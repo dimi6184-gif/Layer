@@ -1,0 +1,11 @@
+# Sentry Configuration
+# This file is used for uploading source maps during build
+
+defaults.url=https://sentry.io/
+defaults.org=${SENTRY_ORG}
+defaults.project=${SENTRY_PROJECT}
+
+auth.token=${SENTRY_AUTH_TOKEN}
+
+# Upload source maps on build
+cli.executable=node_modules/.bin/sentry-cli

@@ -1,0 +1,45 @@
+{
+  "name": "@nexus/bot",
+  "version": "1.0.0",
+  "description": "Layer Discord Bot",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "@discord-player/extractor": "^7.2.0",
+    "@discord-player/opus": "^7.2.0",
+    "@discordjs/voice": "^0.19.2",
+    "@distube/ytdl-core": "^4.16.12",
+    "@google/genai": "^2.7.0",
+    "@google/generative-ai": "^0.24.1",
+    "@nexus/db": "*",
+    "@types/express": "^5.0.6",
+    "axios": "^1.16.1",
+    "canvas": "^3.2.3",
+    "discord-html-transcripts": "^3.2.0",
+    "discord-player": "^7.2.0",
+    "discord-player-youtubei": "^2.0.0",
+    "discord.js": "^14.26.4",
+    "dotenv": "^16.4.5",
+    "express": "^5.2.1",
+    "fast-levenshtein": "^2.0.6",
+    "ffmpeg-static": "^5.3.0",
+    "opusscript": "^0.0.8",
+    "play-dl": "^1.9.7",
+    "tesseract.js": "^7.0.0",
+    "youtube-dl-exec": "^3.1.7",
+    "youtube-ext": "^1.1.25",
+    "youtubei.js": "^17.0.1",
+    "ytdl-core": "^4.11.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.22.4",
+    "typescript": "^5.4.5"
+  }
+}
