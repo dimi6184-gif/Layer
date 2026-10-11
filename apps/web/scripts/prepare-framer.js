@@ -34,6 +34,9 @@ html = html.replace(/href="\.\/legal\/privacy-policy"/g, 'href="/privacy"');
 html = html.replace(/href="\.\/legal\/terms-of-service"/g, 'href="/terms"');
 html = html.replace(/https:\/\/real-sense-374960\.framer\.app\//g, 'https://uselayer.de/');
 html = html.replace(/https:\/\/real-sense-374960\.framer\.app/g, 'https://uselayer.de');
+html = html.replace(/href="https:\/\/uselayer\.de\/login"/g, 'href="/login"');
+html = html.replace(/href="https:\/\/uselayer\.de\/invite"/g, 'href="/invite"');
+html = html.replace(/href="https:\/\/uselayer\.de\/add"/g, 'href="/invite"');
 
 // Add base href tag if missing to ensure assets always load from root /
 if (!html.includes('<base href="/">')) {

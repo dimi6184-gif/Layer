@@ -1,23 +1,13 @@
 const fs = require('fs');
-const path = 'C:/Users/Dimi/Documents/Discordbot/apps/web/public/assets/js/script_main.BYlQb-ML.mjs';
-let content = fs.readFileSync(path, 'utf8');
+const path = require('path');
 
-const before = content.length;
-let changes = 0;
+const jsDir = 'C:/Users/Dimi/Documents/Discordbot/apps/web/public/assets/js';
+if (!fs.existsSync(jsDir)) {
+  console.log('JS directory does not exist yet.');
+  process.exit(0);
+}
 
-// STRATEGY: Map Framer internal SPA routes to GARBAGE paths that will never match
-// real pages. Then the interceptor script (injected into framer-home.html) will
-// catch pushState calls and do full page navigations to the correct Next.js routes.
-//
-// Framer route IDs:
-// I1ur1SZDM  -> /sign-in  (Sign In page)
-// jPFeYLL3A  -> /sign-up  (Sign Up page)
-// QLPbhSIfF  -> /otp      (OTP code entry page)
-// LErbGtErJ  -> /account  (Account page)
-// G9l6HTB3t  -> /contact  (Contact page)
-//
-// We map them to unique internal paths that the interceptor recognizes and handles
-// by doing window.location.href navigation to real Next.js pages.
+const files = fs.readdirAll ? [] : fs.readdirSync(jsDir).filter(f => f.startsWith('script_main') && f.endsWith('.mjs'));
 
 function replacePath(src, fromPath, toPath) {
   const searchStr = 'path:`' + fromPath + '`';
@@ -28,35 +18,24 @@ function replacePath(src, fromPath, toPath) {
   return { result: src, changed: false };
 }
 
-// Map framer internal pages to /__framer/* paths that won't clash with Next.js
-// The interceptor in framer-home.html will catch these and redirect accordingly
-let r = replacePath(content, '/sign-in', '/__framer/sign-in');
-if (r.changed) { content = r.result; changes++; console.log('Patched /sign-in -> /__framer/sign-in'); }
-else { console.log('WARNING: /sign-in path not found (already patched?)'); }
+for (const file of files) {
+  const filePath = path.join(jsDir, file);
+  let content = fs.readFileSync(filePath, 'utf8');
+  let changes = 0;
 
-r = replacePath(content, '/sign-up', '/__framer/sign-up');
-if (r.changed) { content = r.result; changes++; console.log('Patched /sign-up -> /__framer/sign-up'); }
-else { console.log('WARNING: /sign-up path not found (already patched?)'); }
+  ['/sign-in', '/sign-up', '/otp', '/account', '/contact'].forEach(p => {
+    const r = replacePath(content, p, '/__framer' + p);
+    if (r.changed) {
+      content = r.result;
+      changes++;
+      console.log(`[${file}] Patched ${p} -> /__framer${p}`);
+    }
+  });
 
-r = replacePath(content, '/otp', '/__framer/otp');
-if (r.changed) { content = r.result; changes++; console.log('Patched /otp -> /__framer/otp'); }
-else { console.log('WARNING: /otp path not found (already patched?)'); }
-
-r = replacePath(content, '/account', '/__framer/account');
-if (r.changed) { content = r.result; changes++; console.log('Patched /account -> /__framer/account'); }
-else { console.log('WARNING: /account path not found (already patched?)'); }
-
-r = replacePath(content, '/contact', '/__framer/contact');
-if (r.changed) { content = r.result; changes++; console.log('Patched /contact -> /__framer/contact'); }
-else { console.log('WARNING: /contact path not found (already patched?)'); }
-
-// Also handle already-patched paths from previous run (login -> /__framer/sign-in, etc.)
-r = replacePath(content, '/login', '/__framer/sign-in');
-if (r.changed) { content = r.result; changes++; console.log('Re-patched /login -> /__framer/sign-in'); }
-
-r = replacePath(content, '/dashboard', '/__framer/account');
-if (r.changed) { content = r.result; changes++; console.log('Re-patched /dashboard -> /__framer/account'); }
-
-console.log('Total changes:', changes, '| Size before:', before, '-> after:', content.length);
-fs.writeFileSync(path, content, 'utf8');
-console.log('Done patching script_main.BYlQb-ML.mjs');
+  if (changes > 0) {
+    fs.writeFileSync(filePath, content, 'utf8');
+    console.log(`[${file}] Done. Applied ${changes} patches.`);
+  } else {
+    console.log(`[${file}] Clean export: No legacy routes found (already removed in Framer).`);
+  }
+}
