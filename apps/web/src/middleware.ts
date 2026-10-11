@@ -23,7 +23,7 @@ export async function middleware(request: NextRequest) {
 
   // Get client identifier
   const forwarded = request.headers.get('x-forwarded-for');
-  const ip = forwarded ? forwarded.split(',')[0] : request.ip || 'unknown';
+  const ip = forwarded ? forwarded.split(',')[0] : (request.headers.get('x-real-ip') || 'unknown');
   const userAgent = request.headers.get('user-agent');
   const identifier = getClientIdentifier(ip, userAgent);
 

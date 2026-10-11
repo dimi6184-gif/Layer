@@ -9,8 +9,10 @@ import {
     startTransition,
     type CSSProperties,
 } from "react"
-import { addPropertyControls, ControlType, useIsStaticRenderer } from "framer"
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
+
+// Stub for Framer-specific hook — always false in Next.js context
+const useIsStaticRenderer = () => false
 
 /**
  * AI SCAM DETECTION CARD
@@ -580,71 +582,4 @@ export default function AIScamDetectionCard(props: AIScamDetectionCardProps) {
     )
 }
 
-addPropertyControls(AIScamDetectionCard, {
-    bgColor: {
-        type: ControlType.Color,
-        title: "Background",
-        defaultValue: "#EFF6FF",
-    },
-    cardColor: {
-        type: ControlType.Color,
-        title: "Card",
-        defaultValue: "#FFFFFF",
-    },
-    borderColor: {
-        type: ControlType.Color,
-        title: "Border",
-        defaultValue: "#DBEAFE",
-    },
-    primaryColor: {
-        type: ControlType.Color,
-        title: "Primary",
-        defaultValue: "#3B82F6",
-    },
-    dangerColor: {
-        type: ControlType.Color,
-        title: "Danger",
-        defaultValue: "#EF4444",
-    },
-    textColor: {
-        type: ControlType.Color,
-        title: "Text",
-        defaultValue: "#1F2937",
-    },
-    autoplayDemo: {
-        type: ControlType.Boolean,
-        title: "Auto Demo",
-        defaultValue: true,
-    },
-    autoplayInterval: {
-        type: ControlType.Number,
-        title: "Demo Speed",
-        defaultValue: 3000,
-        min: 1000,
-        max: 8000,
-        step: 100,
-        unit: "ms",
-        hidden(props) {
-            return !props.autoplayDemo
-        },
-    },
-    loopSpeed: {
-        type: ControlType.Number,
-        title: "Loop Speed",
-        defaultValue: 1,
-        min: 0.5,
-        max: 2.5,
-        step: 0.05,
-        hidden(props) {
-            return !props.autoplayDemo
-        },
-    },
-    showCursor: {
-        type: ControlType.Boolean,
-        title: "Show Cursor",
-        defaultValue: true,
-        hidden(props) {
-            return !props.autoplayDemo
-        },
-    },
-})
+

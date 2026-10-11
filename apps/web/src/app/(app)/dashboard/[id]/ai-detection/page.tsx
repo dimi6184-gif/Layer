@@ -128,7 +128,7 @@ export default async function AIDetectionPage({ params }: { params: Promise<{ id
         <AIDetectionConfig
           discordId={id}
           initialThreshold={guild.aiDetectionThreshold || 70}
-          initialAction={guild.aiDetectionAction || 'log'}
+          initialAction={(guild.aiDetectionAction as any) || 'log'}
           initialLogChannelId={guild.aiDetectionLogChannelId || ''}
           initialDeleteChannelIds={guild.aiDetectionDeleteChannelIds || []}
           initialWhitelistRoleIds={guild.aiDetectionWhitelistRoleIds || []}

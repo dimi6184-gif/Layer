@@ -38,7 +38,7 @@ export async function ensureServerAccess(guildId: string) {
   }
 
   // Ensure user is a team member (auto-add as owner if first user)
-  const teamMember = await ensureTeamMember(guildId, session.user.id, session.user.name || "Unknown");
+  const teamMember = await ensureTeamMember(guildId, session.user.id ?? '', session.user.name || "Unknown");
   if (process.env.NODE_ENV === 'development') {
     console.log("[ensureServerAccess] Team member:", teamMember);
   }

@@ -8,12 +8,15 @@ import { useToast } from "@/context/ToastContext";
 export function AIPersonalityForm({ discordId, initialPersonality }: { discordId: string; initialPersonality: string | null }) {
   const [personality, setPersonality] = useState(initialPersonality || "");
   const [isPending, startTransition] = useTransition();
+  const [saved, setSaved] = useState(false);
   const { showToast } = useToast();
 
   const handleSave = () => {
     startTransition(() => {
       updateAIPersonality(discordId, personality).then(() => {
         showToast('Bot personality saved');
+        setSaved(true);
+        setTimeout(() => setSaved(false), 3000);
       }).catch(() => {
         showToast('Failed to save personality', 'error');
       });

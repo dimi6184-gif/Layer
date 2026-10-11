@@ -49,16 +49,14 @@ export async function updateAdvancedModSettings(
         avatarLogChannelId: settings.avatarLogChannelId,
 
         // Impersonation
-        impersonationAutoAction: settings.impersonationAutoAction,
-        impersonationActionType: settings.impersonationActionType,
-        impersonationSensitivity: settings.impersonationSensitivity,
+        impersonationEnabled: settings.impersonationAutoAction,
+        impersonationAutoAction: settings.impersonationActionType.toLowerCase(),
+        impersonationSensitivity: settings.impersonationSensitivity.toLowerCase(),
 
         // Ghost Cleaner
-        ghostInactivityDays: settings.ghostInactivityDays,
+        ghostInactiveDays: settings.ghostInactivityDays,
         ghostWarningDays: settings.ghostWarningDays,
-        ghostMaxWarnings: settings.ghostMaxWarnings,
-        ghostExemptRoles: settings.ghostExemptRoles,
-        ghostKickBots: settings.ghostKickBots,
+        ghostWhitelistRoles: settings.ghostExemptRoles,
       },
     });
 

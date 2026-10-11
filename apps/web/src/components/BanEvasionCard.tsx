@@ -9,8 +9,10 @@ import {
     startTransition,
     type CSSProperties,
 } from "react"
-import { addPropertyControls, ControlType, useIsStaticRenderer } from "framer"
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
+
+// Stub for Framer-specific hook — always false in Next.js context
+const useIsStaticRenderer = () => false
 
 /**
  * BAN EVASION TRACKING CARD - MINIMAL
@@ -394,53 +396,4 @@ export default function BanEvasionCard(props: BanEvasionCardProps) {
     )
 }
 
-addPropertyControls(BanEvasionCard, {
-    bgColor: {
-        type: ControlType.Color,
-        title: "Background",
-        defaultValue: "transparent",
-    },
-    cardColor: {
-        type: ControlType.Color,
-        title: "Card",
-        defaultValue: "#FFFFFF",
-    },
-    accentColor: {
-        type: ControlType.Color,
-        title: "Accent",
-        defaultValue: "#1F2937",
-    },
-    textColor: {
-        type: ControlType.Color,
-        title: "Text",
-        defaultValue: "#6B7280",
-    },
-    autoplayDemo: {
-        type: ControlType.Boolean,
-        title: "Auto Demo",
-        defaultValue: true,
-    },
-    autoplayInterval: {
-        type: ControlType.Number,
-        title: "Demo Speed",
-        defaultValue: 3500,
-        min: 2000,
-        max: 8000,
-        step: 100,
-        unit: "ms",
-        hidden(props) {
-            return !props.autoplayDemo
-        },
-    },
-    loopSpeed: {
-        type: ControlType.Number,
-        title: "Loop Speed",
-        defaultValue: 1,
-        min: 0.5,
-        max: 2.5,
-        step: 0.05,
-        hidden(props) {
-            return !props.autoplayDemo
-        },
-    },
-})
+

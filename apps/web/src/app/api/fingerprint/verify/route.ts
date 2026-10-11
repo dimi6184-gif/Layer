@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
   try {
     // 🔒 SECURITY: Bot-only endpoint - verify bot authentication
     const authResult = verifyBotApiAuth(req);
-    if (!authResult.valid) {
+    if (!authResult.authorized) {
       return NextResponse.json(
         { error: authResult.error || 'Unauthorized' },
         { status: 401 }

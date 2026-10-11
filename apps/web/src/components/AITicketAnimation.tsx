@@ -328,7 +328,7 @@ export default function AITicketAnimation(props: AITicketAnimationProps) {
                                 transition={{
                                     duration: 0.8,
                                     repeat: Infinity,
-                                    ease: "steps(1)",
+                                    ease: "linear",
                                 }}
                                 style={{
                                     display: "inline-block",
@@ -390,43 +390,4 @@ export default function AITicketAnimation(props: AITicketAnimationProps) {
     )
 }
 
-addPropertyControls(AITicketAnimation, {
-    textColor: {
-        type: ControlType.Color,
-        title: "Text",
-        defaultValue: "#6B7280",
-    },
-    accentColor: {
-        type: ControlType.Color,
-        title: "Accent",
-        defaultValue: "#1F2937",
-    },
-    autoplayDemo: {
-        type: ControlType.Boolean,
-        title: "Auto Demo",
-        defaultValue: true,
-    },
-    autoplayInterval: {
-        type: ControlType.Number,
-        title: "Demo Speed",
-        defaultValue: 3000,
-        min: 1500,
-        max: 8000,
-        step: 100,
-        unit: "ms",
-        hidden(props) {
-            return !props.autoplayDemo
-        },
-    },
-    loopSpeed: {
-        type: ControlType.Number,
-        title: "Loop Speed",
-        defaultValue: 1,
-        min: 0.5,
-        max: 2.5,
-        step: 0.05,
-        hidden(props) {
-            return !props.autoplayDemo
-        },
-    },
-})
+

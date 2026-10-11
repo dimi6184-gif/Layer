@@ -52,9 +52,9 @@ export default function VerifyPage() {
           body: JSON.stringify({
             userId: params.userId,
             guildId: params.guildId,
-            fingerprint: result.hash,
+            fingerprint: (result as any).hash || (result as any).fingerprint || String(result),
             components: {
-              ...result.components,
+              ...((result as any).components || {}),
               verificationId, // Add persistent ID
             },
           }),

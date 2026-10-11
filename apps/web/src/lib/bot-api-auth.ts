@@ -91,6 +91,8 @@ export function verifyBotApiRequest(request: NextRequest): {
   return { authorized: true };
 }
 
+export const verifyBotApiAuth = verifyBotApiRequest;
+
 /**
  * Sanitize error messages for production
  * Never expose internal details to clients

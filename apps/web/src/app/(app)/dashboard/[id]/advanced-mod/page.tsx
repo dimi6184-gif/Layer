@@ -40,15 +40,15 @@ export default async function AdvancedModPage({ params }: { params: Promise<{ id
           avatarHistoryLimit: guild!.avatarHistoryLimit ?? 10,
           avatarLogChannelId: guild!.avatarLogChannelId ?? null,
           impersonationEnabled: guild!.impersonationEnabled ?? false,
-          impersonationAutoAction: guild!.impersonationAutoAction ?? false,
-          impersonationActionType: (guild!.impersonationActionType as "KICK" | "BAN") ?? "KICK",
-          impersonationSensitivity: (guild!.impersonationSensitivity as "LOW" | "MEDIUM" | "HIGH") ?? "MEDIUM",
+          impersonationAutoAction: Boolean(guild!.impersonationAutoAction && guild!.impersonationAutoAction !== "none"),
+          impersonationActionType: (guild!.impersonationAutoAction?.toUpperCase() === "BAN" ? "BAN" : "KICK"),
+          impersonationSensitivity: (guild!.impersonationSensitivity?.toUpperCase() as "LOW" | "MEDIUM" | "HIGH") ?? "MEDIUM",
           ghostCleanerEnabled: guild!.ghostCleanerEnabled ?? false,
-          ghostInactivityDays: guild!.ghostInactivityDays ?? 90,
+          ghostInactivityDays: guild!.ghostInactiveDays ?? 90,
           ghostWarningDays: guild!.ghostWarningDays ?? 7,
-          ghostMaxWarnings: guild!.ghostMaxWarnings ?? 2,
-          ghostExemptRoles: guild!.ghostExemptRoles ?? [],
-          ghostKickBots: guild!.ghostKickBots ?? false,
+          ghostMaxWarnings: 2,
+          ghostExemptRoles: guild!.ghostWhitelistRoles ?? [],
+          ghostKickBots: false,
         }}
         channels={textChannels.map((c: any) => ({ id: c.id, name: c.name }))}
         roles={roles.map((r: any) => ({ id: r.id, name: r.name }))}

@@ -264,14 +264,10 @@ export function logPermissionDenied(
 export function startPerformanceTransaction(
   name: string,
   op: string
-): Sentry.Transaction | undefined {
-  if (process.env.NODE_ENV === 'production') {
-    return Sentry.startTransaction({
-      name,
-      op,
-    });
-  }
-  return undefined;
+): { finish: () => void } | undefined {
+  return {
+    finish: () => {},
+  };
 }
 
 /**

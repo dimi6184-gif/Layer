@@ -20,11 +20,12 @@ Sentry.init({
     }
 
     // Remove query parameters that might contain tokens
-    if (event.request?.query_string) {
+    if (typeof event.request?.query_string === 'string') {
+      const qs = event.request.query_string;
       const sensitiveParams = ['token', 'secret', 'apiKey', 'api_key'];
       sensitiveParams.forEach(param => {
-        if (event.request?.query_string?.includes(param)) {
-          event.request.query_string = '[Filtered]';
+        if (qs.includes(param)) {
+          event.request!.query_string = '[Filtered]';
         }
       });
     }

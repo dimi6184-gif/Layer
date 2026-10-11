@@ -76,7 +76,7 @@ export async function verifyGuildAccess(
       );
       
       missingPerms.forEach(perm => {
-        logPermissionDenied(session.user.id, guildId, perm, 'guild-access');
+        logPermissionDenied(session.user?.id ?? '', guildId, perm, 'guild-access');
       });
       
       throw new AccessDeniedError(
@@ -169,10 +169,12 @@ export async function logSecurityEvent(
   try {
     await db.auditLog.create({
       data: {
-        event: eventType,
+        action: eventType,
         userId: details.userId,
-        guildId: details.guildId,
-        target: details.resource,
+        guildId: details.guildId ?? '',
+        details: details.resource
+          ? `${eventType}: ${details.resource} — ${details.reason}`
+          : `${eventType}: ${details.reason}`,
         metadata: {
           reason: details.reason,
           ...details.metadata,

@@ -233,7 +233,7 @@ export default function AnimatedBeam(props: Props) {
         {leftNodes.map((item, i) => (
           <motion.div
             key={`left-${i}`}
-            ref={(el) => (leftRefs.current[i] = el)}
+            ref={(el) => { leftRefs.current[i] = el; }}
             style={nodeStyle(nodeSize)}
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -268,7 +268,7 @@ export default function AnimatedBeam(props: Props) {
         {rightNodes.map((item, i) => (
           <motion.div
             key={`right-${i}`}
-            ref={(el) => (rightRefs.current[i] = el)}
+            ref={(el) => { rightRefs.current[i] = el; }}
             style={nodeStyle(nodeSize)}
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}

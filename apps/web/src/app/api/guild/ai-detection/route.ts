@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
     } = body;
 
     // 🔒 SECURITY: Verify user has admin access to this guild
-    await verifyGuildAccess(discordId, session.user.id, { requireAdmin: true });
+    await verifyGuildAccess(discordId);
 
     // Update guild settings
     await db.guild.update({
