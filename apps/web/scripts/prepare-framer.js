@@ -38,6 +38,11 @@ html = html.replace(/href="https:\/\/uselayer\.de\/login"/g, 'href="/login"');
 html = html.replace(/href="https:\/\/uselayer\.de\/invite"/g, 'href="/invite"');
 html = html.replace(/href="https:\/\/uselayer\.de\/add"/g, 'href="/invite"');
 
+// Replace favicons with Layer logo
+html = html.replace(/<link href="assets\/images\/image-extra-1\.png"[^>]*>/g, '<link rel="icon" href="/favicon.ico" sizes="any">');
+html = html.replace(/<link href="assets\/images\/image-extra-2\.png"[^>]*>/g, '<link rel="icon" href="/logo.png" type="image/png">');
+html = html.replace(/<link rel="apple-touch-icon" href="assets\/images\/image-extra-3\.png"[^>]*>/g, '<link rel="apple-touch-icon" href="/apple-icon.png">');
+
 // Add base href tag if missing to ensure assets always load from root /
 if (!html.includes('<base href="/">')) {
   html = html.replace('<head>', '<head>\n<base href="/">');
