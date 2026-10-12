@@ -57,8 +57,8 @@ export async function handleSetupModal(interaction) {
         description: `The AI is now deleting old channels/roles and building the server.\n\n-# Topic: *${topic}*`,
     }));
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    // Try gemini-3.5-flash first, fallback to 1.5-flash if unavailable
-    let modelName = 'gemini-3.5-flash';
+    // Use gemini-3.8-flash
+    let modelName = 'gemini-3.8-flash';
     let model = genAI.getGenerativeModel({
         model: modelName,
         systemInstruction: 'You are Layer, an advanced AI for the Layer Discord Bot. You are an extremely professional Discord Server Architect. Never mention Google or Gemini. Your name is Layer. You MUST respond with ONLY valid JSON, no markdown formatting, no explanations.',

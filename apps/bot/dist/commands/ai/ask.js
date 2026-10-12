@@ -26,7 +26,7 @@ export async function execute(interaction) {
         const systemInstruction = guild?.personality?.trim() || defaultPersonality;
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
         const model = genAI.getGenerativeModel({
-            model: 'gemini-3.5-flash',
+            model: 'gemini-3.8-flash',
             systemInstruction,
         });
         const result = await model.generateContent(`Answer briefly and concisely (max 300 characters): ${question}`);

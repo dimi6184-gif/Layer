@@ -61,7 +61,7 @@ CRITICAL SCAM INDICATORS:
 - Casino rakeback/cashback screenshots
 - Green checkmarks with money amounts`;
     const response = await ai.models.generateContent({
-        model: 'gemini-3.5-flash',
+        model: 'gemini-3.8-flash',
         contents: [
             prompt,
             { inlineData: { data: base64Image, mimeType } },

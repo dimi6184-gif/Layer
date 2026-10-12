@@ -544,10 +544,8 @@ Respond in JSON format:
         }
         const genAI = new GoogleGenerativeAI(apiKey);
         const candidateModels = [
-            'gemini-3.5-flash',
+            'gemini-3.8-flash',
             'gemini-2.5-flash',
-            'gemini-2.0-flash',
-            'gemini-1.5-flash',
         ];
         console.log('[AI Ticket] Generating response with Gemini...');
         let result = null;
