@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
-import { db } from '@nexus/db';
+import { db } from '../../db.js';
 import { useQueue } from 'discord-player';
 export const data = new SlashCommandBuilder()
     .setName('stop')

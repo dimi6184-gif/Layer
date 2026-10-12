@@ -1,5 +1,5 @@
 import { TextChannel, EmbedBuilder } from "discord.js";
-import { db } from "@nexus/db";
+import { db } from "../db.js";
 export class StreamMonitor {
     client;
     checkInterval = null;

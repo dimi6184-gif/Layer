@@ -9,7 +9,7 @@ export async function handleAvatarChange(oldMember, newMember) {
         if (oldMember.user.avatarURL() === newMember.user.avatarURL()) {
             return;
         }
-        const { db } = await import('@nexus/db');
+        const { db } = await import('../db.js');
         // Check if guild has avatar tracking enabled
         const guildSettings = await db.guild.findUnique({
             where: { discordId: newMember.guild.id },

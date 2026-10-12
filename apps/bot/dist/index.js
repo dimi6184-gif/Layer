@@ -185,7 +185,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
             await command.execute(interaction);
             // Log command execution
             if (interaction.guildId) {
-                const { db } = await import('@nexus/db');
+                const { db } = await import('./db.js');
                 await db.auditLog.create({
                     data: {
                         guildId: interaction.guildId,
@@ -276,7 +276,7 @@ client.on(Events.MessageCreate, async (message) => {
     if (message.author.bot || !message.guild)
         return;
     try {
-        const { db } = await import('@nexus/db');
+        const { db } = await import('./db.js');
         const guildSettings = await db.guild.findUnique({
             where: { discordId: message.guild.id },
         });

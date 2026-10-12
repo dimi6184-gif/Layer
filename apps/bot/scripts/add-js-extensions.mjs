@@ -1,8 +1,14 @@
 #!/usr/bin/env node
 // scripts/add-js-extensions.mjs
-// Post-build script: adds .js extensions to all relative imports in dist/ files
+// Post-build script:
+//   1. Replaces @nexus/db imports with correct relative path to db.js
+//   2. Adds .js extensions to all relative imports in dist/ files
 import { readdir, readFile, writeFile } from 'fs/promises';
-import { join, extname } from 'path';
+import { join, extname, relative, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const distDir = join(__dirname, '..', 'dist');
 
 async function getAllFiles(dir) {
   const entries = await readdir(dir, { withFileTypes: true });
@@ -18,29 +24,37 @@ async function getAllFiles(dir) {
   return files;
 }
 
-const distDir = new URL('../dist', import.meta.url).pathname.replace(/^\/([A-Z]:)/, '$1');
-
 const files = await getAllFiles(distDir);
 
 for (const file of files) {
   const original = await readFile(file, 'utf8');
-  // Add .js to relative imports that have no extension
-  const updated = original.replace(
-    /(from\s+['"])(\.{1,2}\/[^'"]+?)(['"])/g,
-    (_, prefix, path, suffix) => {
-      if (extname(path)) return _ ; // already has extension
-      return `${prefix}${path}.js${suffix}`;
-    }
-  ).replace(
-    /(import\(['"])(\.{1,2}\/[^'"]+?)(['"]\))/g,
-    (_, prefix, path, suffix) => {
+  let updated = original;
+
+  // 1. Replace @nexus/db with relative path to db.js
+  const fileDir = dirname(file);
+  const dbPath = relative(fileDir, join(distDir, 'db.js')).replace(/\\/g, '/');
+  const dbImport = dbPath.startsWith('.') ? dbPath : './' + dbPath;
+
+  updated = updated
+    .replace(/from\s+'@nexus\/db'/g, `from '${dbImport}'`)
+    .replace(/from\s+"@nexus\/db"/g, `from "${dbImport}"`)
+    .replace(/import\('@nexus\/db'\)/g, `import('${dbImport}')`)
+    .replace(/import\("@nexus\/db"\)/g, `import("${dbImport}")`);
+
+  // 2. Add .js to relative imports without extension
+  updated = updated
+    .replace(/(from\s+['"])(\.{1,2}\/[^'"]+?)(['"])/g, (_, prefix, path, suffix) => {
       if (extname(path)) return _;
       return `${prefix}${path}.js${suffix}`;
-    }
-  );
+    })
+    .replace(/(import\(['"])(\.{1,2}\/[^'"]+?)(['"]\))/g, (_, prefix, path, suffix) => {
+      if (extname(path)) return _;
+      return `${prefix}${path}.js${suffix}`;
+    });
+
   if (updated !== original) {
     await writeFile(file, updated, 'utf8');
-    console.log(`✓ ${file.split('dist')[1]}`);
+    console.log(`✓ ${relative(distDir, file)}`);
   }
 }
 console.log(`\nDone! Processed ${files.length} files.`);

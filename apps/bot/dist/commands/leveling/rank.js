@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
-import { db } from '@nexus/db';
+import { db } from '../../db.js';
 // XP Multipliers for different activities
 export const XP_MULTIPLIERS = {
     MESSAGE: 1.0, // Base message XP

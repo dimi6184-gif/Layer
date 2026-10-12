@@ -1,5 +1,5 @@
 import { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, EmbedBuilder, } from 'discord.js';
-import { db } from '@nexus/db';
+import { db } from '../db.js';
 // Store CAPTCHA codes temporarily (in production, use Redis)
 const captchaCodes = new Map();
 // Clean expired codes every 5 minutes
