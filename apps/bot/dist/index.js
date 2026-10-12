@@ -82,14 +82,19 @@ async function deployCommands() {
     catch (err) {
         console.error('Failed to deploy slash commands globally:', err);
     }
-    if (guildId) {
-        console.log(`📤 Deploying ${commandsJSON.length} slash commands to dev guild ${guildId} (instant)...`);
+    const instantGuildIds = Array.from(new Set([
+        ...(guildId ? guildId.split(',') : []),
+        '1557787459792928839',
+        '1513589369921994782',
+    ].map((g) => g.trim()).filter(Boolean)));
+    for (const gId of instantGuildIds) {
         try {
-            await rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commandsJSON });
-            console.log(`✅ Slash commands deployed to guild ${guildId}.\n`);
+            console.log(`📤 Deploying ${commandsJSON.length} slash commands to guild ${gId} (instant)...`);
+            await rest.put(Routes.applicationGuildCommands(clientId, gId), { body: commandsJSON });
+            console.log(`✅ Slash commands deployed to guild ${gId}.\n`);
         }
         catch (err) {
-            console.error(`Failed to deploy commands to guild ${guildId}:`, err);
+            console.error(`Failed to deploy commands to guild ${gId}:`, err);
         }
     }
 }
