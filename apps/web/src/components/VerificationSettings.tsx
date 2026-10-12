@@ -70,7 +70,11 @@ export function VerificationSettings({ guildId, settings: initialSettings, chann
   const handleSave = async () => {
     setLoading(true);
     try {
-      await updateVerificationSettings(guildId, { enabled, roleId, panelTitle, panelDescription, panelColor, buttonLabel, buttonEmoji, captchaEnabled, logChannelId });
+      const res = await updateVerificationSettings(guildId, { enabled, roleId, panelTitle, panelDescription, panelColor, buttonLabel, buttonEmoji, captchaEnabled, logChannelId });
+      if (res && !res.success) {
+        showMsg(res.error || 'Failed to save settings', true);
+        return;
+      }
       setSaved(true);
       showToast('Verification settings saved');
       setTimeout(() => setSaved(false), 3000);
@@ -95,7 +99,11 @@ export function VerificationSettings({ guildId, settings: initialSettings, chann
     }
     setSendLoading(true);
     try {
-      await sendVerificationPanel(guildId, sendChannelId);
+      const res = await sendVerificationPanel(guildId, sendChannelId);
+      if (res && !res.success) {
+        showMsg(res.error || 'Failed to send panel', true);
+        return;
+      }
       showMsg('✅ Panel sent! Check the channel in Discord.');
       setSendChannelId('');
     } catch (err: any) {
@@ -120,8 +128,12 @@ export function VerificationSettings({ guildId, settings: initialSettings, chann
     if (!confirm('This will lock ALL channels for unverified users. Continue?')) return;
     setLockLoading(true);
     try {
-      const result = await autoLockServer(guildId, lockChannelId);
-      showMsg(`🔒 ${result.message}`);
+      const res = await autoLockServer(guildId, lockChannelId);
+      if (res && !res.success) {
+        showMsg(res.error || 'Failed to lock server', true);
+        return;
+      }
+      showMsg(`🔒 ${res.message || 'Server locked successfully!'}`);
     } catch (err: any) {
       showMsg(err.message || 'Failed to lock server', true);
     } finally {
