@@ -22,7 +22,10 @@ export const metadata: Metadata = {
   },
   description: "Layer protects your Discord server with AI scam detection, ban evasion tracking, smart ticket routing, leveling, music, and zero data storage. Free to start.",
   keywords: [
+    "layer discord bot",
+    "layer bot",
     "discord bot",
+    "layer ai",
     "discord moderation bot",
     "discord ai bot",
     "discord anti scam bot",

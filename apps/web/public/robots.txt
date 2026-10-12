@@ -1,10 +1,12 @@
-# Allow all crawlers
+# Allow all search engine crawlers
 User-agent: *
 Allow: /
 
-# Disallow private pages
+# Disallow private user/api routes
 Disallow: /dashboard/
 Disallow: /api/
+Disallow: /verify/
 
-# Sitemap
-Sitemap: https://yourdomain.com/sitemap.xml
+# Host & Sitemap
+Host: https://uselayer.de
+Sitemap: https://uselayer.de/sitemap.xml
