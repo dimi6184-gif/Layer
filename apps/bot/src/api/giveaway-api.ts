@@ -75,7 +75,7 @@ export async function createGiveawayHandler(req: Request, res: Response, client:
 
     const row = new ActionRowBuilder<ButtonBuilder>().addComponents(button);
 
-    const message = await channel.send({
+    const message = await (channel as any).send({
       embeds: [embed],
       components: [row],
     });
@@ -235,7 +235,7 @@ export async function rerollGiveawayHandler(req: Request, res: Response, client:
     // Send announcement
     const channel = await client.channels.fetch(giveaway.channelId);
     if (channel?.isTextBased()) {
-      await channel.send(
+      await (channel as any).send(
         `🎉 **Giveaway Rerolled!**\n\n` +
           `**Prize:** ${giveaway.prize}\n` +
           `**New Winner${validWinners.length > 1 ? 's' : ''}:** ${validWinners

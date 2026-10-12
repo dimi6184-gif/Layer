@@ -25,12 +25,9 @@ export async function handleAvatarChange(oldMember: GuildMember, newMember: Guil
 
     console.log(`[Avatar Tracker] ${newMember.user.tag} changed their avatar in ${newMember.guild.name}`);
 
-    const tracker = new AvatarTracker();
-    await tracker.trackAvatarChange(
-      newMember.guild.id,
-      newMember.user.id,
-      newMember.user.username,
-      newMember.user.avatarURL({ size: 512 }) || newMember.user.defaultAvatarURL
+    await AvatarTracker.trackAvatarChange(
+      newMember.user,
+      newMember.guild
     );
 
     // Log to audit channel if configured

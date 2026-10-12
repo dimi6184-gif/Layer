@@ -12,7 +12,7 @@ export async function setupPlayer(client: Client) {
       quality: 'highestaudio',
       highWaterMark: 1 << 25,
     },
-  });
+  } as any);
 
   // Load all default extractors
   await player.extractors.loadMulti(DefaultExtractors);

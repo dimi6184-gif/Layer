@@ -163,7 +163,7 @@ export async function executeAutoModAction(
       .setFooter({ text: 'Please follow the server rules.' })
       .setTimestamp();
     
-    const warningMsg = await message.channel.send({ embeds: [embed] });
+    const warningMsg = await (message.channel as any).send({ embeds: [embed] });
     
     // Delete warning after 8 seconds
     setTimeout(() => {
@@ -211,6 +211,8 @@ export async function executeAutoModAction(
         logChannel.send({ embeds: [logEmbed] }).catch(() => {});
       }
     }
+    
+    if (!message.guild) return;
     
     // Log to database
     await db.auditLog.create({

@@ -204,22 +204,26 @@ interface ImageConfig {
   avatarX: number;
   avatarBorderColor: string;
   avatarBorderWidth: number;
+  welcomeEnabled?: boolean;
   welcomeText: string;
   welcomeSize: number;
   welcomeColor: string;
   welcomeFont: string;
   welcomeX: number;
   welcomeY: number;
+  usernameEnabled?: boolean;
   usernameSize: number;
   usernameColor: string;
   usernameFont: string;
   usernameX: number;
   usernameY: number;
+  memberCountEnabled?: boolean;
   memberCountSize: number;
   memberCountColor: string;
   memberCountFont: string;
   memberCountX: number;
   memberCountY: number;
+  serverNameEnabled?: boolean;
   serverNameSize: number;
   serverNameColor: string;
   serverNameFont: string;
@@ -228,6 +232,10 @@ interface ImageConfig {
 }
 
 const defaultImageConfig: ImageConfig = {
+  welcomeEnabled: true,
+  usernameEnabled: true,
+  memberCountEnabled: true,
+  serverNameEnabled: true,
   backgroundType: 'gradient',
   backgroundColor: '#5865F2',
   gradientStart: '#5865F2',

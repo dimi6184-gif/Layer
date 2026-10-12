@@ -77,8 +77,8 @@ export function buildCV2(opts: CV2Options) {
   }
 
   return {
-    components: [container],
-    flags: MessageFlags.IsComponentsV2,
+    components: [container] as any,
+    flags: MessageFlags.IsComponentsV2 as any,
   };
 }
 
@@ -131,8 +131,8 @@ export function buildTicketPanelCV2(opts: {
   }
 
   return {
-    components: [container],
-    flags: MessageFlags.IsComponentsV2,
+    components: [container] as any,
+    flags: MessageFlags.IsComponentsV2 as any,
   };
 }
 
@@ -167,8 +167,8 @@ export function buildTicketWelcomeCV2(opts: {
   );
 
   return {
-    components: [container],
-    flags: MessageFlags.IsComponentsV2,
+    components: [container] as any,
+    flags: MessageFlags.IsComponentsV2 as any,
   };
 }
 
@@ -206,8 +206,8 @@ export function buildTicketAICV2(opts: {
   );
 
   return {
-    components: [container],
-    flags: MessageFlags.IsComponentsV2,
+    components: [container] as any,
+    flags: MessageFlags.IsComponentsV2 as any,
   };
 }
 

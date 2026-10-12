@@ -155,7 +155,7 @@ export class AIImageDetector {
         // Check if confidence is above threshold
         if (result.confidence >= (guild.aiDetectionThreshold || 70)) {
           // Log to database
-          await db.aiImageDetection.create({
+          await (db as any).aIImageDetection.create({
             data: {
               guildId: message.guild!.id,
               channelId: message.channel.id,

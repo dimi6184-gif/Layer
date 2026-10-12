@@ -139,7 +139,7 @@ async function handleStart(interaction: ChatInputCommandInteraction) {
           button
             .setCustomId('giveaway:enter')
             .setLabel('Enter Giveaway')
-            .setEmoji(giveawayEmoji)
+            .setEmoji(giveawayEmoji as any)
             .setStyle(ButtonStyle.Success)
         )
     );
@@ -151,9 +151,9 @@ async function handleStart(interaction: ChatInputCommandInteraction) {
     )
   );
 
-  const message = await interaction.channel!.send({
-    components: [container],
-    flags: MessageFlags.IsComponentsV2,
+  const message = await (interaction.channel as any)!.send({
+    components: [container] as any,
+    flags: MessageFlags.IsComponentsV2 as any,
   });
 
   // Save to database
@@ -273,9 +273,9 @@ async function handleReroll(interaction: ChatInputCommandInteraction) {
           )
       );
 
-    await channel.send({
-      components: [rerollContainer],
-      flags: MessageFlags.IsComponentsV2,
+    await (channel as any).send({
+      components: [rerollContainer] as any,
+      flags: MessageFlags.IsComponentsV2 as any,
     });
   }
 

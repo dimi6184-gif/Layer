@@ -1,4 +1,4 @@
-import { GuildMember } from 'discord.js';
+import { GuildMember, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 import { ImpersonationDetector } from '../utils/impersonationDetector.js';
 
 /**
@@ -20,20 +20,14 @@ export async function handleNewMember(member: GuildMember) {
 
     console.log(`[Impersonation Detector] Checking ${member.user.tag} in ${member.guild.name}`);
 
-    const detector = new ImpersonationDetector();
-    const results = await detector.checkImpersonation(
-      member.guild.id,
-      member.user.id,
-      member.user.username,
-      member.user.displayName,
-      member.user.avatarURL({ size: 512 })
-    );
+    const results: any = await ImpersonationDetector.checkImpersonation(member);
+    if (!results) return;
 
     // If HIGH risk and auto-action enabled, take action immediately
     if (results.riskLevel === 'HIGH' && guildSettings.impersonationAutoAction) {
       console.log(`[Impersonation Detector] 🚨 HIGH RISK detected! Taking action...`);
 
-      const action = guildSettings.impersonationActionType || 'KICK';
+      const action = ((guildSettings as any).impersonationAutoAction || 'KICK').toUpperCase();
 
       if (action === 'KICK') {
         await member.kick(`Suspected staff impersonation: ${results.reason}`);
@@ -76,7 +70,6 @@ export async function handleNewMember(member: GuildMember) {
       if (guildSettings.logChannelId) {
         const logChannel = member.guild.channels.cache.get(guildSettings.logChannelId);
         if (logChannel && logChannel.isTextBased()) {
-          const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = await import('discord.js');
           
           const riskColor = results.riskLevel === 'HIGH' ? '#dc2626' : '#f59e0b';
           const riskEmoji = results.riskLevel === 'HIGH' ? '🔴' : '🟠';

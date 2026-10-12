@@ -91,7 +91,7 @@ async function loadCommands() {
       const filePath = path.join(categoryPath, file);
       const commandUrl = pathToFileURL(filePath).href;
       const command: Command = await import(commandUrl);
-      if (command.data && command.execute) {
+      if (command.data && typeof command.execute === 'function') {
         commands.set(command.data.name, command);
         console.log(`  ✓ Loaded /${command.data.name}`);
       }
@@ -162,9 +162,6 @@ client.once(Events.ClientReady, async (c) => {
   startGiveawayManager(client);
   console.log(`   Giveaway Manager: Started (checking every 30 seconds)`);
   
-  // Start Ghost Cleaner cron job (runs daily at 3 AM)
-  const ghostCleaner = new GhostCleaner(client);
-  
   // Calculate time until next 3 AM
   const now = new Date();
   const next3AM = new Date(now);
@@ -173,12 +170,16 @@ client.once(Events.ClientReady, async (c) => {
     next3AM.setDate(next3AM.getDate() + 1);
   }
   const msUntil3AM = next3AM.getTime() - now.getTime();
-  
+
   // Schedule first run at 3 AM, then repeat every 24 hours
-  setTimeout(() => {
-    ghostCleaner.executeScheduledKicks();
-    setInterval(() => {
-      ghostCleaner.executeScheduledKicks();
+  setTimeout(async () => {
+    for (const guild of client.guilds.cache.values()) {
+      await GhostCleaner.executeScheduledKicks(guild).catch(() => {});
+    }
+    setInterval(async () => {
+      for (const guild of client.guilds.cache.values()) {
+        await GhostCleaner.executeScheduledKicks(guild).catch(() => {});
+      }
     }, 24 * 60 * 60 * 1000); // Every 24 hours
   }, msUntil3AM);
   
@@ -200,14 +201,14 @@ client.on(Events.GuildMemberAdd, async (member) => {
 });
 
 client.on(Events.GuildMemberRemove, async (member) => {
-  await handleMemberLeave(member);
+  await handleMemberLeave(member as any);
 });
 
 // ─── Avatar Tracking ─────────────────────────────────────────────────────────
 
 client.on(Events.GuildMemberUpdate, async (oldMember, newMember) => {
   const { handleAvatarChange } = await import('./events/avatarTrackingHandler.js');
-  await handleAvatarChange(oldMember, newMember);
+  await handleAvatarChange(oldMember as any, newMember as any);
 });
 
 // ─── Poll Reactions ──────────────────────────────────────────────────────────
