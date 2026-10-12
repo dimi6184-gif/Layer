@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { db } from '../../db.js';
+import { db } from '@nexus/db';
 export const data = new SlashCommandBuilder()
     .setName('ask')
     .setDescription('Ask the Layer AI a question.')

@@ -1,4 +1,4 @@
-import { db } from '../db.js';
+import { db } from '@nexus/db';
 import { endGiveaway } from '../commands/fun/giveaway.js';
 export function startGiveawayManager(client) {
     console.log('[GiveawayManager] Starting giveaway manager...');

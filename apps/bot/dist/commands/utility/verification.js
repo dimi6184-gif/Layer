@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, } from 'discord.js';
-import { db } from '../../db.js';
+import { db } from '@nexus/db';
 export const data = new SlashCommandBuilder()
     .setName('verification')
     .setDescription('Manage verification system')

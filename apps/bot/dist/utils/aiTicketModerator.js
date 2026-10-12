@@ -1,5 +1,5 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { db } from '../db.js';
+import { db } from '@nexus/db';
 import { EmbedBuilder } from 'discord.js';
 /**
  * Check if AI should respond to this ticket message

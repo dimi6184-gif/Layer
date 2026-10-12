@@ -1,5 +1,5 @@
 import { EmbedBuilder, AttachmentBuilder } from 'discord.js';
-import { db } from '../db.js';
+import { db } from '@nexus/db';
 import { createCanvas, loadImage } from 'canvas';
 export async function handleMemberJoin(member) {
     try {

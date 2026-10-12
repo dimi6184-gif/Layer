@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { EmbedBuilder } from 'discord.js';
-import { db } from '../db.js';
+import { db } from '@nexus/db';
 // Hugging Face API für AI Image Detection
 const HF_API_KEY = process.env.HUGGINGFACE_API_KEY;
 const AI_DETECTION_MODEL = 'umm-maybe/AI-image-detector';

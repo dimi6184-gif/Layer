@@ -1,6 +1,6 @@
 // apps/bot/src/commands/moderation/ghostclean.ts
 import { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, ActionRowBuilder, ButtonBuilder, ButtonStyle, } from 'discord.js';
-import { GhostCleaner } from '../../utils/ghostCleaner';
+import { GhostCleaner } from '../../utils/ghostCleaner.js';
 export const data = new SlashCommandBuilder()
     .setName('ghostclean')
     .setDescription('👻 Manage inactive/ghost members')

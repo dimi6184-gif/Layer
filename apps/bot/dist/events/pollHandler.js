@@ -1,4 +1,4 @@
-import { db } from '../db.js';
+import { db } from '@nexus/db';
 const DEFAULT_EMOJIS = ['1️⃣', '2️⃣', '3️⃣', '4️⃣'];
 // Helper to check if emoji is a poll emoji (default or custom)
 async function isPollEmoji(guildId, emoji) {

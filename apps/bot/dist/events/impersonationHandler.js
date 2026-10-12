@@ -6,7 +6,7 @@ import { ImpersonationDetector } from '../utils/impersonationDetector.js';
  */
 export async function handleNewMember(member) {
     try {
-        const { db } = await import('../db.js');
+        const { db } = await import('@nexus/db');
         // Check if guild has impersonation detection enabled
         const guildSettings = await db.guild.findUnique({
             where: { discordId: member.guild.id },

@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, PermissionFlagsBits, } from 'discord.js';
-import { db } from '../../db.js';
+import { db } from '@nexus/db';
 export const data = new SlashCommandBuilder()
     .setName('ticket')
     .setDescription('🎫 Ticket system commands.')

@@ -1,6 +1,6 @@
 // apps/bot/src/commands/moderation/avatarhistory.ts
 import { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
-import { AvatarTracker } from '../../utils/avatarTracker';
+import { AvatarTracker } from '../../utils/avatarTracker.js';
 export const data = new SlashCommandBuilder()
     .setName('avatarhistory')
     .setDescription('👤 View avatar change history for a user')

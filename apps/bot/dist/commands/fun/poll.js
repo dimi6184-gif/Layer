@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, MessageFlags, ContainerBuilder, TextDisplayBuilder, SeparatorBuilder, SeparatorSpacingSize, } from 'discord.js';
-import { db } from '../../db.js';
+import { db } from '@nexus/db';
 export const data = new SlashCommandBuilder()
     .setName('poll')
     .setDescription('Creates a poll.')

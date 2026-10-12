@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { ACHIEVEMENTS } from './rank.js';
-import { db } from '../../db.js';
+import { db } from '@nexus/db';
 export const data = new SlashCommandBuilder()
     .setName('achievements')
     .setDescription('View all available achievements and your progress.')

@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
-import { db } from '../../db.js';
+import { db } from '@nexus/db';
 import { useQueue } from 'discord-player';
 export const data = new SlashCommandBuilder()
     .setName('skip')

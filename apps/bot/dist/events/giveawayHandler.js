@@ -1,5 +1,5 @@
 import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
-import { db } from '../db.js';
+import { db } from '@nexus/db';
 import { xpToLevel } from '../commands/leveling/rank.js';
 export async function handleGiveawayEnter(interaction) {
     const giveaway = await db.giveaway.findFirst({

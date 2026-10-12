@@ -1,4 +1,4 @@
-import { AIImageDetector } from '../utils/aiImageDetector';
+import { AIImageDetector } from '../utils/aiImageDetector.js';
 export function setupAIImageDetection(client) {
     client.on('messageCreate', async (message) => {
         // Ignore DMs
