@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Shield, Save, Send, Lock, Check, Loader2, ShieldCheck, Eye, Info } from 'lucide-react';
+import { Shield, Save, Send, Lock, Check, Loader2, ShieldCheck, Eye, Info, AlertTriangle } from 'lucide-react';
 import { updateVerificationSettings, sendVerificationPanel, autoLockServer } from '@/actions/verification';
 import { EmojiPicker } from './EmojiPicker';
 import { useToast } from '@/context/ToastContext';
@@ -83,8 +83,16 @@ export function VerificationSettings({ guildId, settings: initialSettings, chann
 
   const handleSendPanel = async () => {
     if (!sendChannelId) return showMsg('Select a channel first', true);
-    if (!enabled) return showMsg('Enable verification first', true);
-    if (!roleId) return showMsg('Select a verified role first', true);
+    if (!enabled) {
+      showMsg('Please enable Verification in the Settings tab first and click Save!', true);
+      setActiveTab('settings');
+      return;
+    }
+    if (!roleId) {
+      showMsg('Please select a Verified Role in the Settings tab first and click Save!', true);
+      setActiveTab('settings');
+      return;
+    }
     setSendLoading(true);
     try {
       await sendVerificationPanel(guildId, sendChannelId);
@@ -99,13 +107,21 @@ export function VerificationSettings({ guildId, settings: initialSettings, chann
 
   const handleAutoLock = async () => {
     if (!lockChannelId) return showMsg('Select the verification channel first', true);
-    if (!enabled) return showMsg('Enable verification first', true);
-    if (!roleId) return showMsg('Select a verified role first', true);
+    if (!enabled) {
+      showMsg('Please enable Verification in the Settings tab first and click Save!', true);
+      setActiveTab('settings');
+      return;
+    }
+    if (!roleId) {
+      showMsg('Please select a Verified Role in the Settings tab first and click Save!', true);
+      setActiveTab('settings');
+      return;
+    }
     if (!confirm('This will lock ALL channels for unverified users. Continue?')) return;
     setLockLoading(true);
     try {
       const result = await autoLockServer(guildId, lockChannelId);
-      showMsg(`?? ${result.message}`);
+      showMsg(`🔒 ${result.message}`);
     } catch (err: any) {
       showMsg(err.message || 'Failed to lock server', true);
     } finally {
@@ -270,6 +286,27 @@ export function VerificationSettings({ guildId, settings: initialSettings, chann
           {activeTab === 'deploy' && (
             <div className="space-y-5">
 
+              {/* Notice if settings not complete */}
+              {(!enabled || !roleId) && (
+                <div className="p-3.5 rounded-xl flex items-center justify-between" style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}>
+                  <div className="flex items-center gap-2.5">
+                    <AlertTriangle className="w-4 h-4 flex-shrink-0" style={{ color: "#EF4444" }} />
+                    <span className="text-xs" style={{ color: "#FCA5A5" }}>
+                      {!enabled
+                        ? "Verification is currently disabled. Enable it in the Settings tab."
+                        : "No Verified Role selected yet. Select a role in the Settings tab."}
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => setActiveTab('settings')}
+                    className="text-xs font-semibold px-2.5 py-1 rounded-lg transition-all hover:opacity-90"
+                    style={{ background: "rgba(239,68,68,0.15)", color: "#EF4444" }}
+                  >
+                    Go to Settings →
+                  </button>
+                </div>
+              )}
+
               {/* Send Panel */}
               <div className="p-4 rounded-xl space-y-3" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
                 <div className="flex items-center gap-2 mb-1">
@@ -281,7 +318,7 @@ export function VerificationSettings({ guildId, settings: initialSettings, chann
                   <option value="" style={{ background: "#121315" }}>Choose a channel...</option>
                   {channels.map((c) => <option key={c.id} value={c.id} style={{ background: "#121315" }}># {c.name}</option>)}
                 </select>
-                <button onClick={handleSendPanel} disabled={sendLoading || !sendChannelId || !enabled || !roleId} className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all disabled:opacity-40 hover:opacity-90" style={{ background: "#1FA7BB", color: "#101012" }}>
+                <button onClick={handleSendPanel} disabled={sendLoading || !sendChannelId} className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all disabled:opacity-40 hover:opacity-90" style={{ background: "#1FA7BB", color: "#101012" }}>
                   {sendLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
                   {sendLoading ? "Sending..." : "Send Panel"}
                 </button>
@@ -300,7 +337,7 @@ export function VerificationSettings({ guildId, settings: initialSettings, chann
                   <option value="" style={{ background: "#121315" }}>Choose the verification channel...</option>
                   {channels.map((c) => <option key={c.id} value={c.id} style={{ background: "#121315" }}># {c.name}</option>)}
                 </select>
-                <button onClick={handleAutoLock} disabled={lockLoading || !lockChannelId || !enabled || !roleId} className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all disabled:opacity-40 hover:opacity-90" style={{ background: "#F97316", color: "#ffffff" }}>
+                <button onClick={handleAutoLock} disabled={lockLoading || !lockChannelId} className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all disabled:opacity-40 hover:opacity-90" style={{ background: "#F97316", color: "#ffffff" }}>
                   {lockLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Lock className="w-4 h-4" />}
                   {lockLoading ? "Locking..." : "Auto-Lock Server"}
                 </button>
