@@ -88,7 +88,7 @@ export function VerificationSettings({ guildId, settings: initialSettings, chann
     setSendLoading(true);
     try {
       await sendVerificationPanel(guildId, sendChannelId);
-      showMsg('? Panel sent! Check the channel in Discord.');
+      showMsg('✅ Panel sent! Check the channel in Discord.');
       setSendChannelId('');
     } catch (err: any) {
       showMsg(err.message || 'Failed to send panel', true);
@@ -294,7 +294,7 @@ export function VerificationSettings({ guildId, settings: initialSettings, chann
                   <h3 className="text-sm font-semibold" style={{ color: "#F5F4F5" }}>Auto-Lock Server</h3>
                 </div>
                 <div className="p-3 rounded-lg text-xs" style={{ background: "rgba(249,115,22,0.08)", border: "1px solid rgba(249,115,22,0.2)", color: "#F97316" }}>
-                  ?? Locks ALL channels for @everyone. Only the verification channel stays visible to new members.
+                  ⚠️ Locks ALL channels for @everyone. Only the verification channel stays visible to new members.
                 </div>
                 <select value={lockChannelId} onChange={(e) => setLockChannelId(e.target.value)} style={{ ...inputStyle, cursor: "pointer" }}>
                   <option value="" style={{ background: "#121315" }}>Choose the verification channel...</option>

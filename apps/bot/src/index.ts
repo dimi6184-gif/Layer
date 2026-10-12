@@ -109,14 +109,22 @@ async function deployCommands() {
   const rest = new REST({ version: '10' }).setToken(token);
   const commandsJSON = [...commands.values()].map((c) => c.data.toJSON());
 
-  if (guildId) {
-    console.log(`\n📤 Deploying ${commandsJSON.length} slash commands to dev guild (instant)...`);
-    await rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commandsJSON });
-    console.log(`✅ Slash commands deployed to guild ${guildId}.\n`);
-  } else {
-    console.log(`\n📤 Deploying ${commandsJSON.length} slash commands globally...`);
+  console.log(`\n📤 Deploying ${commandsJSON.length} slash commands globally to all servers...`);
+  try {
     await rest.put(Routes.applicationCommands(clientId), { body: commandsJSON });
-    console.log('✅ Slash commands deployed globally.\n');
+    console.log('✅ Slash commands deployed globally to all servers.\n');
+  } catch (err) {
+    console.error('Failed to deploy slash commands globally:', err);
+  }
+
+  if (guildId) {
+    console.log(`📤 Deploying ${commandsJSON.length} slash commands to dev guild ${guildId} (instant)...`);
+    try {
+      await rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commandsJSON });
+      console.log(`✅ Slash commands deployed to guild ${guildId}.\n`);
+    } catch (err) {
+      console.error(`Failed to deploy commands to guild ${guildId}:`, err);
+    }
   }
 }
 
@@ -248,7 +256,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
       
       // Log command execution
       if (interaction.guildId) {
-        const { db } = await import('@nexus/db');
+        const { db } = await import('./db.js');
         await db.auditLog.create({
           data: {
             guildId: interaction.guildId,
@@ -343,7 +351,7 @@ client.on(Events.MessageCreate, async (message) => {
   if (message.author.bot || !message.guild) return;
 
   try {
-    const { db } = await import('@nexus/db');
+    const { db } = await import('./db.js');
     const guildSettings = await db.guild.findUnique({
       where: { discordId: message.guild.id },
     });
@@ -643,7 +651,7 @@ app.post('/api/reroll-giveaway', (req, res) => {
   rerollGiveawayHandler(req, res, client);
 });
 
-const PORT = process.env.BOT_API_PORT || 3001;
+const PORT = process.env.PORT || process.env.BOT_API_PORT || 3001;
 app.listen(PORT, () => {
   console.log(`   API Server: Running on port ${PORT}`);
 });

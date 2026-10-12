@@ -74,15 +74,23 @@ async function deployCommands() {
     const guildId = process.env.DEV_GUILD_ID;
     const rest = new REST({ version: '10' }).setToken(token);
     const commandsJSON = [...commands.values()].map((c) => c.data.toJSON());
-    if (guildId) {
-        console.log(`\n📤 Deploying ${commandsJSON.length} slash commands to dev guild (instant)...`);
-        await rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commandsJSON });
-        console.log(`✅ Slash commands deployed to guild ${guildId}.\n`);
-    }
-    else {
-        console.log(`\n📤 Deploying ${commandsJSON.length} slash commands globally...`);
+    console.log(`\n📤 Deploying ${commandsJSON.length} slash commands globally to all servers...`);
+    try {
         await rest.put(Routes.applicationCommands(clientId), { body: commandsJSON });
-        console.log('✅ Slash commands deployed globally.\n');
+        console.log('✅ Slash commands deployed globally to all servers.\n');
+    }
+    catch (err) {
+        console.error('Failed to deploy slash commands globally:', err);
+    }
+    if (guildId) {
+        console.log(`📤 Deploying ${commandsJSON.length} slash commands to dev guild ${guildId} (instant)...`);
+        try {
+            await rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commandsJSON });
+            console.log(`✅ Slash commands deployed to guild ${guildId}.\n`);
+        }
+        catch (err) {
+            console.error(`Failed to deploy commands to guild ${guildId}:`, err);
+        }
     }
 }
 import { setupPlayer } from './player.js';
@@ -508,7 +516,7 @@ app.post('/api/end-giveaway', (req, res) => {
 app.post('/api/reroll-giveaway', (req, res) => {
     rerollGiveawayHandler(req, res, client);
 });
-const PORT = process.env.BOT_API_PORT || 3001;
+const PORT = process.env.PORT || process.env.BOT_API_PORT || 3001;
 app.listen(PORT, () => {
     console.log(`   API Server: Running on port ${PORT}`);
 });

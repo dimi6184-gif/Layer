@@ -91,27 +91,54 @@ export async function sendVerificationPanel(guildId: string, channelId: string) 
     emoji: guild.verificationButtonEmoji || '✅',
   };
 
-  // Send to Discord via bot
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BOT_API_URL || 'http://localhost:3001'}/api/send-verification-panel`, {
+  // Send to Discord via official Discord REST API (works directly from Vercel)
+  const botToken = process.env.DISCORD_BOT_TOKEN || process.env.DISCORD_TOKEN;
+  if (!botToken) {
+    throw new Error('Discord Bot Token is not configured in server environment');
+  }
+
+  const embedColor = embedData.color && !isNaN(embedData.color) ? embedData.color : 0x10b981;
+  const buttonEmojiObj = buttonData.emoji ? { name: buttonData.emoji } : { name: '✅' };
+
+  const discordRes = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages`, {
     method: 'POST',
-    headers: { 
+    headers: {
+      Authorization: `Bot ${botToken}`,
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${process.env.BOT_API_SECRET || 'dev-secret'}`
     },
     body: JSON.stringify({
-      guildId,
-      channelId,
-      embed: embedData,
-      button: buttonData,
+      embeds: [
+        {
+          title: embedData.title,
+          description: embedData.description,
+          color: embedColor,
+          timestamp: new Date().toISOString(),
+        },
+      ],
+      components: [
+        {
+          type: 1, // ActionRow
+          components: [
+            {
+              type: 2, // Button
+              style: 3, // Success (green)
+              custom_id: 'verification:verify',
+              label: buttonData.label || 'Verify Me',
+              emoji: buttonEmojiObj,
+            },
+          ],
+        },
+      ],
     }),
   });
 
-  if (!res.ok) {
-    const error = await res.text();
-    throw new Error(`Failed to send panel: ${error}`);
+  if (!discordRes.ok) {
+    const errorText = await discordRes.text();
+    console.error('[Verification] Discord API error:', errorText);
+    throw new Error(`Failed to post panel to Discord: ${discordRes.statusText}`);
   }
 
-  // Update channel ID
+  // Update channel ID in database
   await db.guild.update({
     where: { discordId: guildId },
     data: { verificationChannelId: channelId },
@@ -154,26 +181,105 @@ export async function autoLockServer(guildId: string, verificationChannelId: str
     throw new Error('No verification role configured');
   }
 
-  // Send request to bot
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BOT_API_URL || 'http://localhost:3001'}/api/auto-lock-server`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${process.env.BOT_API_SECRET || 'dev-secret'}`
-    },
-    body: JSON.stringify({
-      guildId,
-      verifiedRoleId: guild.verificationRoleId,
-      verificationChannelId,
-    }),
-  });
-
-  if (!res.ok) {
-    const error = await res.text();
-    throw new Error(`Failed to lock server: ${error}`);
+  const botToken = process.env.DISCORD_BOT_TOKEN || process.env.DISCORD_TOKEN;
+  if (!botToken) {
+    throw new Error('Discord Bot Token is not configured');
   }
 
-  const result = await res.json();
+  // Fetch channels from Discord API
+  const channelsRes = await fetch(`https://discord.com/api/v10/guilds/${guildId}/channels`, {
+    headers: {
+      Authorization: `Bot ${botToken}`,
+    },
+    cache: 'no-store',
+  });
+
+  if (!channelsRes.ok) {
+    throw new Error(`Failed to fetch server channels from Discord: ${channelsRes.statusText}`);
+  }
+
+  const channels: Array<{ id: string; name: string; type: number }> = await channelsRes.json();
+  const everyoneRoleId = guildId; // In Discord, @everyone role ID is the guildId
+  const verifiedRoleId = guild.verificationRoleId;
+  let channelsLocked = 0;
+
+  // ViewChannel = 1024, SendMessages = 2048, ReadMessageHistory = 65536
+  for (const channel of channels) {
+    // Skip category (type 4)
+    if (channel.type === 4) continue;
+
+    try {
+      if (channel.id === verificationChannelId) {
+        // === VERIFICATION CHANNEL ===
+        // @everyone CAN view and read, CANNOT send messages
+        await fetch(`https://discord.com/api/v10/channels/${channel.id}/permissions/${everyoneRoleId}`, {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bot ${botToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            type: 0, // Role
+            allow: String(1024 | 65536),
+            deny: String(2048),
+          }),
+        });
+
+        // verifiedRole CANNOT view verification channel once verified
+        await fetch(`https://discord.com/api/v10/channels/${channel.id}/permissions/${verifiedRoleId}`, {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bot ${botToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            type: 0, // Role
+            allow: '0',
+            deny: String(1024),
+          }),
+        });
+      } else {
+        // === ALL OTHER CHANNELS ===
+        // @everyone CANNOT view
+        await fetch(`https://discord.com/api/v10/channels/${channel.id}/permissions/${everyoneRoleId}`, {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bot ${botToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            type: 0, // Role
+            allow: '0',
+            deny: String(1024),
+          }),
+        });
+
+        // verifiedRole CAN view
+        await fetch(`https://discord.com/api/v10/channels/${channel.id}/permissions/${verifiedRoleId}`, {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bot ${botToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            type: 0, // Role
+            allow: String(1024),
+            deny: '0',
+          }),
+        });
+
+        channelsLocked++;
+      }
+    } catch (err: any) {
+      console.error(`Failed to lock channel ${channel.name}:`, err);
+    }
+  }
+
+  const result = {
+    success: true,
+    channelsLocked,
+    message: `Successfully locked ${channelsLocked} channels. Only verified users can see them now!`,
+  };
 
   // Audit log
   await db.auditLog.create({
