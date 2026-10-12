@@ -1,5 +1,5 @@
 import { EmbedBuilder } from 'discord.js';
-import { db } from '@nexus/db';
+import { db } from '../db.js';
 // Track spam and duplicates
 const userMessageTracker = new Map();
 const userDuplicateTracker = new Map();

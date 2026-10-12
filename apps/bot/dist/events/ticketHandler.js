@@ -1,5 +1,5 @@
 import { EmbedBuilder, ChannelType, PermissionFlagsBits, OverwriteType, } from 'discord.js';
-import { db } from '@nexus/db';
+import { db } from '../db.js';
 import { createTranscript } from 'discord-html-transcripts';
 // Map to track open tickets per user per guild
 const openTickets = new Map(); // key: `${guildId}:${userId}` => channelId

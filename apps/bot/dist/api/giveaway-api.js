@@ -1,5 +1,5 @@
 import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
-import { db } from '@nexus/db';
+import { db } from '../db.js';
 import { endGiveaway as endGiveawayHelper } from '../commands/fun/giveaway.js';
 // Create Giveaway
 export async function createGiveawayHandler(req, res, client) {

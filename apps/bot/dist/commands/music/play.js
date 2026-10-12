@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { getPlayer } from '../../player.js';
-import { db } from '@nexus/db';
+import { db } from '../../db.js';
 export const data = new SlashCommandBuilder()
     .setName('play')
     .setDescription('🎵 Play a song or playlist in your voice channel.')

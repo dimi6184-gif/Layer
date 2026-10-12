@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, EmbedBuilder, ButtonStyle, PermissionFlagsBits, ContainerBuilder, MessageFlags, } from 'discord.js';
-import { db } from '@nexus/db';
+import { db } from '../../db.js';
 import ms from 'ms';
 export const data = new SlashCommandBuilder()
     .setName('giveaway')
