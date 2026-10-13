@@ -57,16 +57,11 @@ export async function handleSetupModal(interaction) {
         description: `The AI is now deleting old channels/roles and building the server.\n\n-# Topic: *${topic}*`,
     }));
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    // Use gemini-3.8-flash
-    let modelName = 'gemini-3.8-flash';
-    let model = genAI.getGenerativeModel({
-        model: modelName,
-        systemInstruction: 'You are Layer, an advanced AI for the Layer Discord Bot. You are an extremely professional Discord Server Architect. Never mention Google or Gemini. Your name is Layer. You MUST respond with ONLY valid JSON, no markdown formatting, no explanations.',
-        generationConfig: {
-            responseMimeType: 'application/json',
-            temperature: 0.7,
-        }
-    });
+    const candidateModels = [
+        'gemini-3.8-flash',
+        'gemini-3.6-flash',
+        'gemini-3.1-flash-lite-preview',
+    ];
     const prompt = `
 You are a Discord Server Architect. The user wants a Discord server about: "${topic}". Language: ${language}.
 
@@ -126,55 +121,13 @@ IMPORTANT RULES:
    - Staff/Helper roles → ["MANAGE_MESSAGES", "KICK_MEMBERS"]
    - VIP/Premium roles → ["MENTION_EVERYONE", "ATTACH_FILES", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"]
    - Member/Default roles → [] (no special permissions)
-
-Example:
-{"serverName":"Gaming Hub","serverDescription":"Epic community","categories":[{"name":"📣 || INFO","channels":[{"name":"📢-announcements","type":"text","topic":"Updates","permissions":"readonly"}]},{"name":"💬 || CHAT","channels":[{"name":"💬-general","type":"text","topic":"Chat","permissions":"normal"}]},{"name":"🔒 || STAFF","channels":[{"name":"🛡️-mod-chat","type":"text","topic":"Staff","permissions":"staff-only"}]}],"roles":[{"name":"Admin","color":"#ef4444","reason":"Admins","permissions":["ADMINISTRATOR"]},{"name":"Mod","color":"#3b82f6","reason":"Moderators","permissions":["MANAGE_MESSAGES","KICK_MEMBERS","BAN_MEMBERS","MANAGE_EVENTS"]},{"name":"Event Manager","color":"#10b981","reason":"Event organizers","permissions":["MANAGE_EVENTS"]},{"name":"Member","color":"#7c3aed","reason":"Members","permissions":[]}]}`;
+`;
     let parsed;
-    let retryWithFallback = false;
-    try {
-        const result = await model.generateContent(prompt);
-        const text = result.response.text();
-        console.log('[Setup] AI Raw Response:', text);
-        // Try to extract JSON from markdown code blocks or plain text
-        let jsonText = text;
-        // Remove markdown code blocks if present
-        if (text.includes('```json')) {
-            const match = text.match(/```json\s*([\s\S]*?)\s*```/);
-            if (match)
-                jsonText = match[1];
-        }
-        else if (text.includes('```')) {
-            const match = text.match(/```\s*([\s\S]*?)\s*```/);
-            if (match)
-                jsonText = match[1];
-        }
-        // Extract JSON object
-        const jsonMatch = jsonText.match(/\{[\s\S]*\}/);
-        if (!jsonMatch) {
-            console.error('[Setup] No JSON object found in response');
-            throw new Error("No JSON object found in AI response");
-        }
-        parsed = JSON.parse(jsonMatch[0]);
-        // Validate structure
-        if (!parsed.serverName) {
-            console.error('[Setup] Missing serverName in parsed JSON');
-            throw new Error("Invalid JSON structure: missing serverName");
-        }
-        console.log('[Setup] Successfully parsed JSON:', JSON.stringify(parsed, null, 2));
-    }
-    catch (err) {
-        console.error("[Setup] AI Error:", err);
-        console.error("[Setup] Error details:", err.message);
-        // Check if it's a 503 error (high demand) and we haven't tried fallback yet
-        if (err.message && err.message.includes('503') && modelName === 'gemini-3.5-flash') {
-            console.log('[Setup] Gemini 3.5 Flash unavailable, trying fallback to 1.5-flash...');
-            await interaction.editReply(warnCV2({
-                title: '⏳ Retrying with different model...',
-                description: 'Gemini 3.5 Flash is currently busy. Switching to Gemini 1.5 Flash...',
-            }));
-            // Retry with 1.5-flash
-            modelName = 'gemini-1.5-flash';
-            model = genAI.getGenerativeModel({
+    let lastError = null;
+    for (const modelName of candidateModels) {
+        try {
+            console.log(`[Setup] Trying to generate server structure using model: ${modelName}...`);
+            const model = genAI.getGenerativeModel({
                 model: modelName,
                 systemInstruction: 'You are Layer, an advanced AI for the Layer Discord Bot. You are an extremely professional Discord Server Architect. Never mention Google or Gemini. Your name is Layer. You MUST respond with ONLY valid JSON, no markdown formatting, no explanations.',
                 generationConfig: {
@@ -182,43 +135,42 @@ Example:
                     temperature: 0.7,
                 }
             });
-            try {
-                const result = await model.generateContent(prompt);
-                const text = result.response.text();
-                console.log('[Setup] Fallback AI Raw Response:', text);
-                let jsonText = text;
-                if (text.includes('```json')) {
-                    const match = text.match(/```json\s*([\s\S]*?)\s*```/);
-                    if (match)
-                        jsonText = match[1];
-                }
-                else if (text.includes('```')) {
-                    const match = text.match(/```\s*([\s\S]*?)\s*```/);
-                    if (match)
-                        jsonText = match[1];
-                }
-                const jsonMatch = jsonText.match(/\{[\s\S]*\}/);
-                if (!jsonMatch)
-                    throw new Error("No JSON object found in fallback response");
-                parsed = JSON.parse(jsonMatch[0]);
-                if (!parsed.serverName)
-                    throw new Error("Invalid JSON structure in fallback");
-                console.log('[Setup] Fallback successful!');
+            const result = await model.generateContent(prompt);
+            const text = result.response.text();
+            console.log(`[Setup] AI (${modelName}) Raw Response:`, text);
+            let jsonText = text;
+            if (text.includes('```json')) {
+                const match = text.match(/```json\s*([\s\S]*?)\s*```/);
+                if (match)
+                    jsonText = match[1];
             }
-            catch (fallbackErr) {
-                console.error('[Setup] Fallback also failed:', fallbackErr);
-                return interaction.editReply(dangerCV2({
-                    title: '❌ AI Error',
-                    description: `Both AI models failed to generate a valid structure.\n\n**Error:** ${fallbackErr.message}\n\nPlease wait a few minutes and try again.`,
-                }));
+            else if (text.includes('```')) {
+                const match = text.match(/```\s*([\s\S]*?)\s*```/);
+                if (match)
+                    jsonText = match[1];
             }
+            const jsonMatch = jsonText.match(/\{[\s\S]*\}/);
+            if (!jsonMatch) {
+                throw new Error("No JSON object found in AI response");
+            }
+            parsed = JSON.parse(jsonMatch[0]);
+            if (!parsed.serverName) {
+                throw new Error("Invalid JSON structure: missing serverName");
+            }
+            console.log(`[Setup] Successfully parsed JSON with model ${modelName}`);
+            break;
         }
-        else {
-            return interaction.editReply(dangerCV2({
-                title: '❌ AI Error',
-                description: `The AI could not generate a valid structure. The server has NOT been deleted.\n\n**Error:** ${err.message}\n\nPlease try again${err.message.includes('503') ? ' in a few minutes' : ''}.`,
-            }));
+        catch (err) {
+            console.warn(`[Setup] Model ${modelName} failed (${err.message}). Trying next fallback...`);
+            lastError = err;
         }
+    }
+    if (!parsed) {
+        console.error("[Setup] All AI models failed:", lastError);
+        return interaction.editReply(dangerCV2({
+            title: '❌ AI Error',
+            description: `The AI could not generate a valid structure. The server has NOT been deleted.\n\n**Error:** ${lastError?.message || 'High demand on AI services'}\n\nPlease try again in a few moments.`,
+        }));
     }
     const guild = interaction.guild;
     let deletedChannels = 0;

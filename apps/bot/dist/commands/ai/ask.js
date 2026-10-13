@@ -25,11 +25,29 @@ export async function execute(interaction) {
         const defaultPersonality = 'You are Layer AI, a professional and helpful AI assistant for Discord. Be concise and helpful.';
         const systemInstruction = guild?.personality?.trim() || defaultPersonality;
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-        const model = genAI.getGenerativeModel({
-            model: 'gemini-3.8-flash',
-            systemInstruction,
-        });
-        const result = await model.generateContent(`Answer briefly and concisely (max 300 characters): ${question}`);
+        const candidateModels = [
+            'gemini-3.8-flash',
+            'gemini-3.6-flash',
+            'gemini-3.1-flash-lite-preview',
+        ];
+        let result;
+        let lastError;
+        for (const modelName of candidateModels) {
+            try {
+                const model = genAI.getGenerativeModel({
+                    model: modelName,
+                    systemInstruction,
+                });
+                result = await model.generateContent(`Answer briefly and concisely (max 300 characters): ${question}`);
+                break;
+            }
+            catch (err) {
+                console.warn(`[/ask] Model ${modelName} failed (${err.message}), trying next fallback...`);
+                lastError = err;
+            }
+        }
+        if (!result)
+            throw lastError;
         const response = result.response.text();
         // Log AI token usage
         const usageMetadata = result.response.usageMetadata;

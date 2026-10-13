@@ -103,20 +103,37 @@ CRITICAL SCAM INDICATORS:
 - Casino rakeback/cashback screenshots
 - Green checkmarks with money amounts`;
 
-  const response = await ai.models.generateContent({
-    model: 'gemini-3.8-flash',
-    contents: [
-      prompt,
-      { inlineData: { data: base64Image, mimeType } },
-    ],
-    config: {
-      responseMimeType: "application/json",
-      responseSchema: ScamAnalysisSchema,
-    }
-  });
+  const candidateModels = [
+    'gemini-3.8-flash',
+    'gemini-3.6-flash',
+    'gemini-3.1-flash-lite-preview',
+  ];
 
+  let response: any = null;
+  let lastError: any = null;
+
+  for (const modelName of candidateModels) {
+    try {
+      response = await ai.models.generateContent({
+        model: modelName,
+        contents: [
+          prompt,
+          { inlineData: { data: base64Image, mimeType } },
+        ],
+        config: {
+          responseMimeType: "application/json",
+          responseSchema: ScamAnalysisSchema,
+        }
+      });
+      if (response?.text) break;
+    } catch (err: any) {
+      console.warn(`[Scam Detector] Model ${modelName} failed (${err.message}). Trying fallback...`);
+      lastError = err;
+    }
+  }
+
+  if (!response?.text) throw lastError || new Error('Invalid empty response from Gemini');
   const text = response.text;
-  if (!text) throw new Error('Invalid empty response from Gemini');
 
   console.log(`[Scam Detector] 🧠 Gemini response: ${text}`);
   const analysis = JSON.parse(text);

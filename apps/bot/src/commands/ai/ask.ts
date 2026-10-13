@@ -34,14 +34,33 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const systemInstruction = guild?.personality?.trim() || defaultPersonality;
 
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
-    const model = genAI.getGenerativeModel({ 
-      model: 'gemini-3.8-flash',
-      systemInstruction,
-    });
+    const candidateModels = [
+      'gemini-3.8-flash',
+      'gemini-3.6-flash',
+      'gemini-3.1-flash-lite-preview',
+    ];
 
-    const result = await model.generateContent(
-      `Answer briefly and concisely (max 300 characters): ${question}`,
-    );
+    let result: any;
+    let lastError: any;
+
+    for (const modelName of candidateModels) {
+      try {
+        const model = genAI.getGenerativeModel({
+          model: modelName,
+          systemInstruction,
+        });
+
+        result = await model.generateContent(
+          `Answer briefly and concisely (max 300 characters): ${question}`,
+        );
+        break;
+      } catch (err: any) {
+        console.warn(`[/ask] Model ${modelName} failed (${err.message}), trying next fallback...`);
+        lastError = err;
+      }
+    }
+
+    if (!result) throw lastError;
     const response = result.response.text();
 
     // Log AI token usage
