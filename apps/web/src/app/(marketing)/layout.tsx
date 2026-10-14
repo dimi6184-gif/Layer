@@ -13,22 +13,22 @@ const navSections = [
   {
     title: "Pricing",
     items: [
-      { href: "/premium", label: "Plans & Pricing", icon: CreditCard, badge: "PRO" },
+      { href: "/premium", label: "Plans & Pricing", icon: CreditCard, badge: "PRO" as string | undefined },
     ],
   },
   {
     title: "Legal",
     items: [
-      { href: "/terms", label: "Terms of Service", icon: FileText },
-      { href: "/privacy", label: "Privacy Policy", icon: ShieldCheck },
-      { href: "/refunds", label: "Refund Policy", icon: RotateCcw },
+      { href: "/terms", label: "Terms of Service", icon: FileText, badge: undefined as string | undefined },
+      { href: "/privacy", label: "Privacy Policy", icon: ShieldCheck, badge: undefined as string | undefined },
+      { href: "/refunds", label: "Refund Policy", icon: RotateCcw, badge: undefined as string | undefined },
     ],
   },
   {
     title: "Resources",
     items: [
-      { href: "/commands", label: "Bot Commands", icon: Terminal },
-      { href: "/security", label: "Security", icon: Shield },
+      { href: "/commands", label: "Bot Commands", icon: Terminal, badge: undefined as string | undefined },
+      { href: "/security", label: "Security", icon: Shield, badge: undefined as string | undefined },
     ],
   },
 ];
