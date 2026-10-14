@@ -5,47 +5,55 @@ import { ALL_PERMISSIONS } from "@/lib/team-permissions";
 
 /**
  * Ensures the authenticated user has access to the given guild.
+ * NEVER throws — always either returns session or redirects.
  *
  * Access logic:
- * 1. Must be logged in
- * 2. If TeamMember record exists and is active → allow
- * 3. If no TeamMember record → verify via Discord API that user has ManageGuild/Admin
- *    → if yes, create them as owner and allow
- *    → if no, redirect to /dashboard
+ * 1. Must be logged in → redirect /login
+ * 2. Active TeamMember record in DB → fast path, allow
+ * 3. No record → verify via Discord API (ManageGuild/Admin)
+ *    → yes: create owner record, allow
+ *    → no: redirect /dashboard
+ * 4. Any unexpected error → redirect /dashboard (never crash)
  */
 export async function ensureServerAccess(guildId: string) {
-  const session = await auth();
+  // ── Auth check ────────────────────────────────────────────────
+  let session: Awaited<ReturnType<typeof auth>>;
+  try {
+    session = await auth();
+  } catch {
+    redirect("/login");
+  }
 
-  // 1. Must be logged in
   if (!session?.user?.id) {
     redirect("/login");
   }
 
   const userId = session.user.id;
 
-  // 2. Check active TeamMember record (fast path — DB only)
-  const teamMember = await db.teamMember.findFirst({
-    where: { guildId, userId, status: "active" },
-    select: { role: true },
-  });
+  try {
+    // ── Fast path: active TeamMember in DB ─────────────────────
+    const teamMember = await db.teamMember.findFirst({
+      where: { guildId, userId, status: "active" },
+      select: { role: true },
+    });
 
-  if (teamMember) {
-    return session; // ✅ Already a verified member
-  }
+    if (teamMember) {
+      return session; // ✅ Verified — existing member
+    }
 
-  // 3. No TeamMember record — verify via Discord API
-  // This handles: new guilds, users who never had a record, migration
-  const accessToken = (session.user as any).accessToken;
+    // ── Fallback: verify via Discord API ───────────────────────
+    const accessToken = (session.user as any).accessToken;
 
-  if (accessToken) {
-    try {
+    if (accessToken) {
       const discordRes = await fetch("https://discord.com/api/users/@me/guilds", {
         headers: { Authorization: `Bearer ${accessToken}` },
         cache: "no-store",
       });
 
       if (discordRes.ok) {
-        const guilds: { id: string; owner: boolean; permissions: string }[] = await discordRes.json();
+        const guilds: { id: string; owner: boolean; permissions: string }[] =
+          await discordRes.json();
+
         const MANAGE_GUILD = 0x20n;
         const ADMINISTRATOR = 0x8n;
 
@@ -60,24 +68,29 @@ export async function ensureServerAccess(guildId: string) {
         });
 
         if (hasAccess) {
-          // Ensure guild exists in DB
+          // Ensure guild + user exist, create/reactivate owner record
           await db.guild.upsert({
             where: { discordId: guildId },
             update: {},
             create: { discordId: guildId, name: "Server" },
           });
 
-          // Ensure user exists in DB
           await db.user.upsert({
             where: { discordId: userId },
             update: {},
-            create: { discordId: userId, username: session.user.name ?? "Unknown" },
+            create: {
+              discordId: userId,
+              username: session.user.name ?? "Unknown",
+            },
           });
 
-          // Add/reactivate as owner with explicit permissions (not wildcard)
           await db.teamMember.upsert({
             where: { guildId_userId: { guildId, userId } },
-            update: { status: "active", role: "owner", permissions: { permissions: ALL_PERMISSIONS } },
+            update: {
+              status: "active",
+              role: "owner",
+              permissions: { permissions: ALL_PERMISSIONS },
+            },
             create: {
               guildId,
               userId,
@@ -87,18 +100,19 @@ export async function ensureServerAccess(guildId: string) {
             },
           });
 
-          return session; // ✅ Verified via Discord, record created
+          return session; // ✅ Verified via Discord — record created
         }
       }
-    } catch (err) {
-      // Discord API failed — fall through to redirect
-      if (process.env.NODE_ENV === "development") {
-        console.error("[ensureServerAccess] Discord API error:", err);
-      }
     }
+  } catch (err) {
+    // Never crash a Server Component — log in dev, redirect in prod
+    if (process.env.NODE_ENV === "development") {
+      console.error("[ensureServerAccess] Unexpected error:", err);
+    }
+    redirect("/dashboard");
   }
 
-  // 4. No access — redirect
+  // No access found → redirect
   if (process.env.NODE_ENV === "development") {
     console.warn(`[ensureServerAccess] Access denied: user ${userId} → guild ${guildId}`);
   }
