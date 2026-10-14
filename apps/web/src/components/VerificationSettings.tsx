@@ -272,7 +272,7 @@ export function VerificationSettings({ guildId, settings: initialSettings, chann
                   <button type="button" onClick={() => setShowEmojiPicker(!showEmojiPicker)} className="w-12 h-10 rounded-xl text-xl flex items-center justify-center" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
                     {buttonEmoji || '?'}
                   </button>
-                  {showEmojiPicker && <EmojiPicker onSelect={(e) => { setButtonEmoji(e); setShowEmojiPicker(false); }} onClose={() => setShowEmojiPicker(false)} />}
+                  {showEmojiPicker && <EmojiPicker onSelect={(e) => { setButtonEmoji(e); setShowEmojiPicker(false); }} onClose={() => setShowEmojiPicker(false)} guildId={guildId} />}
                 </div>
               </div>
 

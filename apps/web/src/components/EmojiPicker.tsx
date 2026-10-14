@@ -3,9 +3,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Search } from "lucide-react";
 
-interface EmojiPickerProps {
+export interface EmojiPickerProps {
   onSelect: (emoji: string) => void;
   onClose: () => void;
+  guildId?: string; // if provided, loads server custom emojis
 }
 
 interface EmojiItem {
@@ -13,13 +14,21 @@ interface EmojiItem {
   name: string;
 }
 
+interface CustomEmoji {
+  id: string;
+  name: string;
+  animated: boolean;
+}
+
+// ─── Static emoji data ────────────────────────────────────────────────────────
+
 const EMOJI_DATA: { category: string; icon: string; emojis: EmojiItem[] }[] = [
   {
-    category: "Frequently Used",
-    icon: "⭐",
+    category: "Discord",
+    icon: "🎫",
     emojis: [
       { char: "🎫", name: "ticket" },
-      { char: "📩", name: "mailbox receive" },
+      { char: "📩", name: "mailbox" },
       { char: "💬", name: "speech bubble" },
       { char: "⚙️", name: "gear" },
       { char: "🛡️", name: "shield" },
@@ -28,137 +37,82 @@ const EMOJI_DATA: { category: string; icon: string; emojis: EmojiItem[] }[] = [
       { char: "🔑", name: "key" },
       { char: "🆘", name: "sos" },
       { char: "🙋", name: "raising hand" },
-      { char: "🚨", name: "police car light" },
+      { char: "🚨", name: "alert" },
       { char: "🔥", name: "fire" },
+      { char: "👑", name: "crown" },
+      { char: "🏆", name: "trophy" },
+      { char: "⭐", name: "star" },
+      { char: "✅", name: "check" },
+      { char: "❌", name: "cross" },
+      { char: "⚠️", name: "warning" },
+      { char: "🔔", name: "bell" },
+      { char: "📢", name: "megaphone" },
+      { char: "🎉", name: "party" },
+      { char: "🎊", name: "confetti" },
+      { char: "💎", name: "gem" },
+      { char: "🚀", name: "rocket" },
     ],
   },
   {
     category: "Smileys",
-    icon: "😃",
+    icon: "😀",
     emojis: [
-      { char: "😀", name: "grinning face" },
-      { char: "😃", name: "grinning face with big eyes" },
-      { char: "😄", name: "grinning face with smiling eyes" },
-      { char: "😁", name: "beaming face with smiling eyes" },
-      { char: "😆", name: "grinning squinting face" },
-      { char: "😅", name: "grinning face with sweat" },
-      { char: "😂", name: "face with tears of joy" },
-      { char: "🤣", name: "rolling on the floor laughing" },
-      { char: "😊", name: "smiling face with smiling eyes" },
-      { char: "😇", name: "smiling face with halo" },
-      { char: "🙂", name: "slightly smiling face" },
-      { char: "🙃", name: "upside-down face" },
-      { char: "😉", name: "winking face" },
-      { char: "😌", name: "relieved face" },
-      { char: "😍", name: "smiling face with heart-eyes" },
-      { char: "🥰", name: "smiling face with hearts" },
-      { char: "😘", name: "face blowing a kiss" },
-      { char: "😋", name: "face savoring food" },
-      { char: "😛", name: "face with tongue" },
-      { char: "😜", name: "winking face with tongue" },
-      { char: "🤪", name: "zany face" },
-      { char: "😝", name: "squinting face with tongue" },
-      { char: "🤑", name: "money-mouth face" },
-      { char: "🤗", name: "smiling face with open hands" },
-      { char: "🤔", name: "thinking face" },
-      { char: "🤭", name: "face with hand over mouth" },
-      { char: "🤫", name: "shushing face" },
-      { char: "🧐", name: "face with monocle" },
-      { char: "🤓", name: "nerd face" },
-      { char: "😎", name: "smiling face with sunglasses" },
-      { char: "🥳", name: "partying face" },
-      { char: "😏", name: "smirking face" },
-      { char: "😒", name: "unamused face" },
-      { char: "🙄", name: "face with rolling eyes" },
-      { char: "😬", name: "grimacing face" },
-      { char: "🤥", name: "lying face" },
-      { char: "😴", name: "sleeping face" },
-      { char: "🤤", name: "drooling face" },
-      { char: "😪", name: "sleepy face" },
-      { char: "🤢", name: "nauseated face" },
-      { char: "🤮", name: "face vomiting" },
-      { char: "🥵", name: "hot face" },
-      { char: "🥶", name: "cold face" },
-      { char: "🥴", name: "woozy face" },
-      { char: "😵", name: "knocked-out face" },
-      { char: "🤯", name: "exploding head" },
-      { char: "🤠", name: "cowboy hat face" },
-      { char: "🥳", name: "partying face" },
-      { char: "🥸", name: "disguised face" },
-      { char: "😎", name: "cool" },
+      { char: "😀", name: "grinning" },
+      { char: "😃", name: "big eyes" },
+      { char: "😄", name: "smile" },
+      { char: "😁", name: "beaming" },
+      { char: "😆", name: "laughing" },
+      { char: "😅", name: "sweat smile" },
+      { char: "😂", name: "joy" },
+      { char: "🤣", name: "rofl" },
+      { char: "😊", name: "blush" },
+      { char: "😇", name: "halo" },
+      { char: "😉", name: "wink" },
+      { char: "😍", name: "heart eyes" },
+      { char: "🥰", name: "hearts" },
+      { char: "😘", name: "kiss" },
+      { char: "😎", name: "sunglasses" },
+      { char: "🥳", name: "party" },
+      { char: "🤔", name: "thinking" },
+      { char: "😏", name: "smirk" },
+      { char: "😒", name: "unamused" },
+      { char: "😴", name: "sleeping" },
+      { char: "🥵", name: "hot" },
+      { char: "🥶", name: "cold" },
+      { char: "🤯", name: "exploding" },
+      { char: "😤", name: "triumph" },
+      { char: "😡", name: "angry" },
+      { char: "🤬", name: "cursing" },
+      { char: "😭", name: "crying" },
+      { char: "🥺", name: "pleading" },
+      { char: "😱", name: "screaming" },
+      { char: "😈", name: "devil" },
     ],
   },
   {
     category: "Gestures",
     icon: "👍",
     emojis: [
-      { char: "👋", name: "waving hand" },
-      { char: "🤚", name: "raised back of hand" },
-      { char: "🖐️", name: "hand with fingers splayed" },
+      { char: "👋", name: "wave" },
       { char: "✋", name: "raised hand" },
-      { char: "🖖", name: "vulcan salute" },
-      { char: "👌", name: "ok hand" },
-      { char: "🤌", name: "pinched fingers" },
-      { char: "🤏", name: "pinching hand" },
-      { char: "✌️", name: "victory hand" },
+      { char: "👌", name: "ok" },
+      { char: "✌️", name: "peace" },
       { char: "🤞", name: "crossed fingers" },
-      { char: "🤟", name: "love-you gesture" },
-      { char: "🤘", name: "sign of the horns" },
-      { char: "🤙", name: "call me hand" },
-      { char: "👈", name: "backhand index pointing left" },
-      { char: "👉", name: "backhand index pointing right" },
-      { char: "👆", name: "backhand index pointing up" },
-      { char: "🖕", name: "middle finger" },
-      { char: "👇", name: "backhand index pointing down" },
-      { char: "☝️", name: "index pointing up" },
+      { char: "🤟", name: "love you" },
+      { char: "👈", name: "left" },
+      { char: "👉", name: "right" },
+      { char: "👆", name: "up" },
+      { char: "👇", name: "down" },
+      { char: "☝️", name: "index up" },
       { char: "👍", name: "thumbs up" },
       { char: "👎", name: "thumbs down" },
-      { char: "✊", name: "raised fist" },
-      { char: "👊", name: "oncoming fist" },
-      { char: "🤛", name: "left-facing fist" },
-      { char: "🤜", name: "right-facing fist" },
-      { char: "👏", name: "clapping hands" },
+      { char: "✊", name: "fist" },
+      { char: "👊", name: "punch" },
+      { char: "👏", name: "clap" },
       { char: "🙌", name: "raising hands" },
-      { char: "👐", name: "open hands" },
-      { char: "🤲", name: "palms up together" },
       { char: "🤝", name: "handshake" },
-      { char: "🙏", name: "folded hands" },
-    ],
-  },
-  {
-    category: "Objects",
-    icon: "🎮",
-    emojis: [
-      { char: "🎫", name: "ticket" },
-      { char: "👑", name: "crown" },
-      { char: "🏆", name: "trophy" },
-      { char: "🏅", name: "sports medal" },
-      { char: "🥇", name: "1st place medal" },
-      { char: "🎮", name: "video game" },
-      { char: "🕹️", name: "joystick" },
-      { char: "🎰", name: "slot machine" },
-      { char: "🎲", name: "game die" },
-      { char: "🧩", name: "puzzle piece" },
-      { char: "🎸", name: "guitar" },
-      { char: "🎧", name: "headphone" },
-      { char: "🎤", name: "microphone" },
-      { char: "🎨", name: "artist palette" },
-      { char: "🎬", name: "clapper board" },
-      { char: "🍿", name: "popcorn" },
-      { char: "🛡️", name: "shield" },
-      { char: "🔑", name: "key" },
-      { char: "🔒", name: "locked" },
-      { char: "🔓", name: "unlocked" },
-      { char: "⚙️", name: "gear" },
-      { char: "🛠️", name: "hammer and wrench" },
-      { char: "📦", name: "package" },
-      { char: "✉️", name: "envelope" },
-      { char: "📩", name: "envelope with arrow" },
-      { char: "💬", name: "speech balloon" },
-      { char: "📣", name: "megaphone" },
-      { char: "📢", name: "loudspeaker" },
-      { char: "🔔", name: "bell" },
-      { char: "📌", name: "pushpin" },
+      { char: "🙏", name: "pray" },
+      { char: "💪", name: "flexed biceps" },
     ],
   },
   {
@@ -173,41 +127,59 @@ const EMOJI_DATA: { category: string; icon: string; emojis: EmojiItem[] }[] = [
       { char: "💜", name: "purple heart" },
       { char: "🖤", name: "black heart" },
       { char: "🤍", name: "white heart" },
-      { char: "🤎", name: "brown heart" },
       { char: "💔", name: "broken heart" },
       { char: "✨", name: "sparkles" },
       { char: "⭐", name: "star" },
       { char: "🌟", name: "glowing star" },
+      { char: "💫", name: "dizzy" },
       { char: "🔥", name: "fire" },
-      { char: "💥", name: "collision" },
-      { char: "⚡", name: "high voltage" },
+      { char: "💥", name: "explosion" },
+      { char: "⚡", name: "lightning" },
       { char: "🌈", name: "rainbow" },
-      { char: "⚠️", name: "warning" },
-      { char: "⛔", name: "no entry" },
-      { char: "🚫", name: "prohibited" },
-      { char: "❌", name: "cross mark" },
-      { char: "✅", name: "white heavy check mark" },
-      { char: "☑️", name: "ballot box with check" },
-      { char: "ℹ️", name: "information" },
-      { char: "❓", name: "question mark" },
-      { char: "❔", name: "white question mark" },
-      { char: "❗", name: "exclamation mark" },
-      { char: "➕", name: "plus" },
-      { char: "➖", name: "minus" },
-      { char: "🛑", name: "stop sign" },
+      { char: "❓", name: "question" },
+      { char: "❗", name: "exclamation" },
+      { char: "🔴", name: "red circle" },
+      { char: "🟠", name: "orange circle" },
+      { char: "🟡", name: "yellow circle" },
+      { char: "🟢", name: "green circle" },
+      { char: "🔵", name: "blue circle" },
+      { char: "🟣", name: "purple circle" },
+      { char: "⚫", name: "black circle" },
+      { char: "⚪", name: "white circle" },
+      { char: "🔶", name: "orange diamond" },
+      { char: "🔷", name: "blue diamond" },
+      { char: "▶️", name: "play" },
     ],
   },
 ];
 
-export function EmojiPicker({ onSelect, onClose }: EmojiPickerProps) {
+// ─── Component ────────────────────────────────────────────────────────────────
+
+export function EmojiPicker({ onSelect, onClose, guildId }: EmojiPickerProps) {
   const [search, setSearch] = useState("");
-  const [activeCategory, setActiveCategory] = useState("Frequently Used");
+  const [activeCategory, setActiveCategory] = useState("Discord");
+  const [customEmojis, setCustomEmojis] = useState<CustomEmoji[]>([]);
+  const [loadingCustom, setLoadingCustom] = useState(false);
   const pickerRef = useRef<HTMLDivElement>(null);
+
+  // Load custom server emojis
+  useEffect(() => {
+    if (!guildId) return;
+    setLoadingCustom(true);
+    fetch(`/api/guild/emojis?guildId=${guildId}`)
+      .then(r => r.json())
+      .then(data => {
+        setCustomEmojis(data.emojis || []);
+        if (data.emojis?.length > 0) setActiveCategory("Server");
+      })
+      .catch(() => {})
+      .finally(() => setLoadingCustom(false));
+  }, [guildId]);
 
   // Click outside to close
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (pickerRef.current && !pickerRef.current.contains(event.target as Node)) {
+    function handleClickOutside(e: MouseEvent) {
+      if (pickerRef.current && !pickerRef.current.contains(e.target as Node)) {
         onClose();
       }
     }
@@ -215,106 +187,210 @@ export function EmojiPicker({ onSelect, onClose }: EmojiPickerProps) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [onClose]);
 
-  // Filter emojis based on search query
-  const filteredData = EMOJI_DATA.map((cat) => {
-    const matched = cat.emojis.filter(
-      (e) =>
-        e.name.toLowerCase().includes(search.toLowerCase()) ||
-        e.char === search
-    );
-    return { ...cat, emojis: matched };
-  }).filter((cat) => cat.emojis.length > 0);
+  // Build tabs — server emojis first if available
+  const tabs = [
+    ...(customEmojis.length > 0
+      ? [{ id: "Server", icon: "🖼️", isCustom: true }]
+      : []),
+    ...EMOJI_DATA.map(c => ({ id: c.category, icon: c.icon, isCustom: false })),
+  ];
+
+  // Filter standard emojis on search
+  const filteredStandard = EMOJI_DATA.flatMap(cat =>
+    cat.emojis.filter(e =>
+      e.name.toLowerCase().includes(search.toLowerCase()) || e.char === search
+    ).map(e => ({ ...e, category: cat.category }))
+  );
+
+  // Filter custom emojis on search
+  const filteredCustom = customEmojis.filter(e =>
+    e.name.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const handleSelect = (emoji: string) => {
+    onSelect(emoji);
+    onClose();
+  };
+
+  const handleSelectCustom = (emoji: CustomEmoji) => {
+    // Discord custom emoji format: <:name:id> or <a:name:id> for animated
+    const formatted = emoji.animated
+      ? `<a:${emoji.name}:${emoji.id}>`
+      : `<:${emoji.name}:${emoji.id}>`;
+    handleSelect(formatted);
+  };
 
   return (
     <div
       ref={pickerRef}
-      className="absolute bottom-[calc(100%+8px)] left-0 w-72 bg-[#0c0c0e]/95 border-3 border-black rounded-2xl p-3 shadow-2xl  z-50 animate-fade-up"
+      className="absolute z-50"
+      style={{
+        bottom: "calc(100% + 8px)",
+        left: 0,
+        width: 300,
+        background: "#121315",
+        border: "1px solid rgba(255,255,255,0.1)",
+        borderRadius: 14,
+        boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
+        overflow: "hidden",
+      }}
     >
-      {/* Search Input */}
-      <div className="relative mb-3">
-        <Search className="absolute left-3 top-2.5 w-4 h-4 text-zinc-500" />
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search emoji..."
-          autoFocus
-          className="w-full bg-[#16161a] border-3 border-black rounded-xl pl-9 pr-4 py-2 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-indigo-500/50 transition-colors"
-        />
+      {/* Search */}
+      <div className="p-3 pb-0">
+        <div className="relative">
+          <Search className="absolute left-3 top-2 w-3.5 h-3.5" style={{ color: "#A8A9A2" }} />
+          <input
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Search emoji..."
+            autoFocus
+            style={{
+              width: "100%",
+              background: "rgba(255,255,255,0.05)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              borderRadius: 8,
+              padding: "7px 10px 7px 30px",
+              fontSize: 12,
+              color: "#F5F4F5",
+              outline: "none",
+            }}
+          />
+        </div>
       </div>
 
-      {/* Categories Tabs (only shown when not searching) */}
+      {/* Category tabs — only show when not searching */}
       {!search && (
-        <div className="flex justify-between border-b border-white/5 pb-2 mb-2">
-          {EMOJI_DATA.map((cat) => (
+        <div
+          className="flex gap-0.5 px-3 pt-3 pb-2 overflow-x-auto"
+          style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}
+        >
+          {tabs.map(tab => (
             <button
-              key={cat.category}
-              onClick={() => setActiveCategory(cat.category)}
-              title={cat.category}
-              className={`p-1.5 rounded-lg text-lg transition-all hover:bg-white/5 ${
-                activeCategory === cat.category ? "bg-white/10 scale-110" : "opacity-60"
-              }`}
+              key={tab.id}
+              onClick={() => setActiveCategory(tab.id)}
+              title={tab.id}
+              className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg text-base transition-all"
+              style={activeCategory === tab.id
+                ? { background: "rgba(31,167,187,0.15)", outline: "1px solid rgba(31,167,187,0.3)" }
+                : { opacity: 0.5 }
+              }
             >
-              {cat.icon}
+              {tab.icon}
             </button>
           ))}
         </div>
       )}
 
-      {/* Emojis Grid Container */}
-      <div className="h-44 overflow-y-auto custom-scrollbar space-y-3">
-        {search ? (
-          filteredData.map((cat) => (
-            <div key={cat.category}>
-              <div className="text-[10px] text-zinc-500 font-black tracking-wider uppercase mb-1.5">
-                {cat.category}
+      {/* Emoji grid */}
+      <div
+        className="overflow-y-auto p-2"
+        style={{ height: 180 }}
+      >
+        {/* Searching */}
+        {search && (
+          <>
+            {/* Custom emojis matching search */}
+            {filteredCustom.length > 0 && (
+              <div className="mb-3">
+                <p className="text-[9px] font-semibold uppercase tracking-widest px-1 mb-1.5" style={{ color: "rgba(255,255,255,0.25)" }}>
+                  Server Emojis
+                </p>
+                <div className="grid grid-cols-7 gap-0.5">
+                  {filteredCustom.map(e => (
+                    <button
+                      key={e.id}
+                      onClick={() => handleSelectCustom(e)}
+                      title={`:${e.name}:`}
+                      className="w-8 h-8 flex items-center justify-center rounded-lg transition-colors hover:bg-white/10"
+                    >
+                      <img
+                        src={`https://cdn.discordapp.com/emojis/${e.id}.${e.animated ? "gif" : "webp"}?size=32`}
+                        alt={e.name}
+                        className="w-6 h-6 object-contain"
+                      />
+                    </button>
+                  ))}
+                </div>
               </div>
-              <div className="grid grid-cols-4 sm:grid-cols-6 gap-1">
-                {cat.emojis.map((emoji) => (
+            )}
+            {/* Standard emojis matching search */}
+            {filteredStandard.length > 0 && (
+              <div className="grid grid-cols-7 gap-0.5">
+                {filteredStandard.map((e, i) => (
                   <button
-                    key={emoji.char}
-                    onClick={() => {
-                      onSelect(emoji.char);
-                      onClose();
-                    }}
-                    title={emoji.name}
-                    className="p-1.5 text-xl rounded-lg hover:bg-white/10 transition-colors duration-150 flex items-center justify-center"
+                    key={i}
+                    onClick={() => handleSelect(e.char)}
+                    title={e.name}
+                    className="w-8 h-8 flex items-center justify-center rounded-lg text-xl transition-colors hover:bg-white/10"
                   >
-                    {emoji.char}
+                    {e.char}
                   </button>
                 ))}
               </div>
-            </div>
-          ))
-        ) : (
-          <div>
-            <div className="text-[10px] text-zinc-500 font-black tracking-wider uppercase mb-1.5">
-              {activeCategory}
-            </div>
-            <div className="grid grid-cols-6 gap-1">
-              {EMOJI_DATA.find((c) => c.category === activeCategory)?.emojis.map((emoji) => (
-                <button
-                  key={emoji.char}
-                  onClick={() => {
-                    onSelect(emoji.char);
-                    onClose();
-                  }}
-                  title={emoji.name}
-                  className="p-1.5 text-xl rounded-lg hover:bg-white/10 transition-colors duration-150 flex items-center justify-center animate-fade-in"
-                >
-                  {emoji.char}
-                </button>
-              ))}
-            </div>
-          </div>
+            )}
+            {filteredCustom.length === 0 && filteredStandard.length === 0 && (
+              <p className="text-xs text-center py-8" style={{ color: "rgba(255,255,255,0.25)" }}>No emojis found</p>
+            )}
+          </>
         )}
 
-        {filteredData.length === 0 && (
-          <div className="text-xs text-zinc-500 text-center py-8">
-            No emojis found
+        {/* Server custom emojis tab */}
+        {!search && activeCategory === "Server" && (
+          <>
+            {loadingCustom ? (
+              <div className="flex items-center justify-center h-full">
+                <p className="text-xs" style={{ color: "rgba(255,255,255,0.3)" }}>Loading...</p>
+              </div>
+            ) : customEmojis.length === 0 ? (
+              <p className="text-xs text-center py-8" style={{ color: "rgba(255,255,255,0.25)" }}>No custom emojis on this server</p>
+            ) : (
+              <div className="grid grid-cols-7 gap-0.5">
+                {customEmojis.map(e => (
+                  <button
+                    key={e.id}
+                    onClick={() => handleSelectCustom(e)}
+                    title={`:${e.name}:`}
+                    className="w-8 h-8 flex items-center justify-center rounded-lg transition-colors hover:bg-white/10"
+                  >
+                    <img
+                      src={`https://cdn.discordapp.com/emojis/${e.id}.${e.animated ? "gif" : "webp"}?size=32`}
+                      alt={e.name}
+                      className="w-6 h-6 object-contain"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
+          </>
+        )}
+
+        {/* Standard emoji tab */}
+        {!search && activeCategory !== "Server" && (
+          <div className="grid grid-cols-7 gap-0.5">
+            {EMOJI_DATA.find(c => c.category === activeCategory)?.emojis.map((e, i) => (
+              <button
+                key={i}
+                onClick={() => handleSelect(e.char)}
+                title={e.name}
+                className="w-8 h-8 flex items-center justify-center rounded-lg text-xl transition-colors hover:bg-white/10"
+              >
+                {e.char}
+              </button>
+            ))}
           </div>
         )}
       </div>
+
+      {/* Footer hint for custom emojis */}
+      {activeCategory === "Server" && customEmojis.length > 0 && !search && (
+        <div
+          className="px-3 py-1.5 text-center text-[10px]"
+          style={{ borderTop: "1px solid rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.2)" }}
+        >
+          {customEmojis.length} custom emoji{customEmojis.length !== 1 ? "s" : ""} from your server
+        </div>
+      )}
     </div>
   );
 }

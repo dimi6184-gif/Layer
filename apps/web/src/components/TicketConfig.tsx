@@ -386,7 +386,7 @@ export function TicketConfig({
                 {buttonEmoji || "🎫"}
               </button>
               {showEmojiPicker && (
-                <EmojiPicker onSelect={(emoji) => { setButtonEmoji(emoji); setShowEmojiPicker(false); }} onClose={() => setShowEmojiPicker(false)} />
+                <EmojiPicker onSelect={(emoji) => { setButtonEmoji(emoji); setShowEmojiPicker(false); }} onClose={() => setShowEmojiPicker(false)} guildId={discordId} />
               )}
             </div>
           </div>
