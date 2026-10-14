@@ -154,9 +154,9 @@ export async function addTeamMember(
     throw new Error("You don't have permission to manage team members");
   }
   
-  // Cannot invite as owner - there can only be one owner
+  // Cannot invite as the system "owner" role — use "co_owner" instead
   if (role === "owner") {
-    throw new Error("Cannot invite someone as owner. There can only be one server owner.");
+    throw new Error("Cannot invite as 'owner'. Use 'Co-Owner' instead — it has the same permissions.");
   }
 
   // Fetch Discord user info
@@ -294,9 +294,9 @@ export async function updateTeamMemberRole(
     throw new Error("Cannot change the owner's role");
   }
   
-  // Cannot promote to owner
+  // Cannot promote to system owner role
   if (role === "owner") {
-    throw new Error("Cannot promote someone to owner. There can only be one server owner.");
+    throw new Error("Cannot promote someone to owner. Use 'Co-Owner' instead.");
   }
 
   // Update role
@@ -503,7 +503,7 @@ export async function acceptTeamInvite(guildId: string) {
     data: { status: "active" },
   });
 
-  // Log action
+  // Audit log
   await db.auditLog.create({
     data: {
       guildId,
@@ -518,6 +518,8 @@ export async function acceptTeamInvite(guildId: string) {
   });
 
   revalidatePath(`/dashboard/${guildId}/team`);
+  revalidatePath(`/dashboard/${guildId}`);
+  revalidatePath(`/dashboard`);
   revalidatePath(`/invites`);
   return updated;
 }
@@ -593,37 +595,63 @@ export async function getPendingInvites() {
     orderBy: { createdAt: "desc" },
   });
 
-  // Fetch inviter info for each invite
   const { fetchDiscordUser } = await import("@/lib/discord-api");
-  
-  const invitesWithInviter = await Promise.all(
+
+  const invitesWithDetails = await Promise.all(
     invites.map(async (invite) => {
       let inviterName = null;
+      let guildIcon: string | null = null;
+      let guildName = invite.guild.name;
 
+      // Fetch inviter name
       if (invite.invitedBy) {
-        // Try to get from database first
         const inviter = await db.user.findUnique({
           where: { discordId: invite.invitedBy },
           select: { username: true },
         });
-
         if (inviter) {
           inviterName = inviter.username;
         } else {
-          // Fetch from Discord API if not in database
           const discordUser = await fetchDiscordUser(invite.invitedBy);
-          if (discordUser) {
-            inviterName = discordUser.globalName || discordUser.username;
+          if (discordUser) inviterName = discordUser.globalName || discordUser.username;
+        }
+      }
+
+      // Fetch real server name + icon from Discord API
+      try {
+        const guildRes = await fetch(
+          `https://discord.com/api/v10/guilds/${invite.guild.discordId}`,
+          {
+            headers: { Authorization: `Bot ${process.env.DISCORD_TOKEN}` },
+            next: { revalidate: 60 },
+          }
+        );
+        if (guildRes.ok) {
+          const guildData = await guildRes.json();
+          guildName = guildData.name || guildName;
+          if (guildData.icon) {
+            guildIcon = `https://cdn.discordapp.com/icons/${invite.guild.discordId}/${guildData.icon}.png?size=64`;
+          }
+          // Update guild name in DB if it changed
+          if (guildData.name && guildData.name !== invite.guild.name) {
+            await db.guild.update({
+              where: { discordId: invite.guild.discordId },
+              data: { name: guildData.name },
+            }).catch(() => {});
           }
         }
+      } catch {
+        // Discord API unavailable — use stored name
       }
 
       return {
         ...invite,
         inviterName,
+        guildIcon,
+        guildName,
       };
     })
   );
 
-  return invitesWithInviter;
+  return invitesWithDetails;
 }

@@ -2,7 +2,6 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { getPendingInvites } from "@/actions/team";
 import { InvitesList } from "@/components/InvitesList";
-import { Sparkles } from "lucide-react";
 
 export default async function InvitesPage() {
   const session = await auth();
@@ -30,13 +29,12 @@ export default async function InvitesPage() {
       </div>
 
       {error ? (
-        <div className="bg-yellow-50 border-2 border-yellow-200 rounded-3xl p-8 text-center">
-          <div className="w-16 h-16 rounded-full bg-yellow-100 flex items-center justify-center mx-auto mb-4">
-            <Sparkles className="w-8 h-8 text-yellow-600" />
-          </div>
-          <h3 className="text-lg font-bold text-gray-900 mb-2">Database Connection Issue</h3>
-          <p className="text-gray-600 mb-4">We're having trouble connecting to the database. Please try again later.</p>
-          <p className="text-sm text-gray-500">If this persists, check that your Supabase database is running.</p>
+        <div
+          className="p-5 rounded-2xl text-center"
+          style={{ background: "#121315", border: "1px solid rgba(255,255,255,0.06)" }}
+        >
+          <p className="text-sm font-semibold mb-1" style={{ color: "#F5F4F5" }}>Connection issue</p>
+          <p className="text-xs" style={{ color: "#A8A9A2" }}>Unable to load invitations. Please try again later.</p>
         </div>
       ) : (
         <InvitesList invites={invites} />

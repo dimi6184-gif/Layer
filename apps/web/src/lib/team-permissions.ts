@@ -48,8 +48,12 @@ export const ALL_PERMISSIONS = Object.values(PERMISSIONS);
 export const ROLE_PRESETS = {
   owner: {
     name: "Owner",
-    description: "Full access to everything",
-    // Use explicit list — never use "*" in ROLE_PRESETS to avoid wildcard inconsistency
+    description: "Server owner — assigned automatically, cannot be invited",
+    permissions: ALL_PERMISSIONS as unknown as string[],
+  },
+  co_owner: {
+    name: "Co-Owner",
+    description: "Full access to everything including team management",
     permissions: ALL_PERMISSIONS as unknown as string[],
   },
   admin: {
