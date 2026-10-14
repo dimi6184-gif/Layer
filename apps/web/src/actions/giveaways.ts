@@ -2,6 +2,7 @@
 
 import { db } from '@nexus/db';
 import { ensureServerAccess } from '@/lib/ensure-access';
+import { auth } from '@/auth';
 import { revalidatePath } from 'next/cache';
 
 interface CreateGiveawayData {
@@ -171,7 +172,8 @@ export async function rerollGiveaway(guildId: string, messageId: string, winners
 }
 
 export async function deleteGiveaway(guildId: string, giveawayId: string) {
-  const session = await ensureServerAccess(guildId);
+  await ensureServerAccess(guildId);
+  const session = await auth();
 
   // SECURITY: Include guildId constraint to prevent cross-guild deletion (object-level IDOR)
   const deleted = await db.giveaway.deleteMany({
@@ -187,8 +189,8 @@ export async function deleteGiveaway(guildId: string, giveawayId: string) {
     data: {
       guildId,
       action: 'GIVEAWAY_DELETED',
-      userId: (session.user as any)?.id ?? null,
-      userName: session.user?.name ?? 'Dashboard',
+      userId: session?.user?.id ?? null,
+      userName: session?.user?.name ?? 'Dashboard',
       details: 'Giveaway deleted from database',
       metadata: { giveawayId },
     },

@@ -33,11 +33,12 @@ interface LeaveSettings {
 }
 
 export async function updateWelcomeSettings(guildId: string, settings: WelcomeSettings) {
-  const session = await ensureServerAccess(guildId);
+  await ensureServerAccess(guildId);
   const canManage = await hasPermission(guildId, PERMISSIONS.MANAGE_MODULES);
   if (!canManage) throw new Error('Missing permission: MANAGE_MODULES');
-  const userId = (session.user as any)?.id ?? null;
-  const userName = session.user?.name ?? 'Dashboard';
+  const session = await auth();
+  const userId = session?.user?.id ?? null;
+  const userName = session?.user?.name ?? 'Dashboard';
 
   await db.guild.update({
     where: { discordId: guildId },
@@ -72,11 +73,12 @@ export async function updateWelcomeSettings(guildId: string, settings: WelcomeSe
 }
 
 export async function updateLeaveSettings(guildId: string, settings: LeaveSettings) {
-  const session = await ensureServerAccess(guildId);
+  await ensureServerAccess(guildId);
   const canManage = await hasPermission(guildId, PERMISSIONS.MANAGE_MODULES);
   if (!canManage) throw new Error('Missing permission: MANAGE_MODULES');
-  const userId = (session.user as any)?.id ?? null;
-  const userName = session.user?.name ?? 'Dashboard';
+  const session = await auth();
+  const userId = session?.user?.id ?? null;
+  const userName = session?.user?.name ?? 'Dashboard';
 
   await db.guild.update({
     where: { discordId: guildId },
