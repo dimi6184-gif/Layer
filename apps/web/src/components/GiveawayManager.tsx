@@ -33,8 +33,7 @@ const inputSt = {
 };
 const labelSt = { color: "#A8A9A2", fontSize: 11, fontWeight: 600, textTransform: "uppercase" as const, letterSpacing: "0.05em", display: "block", marginBottom: 4 };
 
-export function GiveawayManager({ guildId, activeGiveaways: initialActive, endedGiveaways: initialEnded, channels, roles }: GiveawayManagerProps) {
-  const [showCreateForm, setShowCreateForm] = useState(false);
+export function GiveawayManager({ guildId, activeGiveaways: initialActive, endedGiveaways: initialEnded, channels, roles }: GiveawayManagerProps) {  const [showCreateForm, setShowCreateForm] = useState(false);
   const [loading, setLoading] = useState(false);
   const { showToast } = useToast();
 
@@ -47,10 +46,14 @@ export function GiveawayManager({ guildId, activeGiveaways: initialActive, ended
   const [channelId, setChannelId] = useState('');
   const [requiredLevel, setRequiredLevel] = useState('');
   const [requireBoost, setRequireBoost] = useState(false);
+  const [requiredRoleIds, setRequiredRoleIds] = useState<string[]>([]);
+  const [blacklistedRoleIds, setBlacklistedRoleIds] = useState<string[]>([]);
+  const [showRequirements, setShowRequirements] = useState(false);
 
   const resetForm = () => {
     setPrize(''); setDescription(''); setDuration('1'); setDurationUnit('hours');
     setWinnerCount(1); setChannelId(''); setRequiredLevel(''); setRequireBoost(false);
+    setRequiredRoleIds([]); setBlacklistedRoleIds([]); setShowRequirements(false);
   };
 
   const handleCreate = async () => {
@@ -64,6 +67,8 @@ export function GiveawayManager({ guildId, activeGiveaways: initialActive, ended
         winnerCount, channelId,
         requiredLevel: requiredLevel ? parseInt(requiredLevel) : undefined,
         requireBoost,
+        requiredRoleIds: requiredRoleIds.length > 0 ? requiredRoleIds : undefined,
+        blacklistedRoleIds: blacklistedRoleIds.length > 0 ? blacklistedRoleIds : undefined,
       });
       showToast('Giveaway created!');
       setShowCreateForm(false);
@@ -185,16 +190,111 @@ export function GiveawayManager({ guildId, activeGiveaways: initialActive, ended
             </div>
 
             {/* Requirements */}
-            <div className="pt-3 space-y-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-              <p style={labelSt}>Requirements (Optional)</p>
-              <div>
-                <label style={{ ...labelSt, marginBottom: 4 }}>Minimum Level</label>
-                <input type="number" value={requiredLevel} onChange={e => setRequiredLevel(e.target.value)} placeholder="No requirement" min="1" style={inputSt} />
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm" style={{ color: "#F5F4F5" }}>Require Server Boost</span>
-                <ToggleSwitch enabled={requireBoost} onChange={setRequireBoost} />
-              </div>
+            <div className="pt-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+              <button
+                type="button"
+                onClick={() => setShowRequirements(!showRequirements)}
+                className="flex items-center gap-2 text-xs font-medium transition-colors hover:text-white w-full text-left"
+                style={{ color: showRequirements ? "#1FA7BB" : "#A8A9A2" }}
+              >
+                <span>{showRequirements ? "▼" : "▶"}</span>
+                Entry Requirements
+                <span className="ml-auto text-[10px] px-1.5 py-0.5 rounded" style={{ background: "rgba(255,255,255,0.06)", color: "#A8A9A2" }}>
+                  Optional
+                </span>
+              </button>
+
+              {showRequirements && (
+                <div className="mt-4 space-y-4">
+
+                  {/* Required roles */}
+                  <div>
+                    <label style={labelSt}>Required Role (must have one)</label>
+                    <p className="text-xs mb-2" style={{ color: "rgba(255,255,255,0.3)" }}>
+                      Users need at least one of these roles to enter.
+                    </p>
+                    <div className="rounded-xl max-h-36 overflow-y-auto p-2 space-y-1" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
+                      {roles.length === 0 ? (
+                        <p className="text-xs p-2" style={{ color: "#A8A9A2" }}>No roles available</p>
+                      ) : roles.filter((r: any) => r.name !== '@everyone').map((r: any) => (
+                        <label key={r.id} className="flex items-center gap-2.5 px-2 py-1.5 rounded-lg cursor-pointer transition-colors hover:bg-white/5">
+                          <input
+                            type="checkbox"
+                            checked={requiredRoleIds.includes(r.id)}
+                            onChange={() => setRequiredRoleIds(prev =>
+                              prev.includes(r.id) ? prev.filter(x => x !== r.id) : [...prev, r.id]
+                            )}
+                            style={{ accentColor: "#1FA7BB" }}
+                          />
+                          <span className="text-sm" style={{ color: "#F5F4F5" }}>@{r.name}</span>
+                        </label>
+                      ))}
+                    </div>
+                    {requiredRoleIds.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 mt-2">
+                        {roles.filter((r: any) => requiredRoleIds.includes(r.id)).map((r: any) => (
+                          <span key={r.id} className="flex items-center gap-1 px-2 py-0.5 rounded text-xs" style={{ background: "rgba(31,167,187,0.1)", color: "#1FA7BB", border: "1px solid rgba(31,167,187,0.2)" }}>
+                            @{r.name}
+                            <button onClick={() => setRequiredRoleIds(prev => prev.filter(x => x !== r.id))} className="hover:opacity-70">×</button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Blacklisted roles */}
+                  <div>
+                    <label style={labelSt}>Blocked Roles (cannot have)</label>
+                    <p className="text-xs mb-2" style={{ color: "rgba(255,255,255,0.3)" }}>
+                      Users with these roles cannot enter.
+                    </p>
+                    <div className="rounded-xl max-h-36 overflow-y-auto p-2 space-y-1" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
+                      {roles.length === 0 ? (
+                        <p className="text-xs p-2" style={{ color: "#A8A9A2" }}>No roles available</p>
+                      ) : roles.filter((r: any) => r.name !== '@everyone').map((r: any) => (
+                        <label key={r.id} className="flex items-center gap-2.5 px-2 py-1.5 rounded-lg cursor-pointer transition-colors hover:bg-white/5">
+                          <input
+                            type="checkbox"
+                            checked={blacklistedRoleIds.includes(r.id)}
+                            onChange={() => setBlacklistedRoleIds(prev =>
+                              prev.includes(r.id) ? prev.filter(x => x !== r.id) : [...prev, r.id]
+                            )}
+                            style={{ accentColor: "#EF4444" }}
+                          />
+                          <span className="text-sm" style={{ color: "#F5F4F5" }}>@{r.name}</span>
+                        </label>
+                      ))}
+                    </div>
+                    {blacklistedRoleIds.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 mt-2">
+                        {roles.filter((r: any) => blacklistedRoleIds.includes(r.id)).map((r: any) => (
+                          <span key={r.id} className="flex items-center gap-1 px-2 py-0.5 rounded text-xs" style={{ background: "rgba(239,68,68,0.1)", color: "#EF4444", border: "1px solid rgba(239,68,68,0.2)" }}>
+                            @{r.name}
+                            <button onClick={() => setBlacklistedRoleIds(prev => prev.filter(x => x !== r.id))} className="hover:opacity-70">×</button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Minimum level */}
+                  <div>
+                    <label style={labelSt}>Minimum Level</label>
+                    <input type="number" value={requiredLevel} onChange={e => setRequiredLevel(e.target.value)} placeholder="No requirement" min="1" style={inputSt} />
+                    <p className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.3)" }}>Users need this level or higher to enter.</p>
+                  </div>
+
+                  {/* Require boost */}
+                  <div className="flex items-center justify-between p-3 rounded-xl" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
+                    <div>
+                      <p className="text-sm font-medium" style={{ color: "#F5F4F5" }}>Require Server Boost</p>
+                      <p className="text-xs mt-0.5" style={{ color: "rgba(255,255,255,0.3)" }}>Only Server Boosters can enter.</p>
+                    </div>
+                    <ToggleSwitch enabled={requireBoost} onChange={setRequireBoost} />
+                  </div>
+
+                </div>
+              )}
             </div>
 
             <div className="flex gap-2 pt-2">
