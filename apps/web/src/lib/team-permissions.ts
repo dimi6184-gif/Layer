@@ -36,19 +36,26 @@ export const PERMISSIONS = {
   
   // Audit Logs
   VIEW_LOGS: "view_logs",
+
+  // Socials
+  MANAGE_SOCIALS: "manage_socials",
 } as const;
+
+// All permissions as explicit list (used for owner role)
+export const ALL_PERMISSIONS = Object.values(PERMISSIONS);
 
 // Role presets
 export const ROLE_PRESETS = {
   owner: {
     name: "Owner",
     description: "Full access to everything",
-    permissions: Object.values(PERMISSIONS),
+    // Use explicit list — never use "*" in ROLE_PRESETS to avoid wildcard inconsistency
+    permissions: ALL_PERMISSIONS as unknown as string[],
   },
   admin: {
     name: "Admin",
     description: "Almost full access, cannot manage team",
-    permissions: Object.values(PERMISSIONS).filter(p => p !== PERMISSIONS.MANAGE_TEAM),
+    permissions: ALL_PERMISSIONS.filter(p => p !== PERMISSIONS.MANAGE_TEAM) as unknown as string[],
   },
   moderator: {
     name: "Moderator",

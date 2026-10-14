@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { db } from "@nexus/db";
+import { ALL_PERMISSIONS } from "@/lib/team-permissions";
 
 /**
  * Ensures the authenticated user has access to the given guild.
@@ -73,16 +74,16 @@ export async function ensureServerAccess(guildId: string) {
             create: { discordId: userId, username: session.user.name ?? "Unknown" },
           });
 
-          // Add/reactivate as owner
+          // Add/reactivate as owner with explicit permissions (not wildcard)
           await db.teamMember.upsert({
             where: { guildId_userId: { guildId, userId } },
-            update: { status: "active", role: "owner", permissions: { permissions: ["*"] } },
+            update: { status: "active", role: "owner", permissions: { permissions: ALL_PERMISSIONS } },
             create: {
               guildId,
               userId,
               role: "owner",
               status: "active",
-              permissions: { permissions: ["*"] },
+              permissions: { permissions: ALL_PERMISSIONS },
             },
           });
 
