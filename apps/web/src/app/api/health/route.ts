@@ -42,7 +42,9 @@ export async function GET() {
       {
         status: "unhealthy",
         timestamp: new Date().toISOString(),
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: process.env.NODE_ENV === 'development'
+        ? (error instanceof Error ? error.message : "Unknown error")
+        : "Service unavailable",
         services: {
           database: {
             status: "down",

@@ -67,10 +67,39 @@ export async function updateAutoModSettings(guildId: string, settings: {
   
   const session = await auth();
 
-  // Update settings
+  // SECURITY: Explicitly whitelist only allowed fields — never spread raw input into db.guild.update
   await db.guild.update({
     where: { discordId: guildId },
-    data: settings,
+    data: {
+      autoModEnabled: settings.autoModEnabled,
+      autoModSpamEnabled: settings.autoModSpamEnabled,
+      autoModSpamMaxMessages: settings.autoModSpamMaxMessages,
+      autoModSpamTimeframe: settings.autoModSpamTimeframe,
+      autoModSpamAction: settings.autoModSpamAction,
+      autoModSpamTimeoutDuration: settings.autoModSpamTimeoutDuration,
+      autoModCapsEnabled: settings.autoModCapsEnabled,
+      autoModCapsThreshold: settings.autoModCapsThreshold,
+      autoModCapsMinLength: settings.autoModCapsMinLength,
+      autoModCapsAction: settings.autoModCapsAction,
+      autoModLinksEnabled: settings.autoModLinksEnabled,
+      autoModLinksWhitelist: settings.autoModLinksWhitelist,
+      autoModLinksAction: settings.autoModLinksAction,
+      autoModInvitesEnabled: settings.autoModInvitesEnabled,
+      autoModInvitesAction: settings.autoModInvitesAction,
+      autoModMentionsEnabled: settings.autoModMentionsEnabled,
+      autoModMentionsMax: settings.autoModMentionsMax,
+      autoModMentionsAction: settings.autoModMentionsAction,
+      autoModEmojisEnabled: settings.autoModEmojisEnabled,
+      autoModEmojisMax: settings.autoModEmojisMax,
+      autoModEmojisAction: settings.autoModEmojisAction,
+      autoModAttachmentsEnabled: settings.autoModAttachmentsEnabled,
+      autoModAttachmentsAction: settings.autoModAttachmentsAction,
+      autoModWhitelistChannels: settings.autoModWhitelistChannels,
+      autoModWhitelistRoles: settings.autoModWhitelistRoles,
+      autoModDuplicatesEnabled: settings.autoModDuplicatesEnabled,
+      autoModDuplicatesTimeframe: settings.autoModDuplicatesTimeframe,
+      autoModDuplicatesAction: settings.autoModDuplicatesAction,
+    },
   });
 
   // Log audit

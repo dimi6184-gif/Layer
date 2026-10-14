@@ -17,7 +17,14 @@ interface CreateGiveawayData {
 }
 
 export async function createGiveaway(guildId: string, data: CreateGiveawayData) {
-  await ensureServerAccess(guildId);
+  const session = await ensureServerAccess(guildId);
+
+  // SECURITY: Validate duration bounds to prevent extremely long or short giveaways
+  if (data.duration < 60) throw new Error('Giveaway must last at least 1 minute');
+  if (data.duration > 30 * 24 * 3600) throw new Error('Giveaway cannot last more than 30 days');
+  if (data.winnerCount < 1 || data.winnerCount > 20) throw new Error('Winner count must be between 1 and 20');
+  if (!data.prize || data.prize.trim().length === 0) throw new Error('Prize is required');
+  if (data.prize.length > 200) throw new Error('Prize must be under 200 characters');
 
   const endsAt = new Date(Date.now() + data.duration * 1000);
 

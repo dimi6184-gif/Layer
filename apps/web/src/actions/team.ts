@@ -23,7 +23,8 @@ export async function hasPermission(guildId: string, permission: string): Promis
   if (!teamMember || teamMember.status !== "active") return false;
 
   const permissions = teamMember.permissions as { permissions: string[] };
-  return permissions.permissions.includes(permission);
+  // Wildcard permission (*) grants everything — used for owners
+  return permissions.permissions.includes("*") || permissions.permissions.includes(permission);
 }
 
 // Ensure user is a team member (auto-add as owner if first user)
@@ -363,6 +364,11 @@ export async function removeTeamMember(guildId: string, userId: string) {
   if (teamMember?.role === "owner") {
     throw new Error("Cannot remove owner");
   }
+  
+  // SECURITY: Cannot remove yourself
+  if (userId === session.user.id) {
+    throw new Error("You cannot remove yourself from the team");
+  }
 
   // Remove team member
   await db.teamMember.delete({
@@ -422,6 +428,15 @@ export async function updateTeamMemberPermissions(
     throw new Error("Cannot change owner permissions");
   }
 
+  // SECURITY: Prevent privilege escalation — no one can grant wildcard or owner-level perms
+  const FORBIDDEN_PERMISSIONS = ["*", "OWNER"];
+  const sanitizedPermissions = permissions.filter(p => !FORBIDDEN_PERMISSIONS.includes(p));
+  
+  // Cannot change your own permissions
+  if (userId === session.user.id) {
+    throw new Error("You cannot change your own permissions");
+  }
+
   // Update permissions
   const updated = await db.teamMember.update({
     where: {
@@ -433,7 +448,7 @@ export async function updateTeamMemberPermissions(
     data: {
       role: "custom",
       permissions: {
-        permissions,
+        permissions: sanitizedPermissions,
       },
     },
   });
