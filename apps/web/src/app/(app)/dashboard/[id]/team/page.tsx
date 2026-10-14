@@ -1,4 +1,3 @@
-import { auth } from "@/auth";
 import { db } from "@nexus/db";
 import { redirect } from "next/navigation";
 import { TeamManagement } from "@/components/TeamManagement";
@@ -9,45 +8,62 @@ import { ensureServerAccess } from "@/lib/ensure-access";
 export default async function TeamPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: guildId } = await params;
 
-  // Ensure user has access (auto-creates owner if first user)
   await ensureServerAccess(guildId);
 
-  // Check if user has permission to view team
   const canView = await hasPermission(guildId, PERMISSIONS.VIEW_TEAM);
-  
+
   if (!canView) {
     return (
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-8 text-center">
-          <h1 className="text-2xl font-bold text-red-400 mb-2">Access Denied</h1>
-          <p className="text-zinc-400">
-            You don't have permission to view team management for this server.
-          </p>
-        </div>
+      <div className="max-w-4xl mx-auto p-8 text-center rounded-2xl" style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}>
+        <p className="text-sm font-semibold" style={{ color: "#EF4444" }}>Access Denied</p>
+        <p className="text-xs mt-1" style={{ color: "#A8A9A2" }}>You don't have permission to view team management.</p>
       </div>
     );
   }
 
-  // Get team members (only active ones)
   const teamMembers = await db.teamMember.findMany({
-    where: { 
-      guildId,
-      status: "active",
-    },
+    where: { guildId, status: "active" },
     include: {
-      user: {
-        select: {
-          username: true,
-          discordId: true,
-        },
-      },
+      user: { select: { username: true, discordId: true } },
     },
     orderBy: { createdAt: "asc" },
   });
 
+  // Fetch Discord avatars for all members in one batch
+  const avatarMap: Record<string, string | null> = {};
+  await Promise.all(
+    teamMembers.map(async (m) => {
+      try {
+        const res = await fetch(
+          `https://discord.com/api/v10/users/${m.user.discordId}`,
+          {
+            headers: { Authorization: `Bot ${process.env.DISCORD_TOKEN}` },
+            next: { revalidate: 300 },
+          }
+        );
+        if (res.ok) {
+          const data = await res.json();
+          avatarMap[m.user.discordId] = data.avatar
+            ? `https://cdn.discordapp.com/avatars/${m.user.discordId}/${data.avatar}.png?size=128`
+            : null;
+        } else {
+          avatarMap[m.user.discordId] = null;
+        }
+      } catch {
+        avatarMap[m.user.discordId] = null;
+      }
+    })
+  );
+
+  // Attach avatar URLs to members
+  const membersWithAvatars = teamMembers.map((m) => ({
+    ...m,
+    avatarUrl: avatarMap[m.user.discordId] ?? null,
+  }));
+
   return (
-    <div className="max-w-6xl mx-auto">
-      <TeamManagement guildId={guildId} teamMembers={teamMembers as any} />
+    <div className="max-w-4xl mx-auto">
+      <TeamManagement guildId={guildId} teamMembers={membersWithAvatars as any} />
     </div>
   );
 }
