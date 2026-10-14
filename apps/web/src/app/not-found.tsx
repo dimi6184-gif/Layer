@@ -1,80 +1,137 @@
 ﻿import Link from "next/link";
 import Image from "next/image";
-import { Home, ArrowLeft, Search } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Animated background gradient */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-yellow-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-yellow-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+    <div
+      className="min-h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden"
+      style={{ background: "#080808" }}
+      suppressHydrationWarning
+    >
+      {/* Background: two soft glows */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div style={{
+          position: "absolute", top: "35%", left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: 600, height: 600, borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(31,167,187,0.07) 0%, transparent 65%)",
+        }} />
+        <div style={{
+          position: "absolute", bottom: "10%", right: "20%",
+          width: 300, height: 300, borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(31,167,187,0.04) 0%, transparent 70%)",
+        }} />
       </div>
 
-      <div className="max-w-2xl w-full text-center relative z-10">
+      {/* Grid texture — very subtle */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.025]"
+        style={{
+          backgroundImage: "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
+          backgroundSize: "60px 60px",
+        }}
+      />
+
+      {/* Content */}
+      <div className="relative z-10 flex flex-col items-center text-center">
+
         {/* Logo */}
-        <div className="mb-8 flex justify-center">
-          <div className="w-20 h-20 relative">
-            <Image src="/logo.png" alt="Layer Logo" width={80} height={80} style={{ width: 'auto', height: 'auto' }} className="max-w-[80px] max-h-[80px] object-contain opacity-50" />
+        <Link href="/" className="flex items-center gap-2 mb-12 group">
+          <div className="opacity-50 group-hover:opacity-100 transition-opacity flex items-center gap-2">
+            <Image src="/logo.png" alt="Layer" width={22} height={22} className="object-contain" />
+            <span className="text-sm font-semibold text-white">Layer</span>
           </div>
-        </div>
+        </Link>
 
-        {/* 404 with gradient */}
-        <div className="mb-8">
-          <h1 className="text-[150px] md:text-[200px] font-bold leading-none mb-4">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 animate-gradient">
-              404
-            </span>
-          </h1>
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Lost in the layers
-          </h2>
-          <p className="text-lg md:text-xl text-zinc-400 max-w-md mx-auto leading-relaxed">
-            This page doesn't exist or has been moved to another layer.
+        {/* Big 404 with teal border-bottom effect */}
+        <div className="relative mb-6">
+          <p
+            className="font-bold leading-none select-none"
+            style={{
+              fontSize: "clamp(96px, 18vw, 160px)",
+              background: "linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              letterSpacing: "-4px",
+            }}
+          >
+            404
           </p>
+          {/* Teal underline glow */}
+          <div style={{
+            position: "absolute", bottom: -4, left: "50%",
+            transform: "translateX(-50%)",
+            width: "60%", height: 2,
+            background: "linear-gradient(90deg, transparent, #1FA7BB, transparent)",
+            opacity: 0.6,
+          }} />
         </div>
 
-        {/* Action buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+        {/* Text */}
+        <h1 className="text-lg font-semibold mb-2" style={{ color: "#F5F4F5" }}>
+          Page not found
+        </h1>
+        <p className="text-sm mb-10 max-w-xs leading-6" style={{ color: "rgba(255,255,255,0.38)" }}>
+          This page doesn't exist or has been moved.<br />
+          Let's get you back on track.
+        </p>
+
+        {/* Buttons */}
+        <div className="flex items-center gap-3">
           <Link
             href="/"
-            className="group w-full sm:w-auto flex items-center justify-center gap-2 comic-button bg-yellow-400 text-black rounded-xl font-black text-lg transition-all hover:translate-y-\[-2px\] hover:shadow-\[8px_8px_0px_#000\] hover:shadow-2xl hover:shadow-yellow-500/50"
+            className="px-5 py-2.5 rounded-xl text-sm font-semibold transition-all hover:opacity-90 active:scale-95"
+            style={{ background: "#1FA7BB", color: "#101012" }}
           >
-            <Home className="w-5 h-5" />
-            Go Back Home
+            Go home
           </Link>
           <Link
             href="/dashboard"
-            className="group w-full sm:w-auto flex items-center justify-center gap-2 bg-white text-black hover:bg-yellow-400 border-3 border-black "
+            className="px-5 py-2.5 rounded-xl text-sm font-medium transition-all hover:text-white active:scale-95"
+            style={{
+              background: "rgba(255,255,255,0.05)",
+              border: "1px solid rgba(255,255,255,0.09)",
+              color: "rgba(255,255,255,0.55)",
+            }}
           >
-            <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
             Dashboard
           </Link>
         </div>
 
-        {/* Helpful links */}
-        <div className="border-t border-white/10 pt-8">
-          <p className="text-sm text-zinc-500 mb-4">Looking for something?</p>
-          <div className="flex flex-wrap items-center justify-center gap-4 text-sm">
-            <Link href="/commands" className="text-yellow-400 hover:text-yellow-300 transition-colors flex items-center gap-1">
-              <Search className="w-4 h-4" />
-              Commands
-            </Link>
-            <span className="text-zinc-700">•</span>
-            <Link href="/about" className="text-yellow-400 hover:text-yellow-300 transition-colors">
-              About
-            </Link>
-            <span className="text-zinc-700">•</span>
-            <Link href="/#features" className="text-yellow-400 hover:text-yellow-300 transition-colors">
-              Features
-            </Link>
-            <span className="text-zinc-700">•</span>
-            <Link href="/premium" className="text-yellow-400 hover:text-yellow-300 transition-colors">
-              Premium
-            </Link>
-          </div>
+        {/* Divider */}
+        <div className="flex items-center gap-4 mt-12 mb-4">
+          <div style={{ width: 40, height: 1, background: "rgba(255,255,255,0.07)" }} />
+          <span className="text-xs" style={{ color: "rgba(255,255,255,0.2)" }}>or explore</span>
+          <div style={{ width: 40, height: 1, background: "rgba(255,255,255,0.07)" }} />
         </div>
+
+        {/* Quick links */}
+        <div className="flex items-center gap-6">
+          {[
+            { label: "Commands", href: "/commands" },
+            { label: "Security", href: "/security" },
+            { label: "Pricing", href: "/premium" },
+          ].map(link => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="text-xs transition-colors hover:text-white"
+              style={{ color: "rgba(255,255,255,0.25)" }}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+
       </div>
+
+      {/* Bottom copyright */}
+      <p
+        className="absolute bottom-6 text-xs"
+        style={{ color: "rgba(255,255,255,0.12)" }}
+      >
+        © {new Date().getFullYear()} Layer
+      </p>
     </div>
   );
 }

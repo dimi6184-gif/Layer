@@ -50,15 +50,22 @@ export async function shouldAIRespond(message: Message): Promise<boolean> {
   });
 
   if (staffHasWritten) {
-    // Check if that user has a staff role
+    // Check if that user has a staff role OR admin permissions
     try {
       const member = await message.guild?.members.fetch(staffHasWritten.userId);
       if (member) {
         const hasStaffRole = member.roles.cache.some((role) =>
           guild.aiTicketStaffRoleIds.includes(role.id)
         );
-        if (hasStaffRole) {
-          console.log(`[AI Ticket] Staff member has already responded in this ticket`);
+        const hasAdminPermission =
+          member.permissions.has('Administrator') ||
+          member.permissions.has('ManageGuild') ||
+          member.permissions.has('ManageChannels') ||
+          member.permissions.has('KickMembers') ||
+          member.permissions.has('BanMembers');
+
+        if (hasStaffRole || hasAdminPermission) {
+          console.log(`[AI Ticket] Staff/Admin has already responded in this ticket — AI staying silent`);
           return false;
         }
       }
@@ -67,7 +74,7 @@ export async function shouldAIRespond(message: Message): Promise<boolean> {
     }
   }
 
-  // Check if current message author has a staff role
+  // Check if current message author has a staff role OR admin permissions
   // Do NOT block if the author is the one who opened the ticket!
   const channelTopic = 'topic' in message.channel ? (message.channel as any).topic : null;
   const isTicketCreator = 
@@ -78,11 +85,21 @@ export async function shouldAIRespond(message: Message): Promise<boolean> {
     try {
       const member = await message.guild?.members.fetch(message.author.id);
       if (member) {
+        // Check configured staff roles
         const hasStaffRole = member.roles.cache.some((role) =>
           guild.aiTicketStaffRoleIds.includes(role.id)
         );
-        if (hasStaffRole) {
-          console.log(`[AI Ticket] Message from staff member - AI will not respond`);
+
+        // Check Discord admin permissions (Administrator, ManageGuild, ManageChannels)
+        const hasAdminPermission =
+          member.permissions.has('Administrator') ||
+          member.permissions.has('ManageGuild') ||
+          member.permissions.has('ManageChannels') ||
+          member.permissions.has('KickMembers') ||
+          member.permissions.has('BanMembers');
+
+        if (hasStaffRole || hasAdminPermission) {
+          console.log(`[AI Ticket] Staff/Admin member wrote in ticket — AI stepping back`);
           return false;
         }
       }

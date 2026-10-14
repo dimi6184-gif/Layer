@@ -1,230 +1,182 @@
-﻿'use client';
-
-import { Crown, Check, Sparkles, Zap, Shield, Bot, ArrowRight, X } from "lucide-react";
+﻿import { Check, X } from "lucide-react";
 import Link from "next/link";
 
 export default function PremiumPage() {
+  const free = [
+    "Up to 1,000 members",
+    "Basic auto-moderation",
+    "Ticket system",
+    "Leveling & XP",
+    "Welcome messages",
+    "Verification system",
+    "Music player",
+    "10 AI scans per day",
+    "Community support",
+  ];
+
+  const pro = [
+    "Up to 10,000 members",
+    "Unlimited AI scam detection",
+    "Ban evasion tracking",
+    "AI ticket routing",
+    "Advanced auto-moderation",
+    "Custom verification flows",
+    "Advanced analytics dashboard",
+    "Ghost member cleaner",
+    "Avatar history tracker",
+    "Impersonation detection",
+    "Priority support (24h)",
+    "Remove 'Powered by Layer'",
+  ];
+
+  const notInFree = [
+    "Ban evasion tracking",
+    "AI ticket routing",
+    "Advanced analytics",
+    "Ghost member cleaner",
+    "Avatar history tracker",
+    "Impersonation detection",
+    "Priority support",
+  ];
+
   return (
-    <div className="min-h-screen bg-white text-gray-900">
-      
-      {/* Hero */}
-      <section className="py-40 px-6 bg-gradient-to-b from-blue-50/30 to-white">
-        <div className="max-w-4xl mx-auto text-center">
-          
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 rounded-full mb-6 animate-fade-in">
-            <Crown className="w-4 h-4 text-blue-600" />
-            <span className="text-sm font-medium text-blue-600">Layer Premium</span>
-          </div>
-          
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight animate-fade-in">
-            Unlock the full
-            <br />
-            <span className="bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent animate-gradient">
-              power of Layer
-            </span>
-          </h1>
-          
-          <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto animate-fade-in-delay">
-            Get advanced features, priority support, and exclusive tools for serious communities.
-          </p>
+    <div className="space-y-12">
 
-        </div>
-      </section>
+      {/* Header */}
+      <div>
+        <h1 className="text-3xl font-semibold tracking-tight mb-1.5" style={{ color: "#F5F4F5" }}>
+          Plans & Pricing
+        </h1>
+        <p className="text-sm leading-6" style={{ color: "rgba(255,255,255,0.5)" }}>
+          Layer is completely free during early access. Every feature, every server, no limits.<br />
+          We may introduce Pro in the future — early servers will always be taken care of.
+        </p>
+      </div>
 
-      {/* Pricing Cards */}
-      <section className="py-16 px-6">
-        <div className="max-w-5xl mx-auto">
-          
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            
-            {/* Free Plan */}
-            <div className="p-8 bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 animate-fade-in">
-              <div className="mb-6">
-                <h3 className="text-2xl font-bold mb-2">Free</h3>
-                <div className="flex items-baseline gap-2 mb-4">
-                  <span className="text-5xl font-bold">$0</span>
-                  <span className="text-gray-500">/month</span>
-                </div>
-                <p className="text-sm text-gray-600">Perfect for small communities</p>
-              </div>
+      {/* Plans grid */}
+      <div className="grid md:grid-cols-2 gap-5">
 
-              <div className="space-y-3 mb-8">
-                <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
-                  <span className="text-sm">Basic moderation</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
-                  <span className="text-sm">Music player</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
-                  <span className="text-sm">Leveling system</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-green-500 shrink-0 mt-0.5" />
-                  <span className="text-sm">Web dashboard</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <X className="w-5 h-5 text-gray-300 shrink-0 mt-0.5" />
-                  <span className="text-sm text-gray-400">AI features</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <X className="w-5 h-5 text-gray-300 shrink-0 mt-0.5" />
-                  <span className="text-sm text-gray-400">Priority support</span>
-                </div>
-              </div>
-
-              <Link 
-                href="/dashboard"
-                className="block w-full text-center px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-900 font-semibold rounded-full transition-all duration-300"
-              >
-                Get Started
-              </Link>
+        <div className="rounded-2xl p-6 space-y-5" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}>
+          <div>
+            <p className="text-xs uppercase tracking-wider mb-2" style={{ color: "rgba(255,255,255,0.35)" }}>Free</p>
+            <div className="flex items-end gap-1 mb-1">
+              <span className="text-4xl font-semibold" style={{ color: "#F5F4F5" }}>$0</span>
+              <span className="text-sm mb-1.5" style={{ color: "rgba(255,255,255,0.35)" }}>/month</span>
             </div>
-
-            {/* Pro Plan - Featured */}
-            <div className="p-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl shadow-2xl hover:shadow-blue-500/50 transition-all duration-500 relative card-glow border-2 border-blue-400 animate-fade-in-delay">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                <div className="px-4 py-1 bg-yellow-400 rounded-full text-xs font-bold text-gray-900 animate-pulse">
-                  RECOMMENDED
-                </div>
-              </div>
-
-              <div className="mb-6">
-                <h3 className="text-2xl font-bold mb-2 text-white">Pro</h3>
-                <div className="flex items-baseline gap-2 mb-4">
-                  <span className="text-5xl font-bold text-white">$5</span>
-                  <span className="text-blue-100">/month</span>
-                </div>
-                <p className="text-sm text-blue-100">For serious communities</p>
-              </div>
-
-              <div className="space-y-3 mb-8">
-                <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-white shrink-0 mt-0.5" />
-                  <span className="text-sm text-white font-medium">Everything in Free</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-white shrink-0 mt-0.5" />
-                  <span className="text-sm text-white">AI moderation</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-white shrink-0 mt-0.5" />
-                  <span className="text-sm text-white">AI tickets</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-white shrink-0 mt-0.5" />
-                  <span className="text-sm text-white">Custom branding</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-white shrink-0 mt-0.5" />
-                  <span className="text-sm text-white">Priority support</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-white shrink-0 mt-0.5" />
-                  <span className="text-sm text-white">Advanced analytics</span>
-                </div>
-              </div>
-
-              <Link 
-                href="/dashboard"
-                className="block w-full text-center px-6 py-3 bg-white hover:bg-blue-50 text-blue-600 font-semibold rounded-full transition-all duration-300 hover:scale-105 shadow-lg"
-              >
-                Upgrade to Pro
-              </Link>
-            </div>
-
+            <p className="text-xs leading-5" style={{ color: "rgba(255,255,255,0.4)" }}>Perfect for small communities getting started.</p>
           </div>
-        </div>
-      </section>
-
-      {/* Feature Comparison */}
-      <section className="py-16 px-6 bg-gradient-to-b from-white to-blue-50/30">
-        <div className="max-w-4xl mx-auto">
-          
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-3">Compare plans</h2>
-            <p className="text-gray-600">See what's included</p>
-          </div>
-
-          <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="text-left p-4 font-semibold text-sm">Feature</th>
-                    <th className="text-center p-4 font-semibold text-sm">Free</th>
-                    <th className="text-center p-4 font-semibold text-sm bg-blue-50">Pro</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                  <tr>
-                    <td className="p-4 text-sm">Basic Commands</td>
-                    <td className="text-center p-4"><Check className="w-5 h-5 text-green-500 mx-auto" /></td>
-                    <td className="text-center p-4 bg-blue-50/50"><Check className="w-5 h-5 text-green-500 mx-auto" /></td>
-                  </tr>
-                  <tr>
-                    <td className="p-4 text-sm">Music Player</td>
-                    <td className="text-center p-4"><Check className="w-5 h-5 text-green-500 mx-auto" /></td>
-                    <td className="text-center p-4 bg-blue-50/50"><Check className="w-5 h-5 text-green-500 mx-auto" /></td>
-                  </tr>
-                  <tr>
-                    <td className="p-4 text-sm">Leveling System</td>
-                    <td className="text-center p-4"><Check className="w-5 h-5 text-green-500 mx-auto" /></td>
-                    <td className="text-center p-4 bg-blue-50/50"><Check className="w-5 h-5 text-green-500 mx-auto" /></td>
-                  </tr>
-                  <tr>
-                    <td className="p-4 text-sm">AI Moderation</td>
-                    <td className="text-center p-4"><X className="w-5 h-5 text-gray-300 mx-auto" /></td>
-                    <td className="text-center p-4 bg-blue-50/50"><Check className="w-5 h-5 text-green-500 mx-auto" /></td>
-                  </tr>
-                  <tr>
-                    <td className="p-4 text-sm">Custom Branding</td>
-                    <td className="text-center p-4"><X className="w-5 h-5 text-gray-300 mx-auto" /></td>
-                    <td className="text-center p-4 bg-blue-50/50"><Check className="w-5 h-5 text-green-500 mx-auto" /></td>
-                  </tr>
-                  <tr>
-                    <td className="p-4 text-sm">Priority Support</td>
-                    <td className="text-center p-4"><X className="w-5 h-5 text-gray-300 mx-auto" /></td>
-                    <td className="text-center p-4 bg-blue-50/50"><Check className="w-5 h-5 text-green-500 mx-auto" /></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="py-24 px-6 bg-gradient-to-br from-blue-50 to-white">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 animate-slide-up">
-            Start free,
-            <br />
-            <span className="bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
-              upgrade anytime
-            </span>
-          </h2>
-
-          <p className="text-lg text-gray-600 mb-8 animate-fade-in-delay">
-            Try Layer for free. Upgrade when you're ready for more.
-          </p>
-
-          <Link 
+          <Link
             href="/dashboard"
-            className="inline-flex items-center gap-2 px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-full transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-blue-600/25 animate-bounce-in"
+            className="block w-full text-center py-2.5 rounded-xl text-sm font-medium transition-all hover:bg-white/10"
+            style={{ border: "1px solid rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.7)" }}
           >
-            <Bot className="w-5 h-5" />
-            Get Started Free
-            <ArrowRight className="w-4 h-4" />
+            Get started
           </Link>
-
-          <p className="text-sm text-gray-500 mt-6 animate-fade-in-delay-2">
-            No credit card required • Cancel anytime
-          </p>
+          <ul className="space-y-2.5">
+            {free.map(f => (
+              <li key={f} className="flex items-start gap-2.5 text-sm" style={{ color: "rgba(255,255,255,0.5)" }}>
+                <Check className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" style={{ color: "#1FA7BB" }} />
+                {f}
+              </li>
+            ))}
+          </ul>
         </div>
-      </section>
+
+        {/* Pro */}
+        <div className="rounded-2xl p-6 space-y-5 relative" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(31,167,187,0.25)" }}>
+          <div className="absolute -top-3 left-6">
+            <span className="px-2.5 py-1 rounded-full text-[10px] font-medium" style={{ background: "#1FA7BB", color: "#080808" }}>
+              Coming Soon
+            </span>
+          </div>
+          <div>
+            <p className="text-xs uppercase tracking-wider mb-2" style={{ color: "#1FA7BB" }}>Pro</p>
+            <div className="flex items-end gap-1 mb-1">
+              <span className="text-4xl font-semibold" style={{ color: "#F5F4F5" }}>$4.99</span>
+              <span className="text-sm mb-1.5" style={{ color: "rgba(255,255,255,0.35)" }}>/month</span>
+            </div>
+            <p className="text-xs leading-5" style={{ color: "rgba(255,255,255,0.4)" }}>Unlock AI superpowers for serious servers.</p>
+          </div>
+          <div
+            className="block w-full text-center py-2.5 rounded-xl text-sm font-medium opacity-40 cursor-not-allowed"
+            style={{ background: "#1FA7BB", color: "#080808" }}
+          >
+            Start Pro
+          </div>
+          <ul className="space-y-2.5">
+            {pro.map(f => (
+              <li key={f} className="flex items-start gap-2.5 text-sm" style={{ color: notInFree.includes(f) ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.45)" }}>
+                <Check className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" style={{ color: "#1FA7BB" }} />
+                {f}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {/* Comparison table */}
+      <div>
+        <h2 className="text-xl font-semibold mb-5" style={{ color: "#F5F4F5" }}>Feature comparison</h2>
+        <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.06)" }}>
+          {/* Header */}
+          <div className="grid grid-cols-3 px-5 py-3" style={{ background: "rgba(255,255,255,0.02)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+            <span className="text-xs font-semibold" style={{ color: "#A8A9A2" }}>Feature</span>
+            <span className="text-xs font-semibold text-center" style={{ color: "#A8A9A2" }}>Free</span>
+            <span className="text-xs font-semibold text-center" style={{ color: "#1FA7BB" }}>Pro</span>
+          </div>
+          {[
+            ["Members", "1,000", "10,000"],
+            ["AI Scam Detection", "10/day", "Unlimited"],
+            ["Ban Evasion Tracking", false, true],
+            ["AI Ticket Routing", false, true],
+            ["Auto-Moderation", true, true],
+            ["Leveling & XP", true, true],
+            ["Music Player", true, true],
+            ["Verification System", true, true],
+            ["Advanced Analytics", false, true],
+            ["Ghost Member Cleaner", false, true],
+            ["Priority Support", false, true],
+          ].map(([feat, f, p], i) => (
+            <div
+              key={String(feat)}
+              className="grid grid-cols-3 px-5 py-3 items-center"
+              style={{ borderBottom: i < 10 ? "1px solid rgba(255,255,255,0.04)" : "none" }}
+            >
+              <span className="text-sm" style={{ color: "#F5F4F5" }}>{feat}</span>
+              <div className="flex justify-center">
+                {typeof f === "boolean"
+                  ? f ? <Check className="w-4 h-4" style={{ color: "#1FA7BB" }} /> : <X className="w-4 h-4" style={{ color: "#A8A9A2" }} />
+                  : <span className="text-xs" style={{ color: "#A8A9A2" }}>{f}</span>
+                }
+              </div>
+              <div className="flex justify-center">
+                {typeof p === "boolean"
+                  ? p ? <Check className="w-4 h-4" style={{ color: "#1FA7BB" }} /> : <X className="w-4 h-4" style={{ color: "#A8A9A2" }} />
+                  : <span className="text-xs font-semibold" style={{ color: "#1FA7BB" }}>{p}</span>
+                }
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* FAQ */}
+      <div>
+        <h2 className="text-xl font-semibold mb-5" style={{ color: "#F5F4F5" }}>Common questions</h2>
+        <div className="space-y-4">
+          {[
+            ["Is Layer really free?", "Yes, completely. Every feature is free during our early access period. We may introduce Pro in the future, but early servers will always be taken care of."],
+            ["What happens when I exceed the member limit?", "We notify you and give you 7 days to upgrade. No features are disabled during the grace period."],
+            ["Can I cancel Pro anytime?", "Yes. Cancel from your billing settings in one click. No contracts, no questions. Rolls back to Free at end of billing period."],
+            ["Is payment secure?", "Yes, powered by Stripe. We never store your card details."],
+          ].map(([q, a]) => (
+            <div key={String(q)} className="p-4 rounded-xl" style={{ background: "#121315", border: "1px solid rgba(255,255,255,0.06)" }}>
+              <p className="text-sm font-semibold mb-1.5" style={{ color: "#F5F4F5" }}>{q}</p>
+              <p className="text-sm" style={{ color: "#A8A9A2" }}>{a}</p>
+            </div>
+          ))}
+        </div>
+      </div>
 
     </div>
   );
