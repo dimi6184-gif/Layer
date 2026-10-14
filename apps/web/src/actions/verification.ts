@@ -70,8 +70,6 @@ export async function sendVerificationPanel(guildId: string, channelId: string) 
     const session = await ensureServerAccess(guildId);
     const canManage = await hasPermission(guildId, PERMISSIONS.MANAGE_MODULES);
     if (!canManage) return { success: false, error: 'Missing permission: MANAGE_MODULES' };
-    const canManage = await hasPermission(guildId, PERMISSIONS.MANAGE_MODULES);
-    if (!canManage) return { success: false, error: 'Missing permission: MANAGE_MODULES' };
 
     // Get guild settings
     const guild = await db.guild.findUnique({

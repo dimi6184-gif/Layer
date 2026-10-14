@@ -171,7 +171,6 @@ export async function rerollGiveaway(guildId: string, messageId: string, winners
 }
 
 export async function deleteGiveaway(guildId: string, giveawayId: string) {
-export async function deleteGiveaway(guildId: string, giveawayId: string) {
   const session = await ensureServerAccess(guildId);
 
   // SECURITY: Include guildId constraint to prevent cross-guild deletion (object-level IDOR)
