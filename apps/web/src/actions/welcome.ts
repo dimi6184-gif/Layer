@@ -2,6 +2,9 @@
 
 import { db } from '@nexus/db';
 import { ensureServerAccess } from '@/lib/ensure-access';
+import { hasPermission } from '@/actions/team';
+import { PERMISSIONS } from '@/lib/team-permissions';
+import { auth } from '@/auth';
 import { revalidatePath } from 'next/cache';
 
 interface WelcomeSettings {
@@ -30,7 +33,11 @@ interface LeaveSettings {
 }
 
 export async function updateWelcomeSettings(guildId: string, settings: WelcomeSettings) {
-  await ensureServerAccess(guildId);
+  const session = await ensureServerAccess(guildId);
+  const canManage = await hasPermission(guildId, PERMISSIONS.MANAGE_MODULES);
+  if (!canManage) throw new Error('Missing permission: MANAGE_MODULES');
+  const userId = (session.user as any)?.id ?? null;
+  const userName = session.user?.name ?? 'Dashboard';
 
   await db.guild.update({
     where: { discordId: guildId },
@@ -54,8 +61,8 @@ export async function updateWelcomeSettings(guildId: string, settings: WelcomeSe
     data: {
       guildId,
       action: 'WELCOME_SETTINGS_UPDATED',
-      userId: null,
-      userName: 'Dashboard',
+      userId,
+      userName,
       details: 'Welcome settings updated',
       metadata: settings as any,
     },
@@ -65,7 +72,11 @@ export async function updateWelcomeSettings(guildId: string, settings: WelcomeSe
 }
 
 export async function updateLeaveSettings(guildId: string, settings: LeaveSettings) {
-  await ensureServerAccess(guildId);
+  const session = await ensureServerAccess(guildId);
+  const canManage = await hasPermission(guildId, PERMISSIONS.MANAGE_MODULES);
+  if (!canManage) throw new Error('Missing permission: MANAGE_MODULES');
+  const userId = (session.user as any)?.id ?? null;
+  const userName = session.user?.name ?? 'Dashboard';
 
   await db.guild.update({
     where: { discordId: guildId },
@@ -84,8 +95,8 @@ export async function updateLeaveSettings(guildId: string, settings: LeaveSettin
     data: {
       guildId,
       action: 'LEAVE_SETTINGS_UPDATED',
-      userId: null,
-      userName: 'Dashboard',
+      userId,
+      userName,
       details: 'Leave settings updated',
       metadata: settings as any,
     },

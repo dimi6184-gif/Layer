@@ -2,6 +2,8 @@
 
 import { db } from '@nexus/db';
 import { ensureServerAccess } from '@/lib/ensure-access';
+import { hasPermission } from '@/actions/team';
+import { PERMISSIONS } from '@/lib/team-permissions';
 import { revalidatePath } from 'next/cache';
 
 interface VerificationSettings {
@@ -21,7 +23,11 @@ export async function updateVerificationSettings(
   settings: VerificationSettings
 ) {
   try {
-    await ensureServerAccess(guildId);
+    const session = await ensureServerAccess(guildId);
+    const canManage = await hasPermission(guildId, PERMISSIONS.MANAGE_MODULES);
+    if (!canManage) return { success: false, error: 'Missing permission: MANAGE_MODULES' };
+    const userId = (session.user as any)?.id ?? null;
+    const userName = session.user?.name ?? 'Dashboard';
 
     await db.guild.update({
       where: { discordId: guildId },
@@ -43,8 +49,8 @@ export async function updateVerificationSettings(
       data: {
         guildId,
         action: 'VERIFICATION_SETTINGS_UPDATED',
-        userId: null,
-        userName: 'Dashboard',
+        userId,
+        userName,
         details: 'Verification settings updated',
         metadata: settings as any,
       },
@@ -61,7 +67,11 @@ export async function updateVerificationSettings(
 
 export async function sendVerificationPanel(guildId: string, channelId: string) {
   try {
-    await ensureServerAccess(guildId);
+    const session = await ensureServerAccess(guildId);
+    const canManage = await hasPermission(guildId, PERMISSIONS.MANAGE_MODULES);
+    if (!canManage) return { success: false, error: 'Missing permission: MANAGE_MODULES' };
+    const canManage = await hasPermission(guildId, PERMISSIONS.MANAGE_MODULES);
+    if (!canManage) return { success: false, error: 'Missing permission: MANAGE_MODULES' };
 
     // Get guild settings
     const guild = await db.guild.findUnique({
@@ -188,6 +198,8 @@ export async function sendVerificationPanel(guildId: string, channelId: string) 
 export async function autoLockServer(guildId: string, verificationChannelId: string) {
   try {
     await ensureServerAccess(guildId);
+    const canManage = await hasPermission(guildId, PERMISSIONS.MANAGE_MODULES);
+    if (!canManage) return { success: false, error: 'Missing permission: MANAGE_MODULES' };
 
     // Get guild settings
     const guild = await db.guild.findUnique({

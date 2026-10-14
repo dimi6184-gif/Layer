@@ -164,19 +164,25 @@ export async function rerollGiveaway(guildId: string, messageId: string, winners
 }
 
 export async function deleteGiveaway(guildId: string, giveawayId: string) {
-  await ensureServerAccess(guildId);
+export async function deleteGiveaway(guildId: string, giveawayId: string) {
+  const session = await ensureServerAccess(guildId);
 
-  await db.giveaway.delete({
-    where: { id: giveawayId },
+  // SECURITY: Include guildId constraint to prevent cross-guild deletion (object-level IDOR)
+  const deleted = await db.giveaway.deleteMany({
+    where: { id: giveawayId, guildId },
   });
 
-  // Audit log
+  if (deleted.count === 0) {
+    throw new Error('Giveaway not found or does not belong to this server');
+  }
+
+  // Audit log with user attribution
   await db.auditLog.create({
     data: {
       guildId,
       action: 'GIVEAWAY_DELETED',
-      userId: null,
-      userName: 'Dashboard',
+      userId: (session.user as any)?.id ?? null,
+      userName: session.user?.name ?? 'Dashboard',
       details: 'Giveaway deleted from database',
       metadata: { giveawayId },
     },
