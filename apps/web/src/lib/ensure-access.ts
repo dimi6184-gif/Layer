@@ -3,6 +3,16 @@ import { redirect } from "next/navigation";
 import { db } from "@nexus/db";
 import { ALL_PERMISSIONS } from "@/lib/team-permissions";
 
+type AuthSession = {
+  user?: {
+    id?: string;
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+    [key: string]: any;
+  };
+} | null;
+
 /**
  * Ensures the authenticated user has access to the given guild.
  * NEVER throws — always either returns session or redirects.
@@ -17,9 +27,10 @@ import { ALL_PERMISSIONS } from "@/lib/team-permissions";
  */
 export async function ensureServerAccess(guildId: string) {
   // ── Auth check ────────────────────────────────────────────────
-  let session: Awaited<ReturnType<typeof auth>>;
+  // Cast to any to avoid NextAuth v5 overload resolution picking NextMiddleware
+  let session: AuthSession;
   try {
-    session = await auth();
+    session = (await (auth as any)()) as AuthSession;
   } catch {
     redirect("/login");
   }

@@ -4,6 +4,7 @@ import { db } from '@nexus/db';
 import { ensureServerAccess } from '@/lib/ensure-access';
 import { hasPermission } from '@/actions/team';
 import { PERMISSIONS } from '@/lib/team-permissions';
+import { auth } from '@/auth';
 import { revalidatePath } from 'next/cache';
 
 interface VerificationSettings {
@@ -23,11 +24,12 @@ export async function updateVerificationSettings(
   settings: VerificationSettings
 ) {
   try {
-    const session = await ensureServerAccess(guildId);
+    await ensureServerAccess(guildId);
     const canManage = await hasPermission(guildId, PERMISSIONS.MANAGE_MODULES);
     if (!canManage) return { success: false, error: 'Missing permission: MANAGE_MODULES' };
-    const userId = (session.user as any)?.id ?? null;
-    const userName = session.user?.name ?? 'Dashboard';
+    const session = await auth();
+    const userId = session?.user?.id ?? null;
+    const userName = session?.user?.name ?? 'Dashboard';
 
     await db.guild.update({
       where: { discordId: guildId },
@@ -67,7 +69,7 @@ export async function updateVerificationSettings(
 
 export async function sendVerificationPanel(guildId: string, channelId: string) {
   try {
-    const session = await ensureServerAccess(guildId);
+    await ensureServerAccess(guildId);
     const canManage = await hasPermission(guildId, PERMISSIONS.MANAGE_MODULES);
     if (!canManage) return { success: false, error: 'Missing permission: MANAGE_MODULES' };
 

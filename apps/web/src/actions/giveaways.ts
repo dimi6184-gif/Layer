@@ -18,7 +18,7 @@ interface CreateGiveawayData {
 }
 
 export async function createGiveaway(guildId: string, data: CreateGiveawayData) {
-  const session = await ensureServerAccess(guildId);
+  await ensureServerAccess(guildId);
 
   // SECURITY: Validate duration bounds to prevent extremely long or short giveaways
   if (data.duration < 60) throw new Error('Giveaway must last at least 1 minute');
