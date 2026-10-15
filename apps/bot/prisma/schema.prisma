@@ -650,3 +650,22 @@ model AIImageDetection {
   @@index([guildId, confidence])
   @@index([messageId])
 }
+
+model PendingPunishment {
+  id        String   @id @default(cuid())
+  guildId   String
+  userId    String
+  type      String
+  reason    String   @default("No reason provided.")
+  expiresAt DateTime?
+  roleIds   String[] @default([])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  reapplied    Boolean  @default(false)
+  reappliedAt  DateTime?
+  reapplyCount Int      @default(0)
+
+  @@unique([guildId, userId, type])
+  @@index([guildId, userId])
+  @@index([guildId, reapplied])
+}
