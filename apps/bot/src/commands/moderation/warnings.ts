@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
 import { infoCV2 } from '../../utils/cv2.js';
-import { warnStore } from './warn.js';
+import { db } from '@nexus/db';
 
 export const data = new SlashCommandBuilder()
   .setName('warnings')
@@ -9,12 +9,23 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction: ChatInputCommandInteraction) {
   const target = interaction.options.getUser('user', true);
-  const key = `${interaction.guild!.id}-${target.id}`;
-  const warns = warnStore.get(key) ?? [];
+  const guildId = interaction.guild!.id;
+
+  // Read from DB — persistent across restarts
+  const warns = await db.auditLog.findMany({
+    where: { guildId, userId: target.id, action: 'WARN' },
+    orderBy: { createdAt: 'desc' },
+    take: 20,
+  });
 
   const warnsText = warns.length === 0
     ? '✅ No warnings.'
-    : warns.map((w, i) => `**${i + 1}.** ${w.reason}\n-# by ${w.by} • ${w.at.toLocaleDateString('en-US')}`).join('\n\n');
+    : warns.map((w, i) => {
+        const meta = w.metadata as any;
+        const mod = meta?.moderatorTag ?? 'Unknown';
+        const date = w.createdAt.toLocaleDateString('en-US');
+        return `**${i + 1}.** ${w.details}\n-# by ${mod} • ${date}`;
+      }).join('\n\n');
 
   await interaction.reply({
     ...infoCV2({

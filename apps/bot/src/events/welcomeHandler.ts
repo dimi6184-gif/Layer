@@ -67,10 +67,15 @@ export async function handleMemberJoin(member: GuildMember) {
 
         // Create embed if enabled
         if (settings.welcomeEmbedEnabled) {
+          // Safe color parse — fall back to Discord blue on invalid hex
+          const rawColor = settings.welcomeEmbedColor?.replace('#', '') || '5865F2';
+          const colorInt = parseInt(rawColor, 16);
+          const safeColor = isNaN(colorInt) ? 0x5865F2 : colorInt;
+
           const embed = new EmbedBuilder()
-            .setColor(parseInt(settings.welcomeEmbedColor?.replace('#', '') || '5865F2', 16))
-            .setTitle(replacePlaceholders(settings.welcomeEmbedTitle))
-            .setDescription(replacePlaceholders(settings.welcomeEmbedDescription))
+            .setColor(safeColor)
+            .setTitle(replacePlaceholders(settings.welcomeEmbedTitle || 'Welcome!'))
+            .setDescription(replacePlaceholders(settings.welcomeEmbedDescription || 'A new member has joined.'))
             .setThumbnail(member.user.displayAvatarURL({ size: 256 }))
             .setTimestamp();
 
@@ -284,6 +289,31 @@ async function generateWelcomeImage(
   const ctx = canvas.getContext('2d');
 
   // Draw background
+  if (config.backgroundType === 'image' && config.backgroundImageUrl) {
+    // SECURITY: Validate URL to prevent SSRF — only allow https:// with public hostnames
+    const url = config.backgroundImageUrl;
+    const isAllowed = (() => {
+      try {
+        const parsed = new URL(url);
+        if (parsed.protocol !== 'https:') return false;
+        // Block private/internal IP ranges and localhost
+        const host = parsed.hostname;
+        if (host === 'localhost' || host === '127.0.0.1' || host.startsWith('192.168.') ||
+            host.startsWith('10.') || host.startsWith('172.16.') || host === '0.0.0.0' ||
+            host.includes('169.254') || host.endsWith('.internal') || host.endsWith('.local')) {
+          return false;
+        }
+        return true;
+      } catch { return false; }
+    })();
+
+    if (!isAllowed) {
+      console.warn(`[Welcome] Blocked SSRF attempt — invalid backgroundImageUrl: ${url}`);
+      // Fall through to gradient background
+      config.backgroundType = 'gradient';
+    }
+  }
+
   if (config.backgroundType === 'image' && config.backgroundImageUrl) {
     try {
       const bgImage = await loadImage(config.backgroundImageUrl);

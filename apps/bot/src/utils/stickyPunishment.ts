@@ -46,6 +46,7 @@ export async function handleLeaveWithPunishment(member: GuildMember) {
         expiresAt: member.communicationDisabledUntil,
         reapplied: false,
         reappliedAt: null,
+        // Don't reset reapplyCount — it tracks cumulative abuse
         updatedAt: new Date(),
       },
       create: {
@@ -70,11 +71,14 @@ export async function handleRejoinWithPunishment(member: GuildMember) {
   const userId = member.user.id;
 
   // Find any pending punishments that haven't been re-applied
+  // Cap at 5 re-applies to prevent leave/rejoin spam abuse
+  const MAX_REAPPLY = 5;
   const pending = await db.pendingPunishment.findFirst({
     where: {
       guildId,
       userId,
       reapplied: false,
+      reapplyCount: { lt: MAX_REAPPLY },
     },
   });
 
@@ -108,7 +112,7 @@ export async function handleRejoinWithPunishment(member: GuildMember) {
 
       await db.pendingPunishment.update({
         where: { id: pending.id },
-        data: { reapplied: true, reappliedAt: now },
+        data: { reapplied: true, reappliedAt: now, reapplyCount: { increment: 1 } },
       });
 
       // DM the user

@@ -367,6 +367,17 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
 const spamTracker = new Map<string, number[]>();
 
+// Cleanup stale spamTracker entries every 60 seconds to prevent memory leak
+setInterval(() => {
+  const now = Date.now();
+  for (const [key, ts] of spamTracker.entries()) {
+    if (key.endsWith('-locked')) continue;
+    if (ts.length === 0 || now - ts[ts.length - 1] > 60000) {
+      spamTracker.delete(key);
+    }
+  }
+}, 60000);
+
 client.on(Events.MessageCreate, async (message) => {
   if (message.author.bot || !message.guild) return;
 
@@ -672,6 +683,7 @@ app.post('/api/reroll-giveaway', (req, res) => {
 });
 
 const PORT = process.env.PORT || process.env.BOT_API_PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`   API Server: Running on port ${PORT}`);
+// Bind to localhost only — not exposed to public internet
+app.listen(Number(PORT), '127.0.0.1', () => {
+  console.log(`   API Server: Running on 127.0.0.1:${PORT}`);
 });

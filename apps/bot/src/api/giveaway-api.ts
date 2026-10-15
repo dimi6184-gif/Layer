@@ -1,16 +1,30 @@
 import { Request, Response } from 'express';
 import { Client, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 import { db } from '@nexus/db';
+import { randomInt } from 'crypto';
 import { endGiveaway as endGiveawayHelper } from '../commands/fun/giveaway.js';
+
+/** Cryptographically fair Fisher-Yates shuffle */
+function cryptoShuffle<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = randomInt(0, i + 1);
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
 // Create Giveaway
 export async function createGiveawayHandler(req: Request, res: Response, client: Client) {
   try {
     // Auth check
     const authHeader = req.headers.authorization;
-    const expectedAuth = `Bearer ${process.env.BOT_API_SECRET || 'dev-secret'}`;
-
-    if (authHeader !== expectedAuth) {
+    const secret = process.env.BOT_API_SECRET;
+    if (!secret) {
+      console.error('[API] BOT_API_SECRET is not configured!');
+      return res.status(500).send('Server misconfiguration');
+    }
+    if (authHeader !== `Bearer ${secret}`) {
       return res.status(401).send('Unauthorized');
     }
 
@@ -118,9 +132,12 @@ export async function endGiveawayHandler(req: Request, res: Response, client: Cl
   try {
     // Auth check
     const authHeader = req.headers.authorization;
-    const expectedAuth = `Bearer ${process.env.BOT_API_SECRET || 'dev-secret'}`;
-
-    if (authHeader !== expectedAuth) {
+    const secret = process.env.BOT_API_SECRET;
+    if (!secret) {
+      console.error('[API] BOT_API_SECRET is not configured!');
+      return res.status(500).send('Server misconfiguration');
+    }
+    if (authHeader !== `Bearer ${secret}`) {
       return res.status(401).send('Unauthorized');
     }
 
@@ -156,13 +173,22 @@ export async function rerollGiveawayHandler(req: Request, res: Response, client:
   try {
     // Auth check
     const authHeader = req.headers.authorization;
-    const expectedAuth = `Bearer ${process.env.BOT_API_SECRET || 'dev-secret'}`;
-
-    if (authHeader !== expectedAuth) {
+    const secret = process.env.BOT_API_SECRET;
+    if (!secret) {
+      console.error('[API] BOT_API_SECRET is not configured!');
+      return res.status(500).send('Server misconfiguration');
+    }
+    if (authHeader !== `Bearer ${secret}`) {
       return res.status(401).send('Unauthorized');
     }
 
     const { guildId, messageId, winnersCount = 1 } = req.body;
+
+    // Validate winnersCount
+    const safeWinnersCount = Number(winnersCount);
+    if (!Number.isInteger(safeWinnersCount) || safeWinnersCount < 1 || safeWinnersCount > 20) {
+      return res.status(400).send('winnersCount must be between 1 and 20');
+    }
 
     if (!guildId || !messageId) {
       return res.status(400).send('Missing required fields');
@@ -190,15 +216,14 @@ export async function rerollGiveawayHandler(req: Request, res: Response, client:
       return res.status(400).send('No more participants available to reroll');
     }
 
-    // Pick new winners
+    // Pick new winners using cryptographically fair shuffle
     const pickWinners = (participants: string[], count: number) => {
-      const shuffled = [...participants].sort(() => Math.random() - 0.5);
-      return shuffled.slice(0, count);
+      return cryptoShuffle(participants).slice(0, count);
     };
 
     const newWinnerIds = pickWinners(
       availableParticipants,
-      Math.min(winnersCount, availableParticipants.length)
+      Math.min(safeWinnersCount, availableParticipants.length)
     );
 
     // Fetch winner details

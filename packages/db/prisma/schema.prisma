@@ -674,6 +674,7 @@ model PendingPunishment {
   // Whether the punishment has been re-applied after rejoin
   reapplied    Boolean  @default(false)
   reappliedAt  DateTime?
+  reapplyCount Int      @default(0)
   
   @@unique([guildId, userId, type])
   @@index([guildId, userId])

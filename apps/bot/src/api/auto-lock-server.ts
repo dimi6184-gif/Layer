@@ -5,9 +5,12 @@ export async function autoLockServerHandler(req: Request, res: Response, client:
   try {
     // Auth check
     const authHeader = req.headers.authorization;
-    const expectedAuth = `Bearer ${process.env.BOT_API_SECRET || 'dev-secret'}`;
-    
-    if (authHeader !== expectedAuth) {
+    const secret = process.env.BOT_API_SECRET;
+    if (!secret) {
+      console.error('[API] BOT_API_SECRET is not configured!');
+      return res.status(500).send('Server misconfiguration');
+    }
+    if (authHeader !== `Bearer ${secret}`) {
       return res.status(401).send('Unauthorized');
     }
 

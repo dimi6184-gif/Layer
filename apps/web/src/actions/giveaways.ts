@@ -60,7 +60,7 @@ export async function createGiveaway(guildId: string, data: CreateGiveawayData) 
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.BOT_API_SECRET || 'dev-secret'}`,
+        Authorization: `Bearer ${process.env.BOT_API_SECRET}`,
       },
       body: JSON.stringify({
         guildId,
@@ -103,7 +103,7 @@ export async function endGiveaway(guildId: string, messageId: string) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.BOT_API_SECRET || 'dev-secret'}`,
+        Authorization: `Bearer ${process.env.BOT_API_SECRET}`,
       },
       body: JSON.stringify({ guildId, messageId }),
     }
@@ -141,7 +141,7 @@ export async function rerollGiveaway(guildId: string, messageId: string, winners
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.BOT_API_SECRET || 'dev-secret'}`,
+        Authorization: `Bearer ${process.env.BOT_API_SECRET}`,
       },
       body: JSON.stringify({ guildId, messageId, winnersCount }),
     }

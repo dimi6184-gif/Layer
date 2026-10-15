@@ -57,9 +57,18 @@ export async function middleware(request: NextRequest) {
         );
       }
     } catch (error) {
-      // Redis error - fall back to in-memory
+      // Redis failed — apply in-memory fallback instead of skipping entirely
       if (process.env.NODE_ENV === 'development') {
-        console.error('[Rate Limit] Redis error, falling back to memory:', error);
+        console.error('[Rate Limit] Redis error, applying memory fallback:', error);
+      }
+      const limit = RATE_LIMITS[pathname as keyof typeof RATE_LIMITS] || { requests: 200, window: 60000 };
+      const result = checkRateLimitMemory(identifier, limit);
+      if (!result.success) {
+        logRateLimitViolation(pathname, ip, undefined, limit.requests - result.remaining);
+        return new NextResponse(
+          JSON.stringify({ error: 'Too many requests', message: 'Please slow down and try again later.' }),
+          { status: 429, headers: { 'Content-Type': 'application/json', 'Retry-After': String(Math.ceil((result.reset - Date.now()) / 1000)) } }
+        );
       }
     }
   }
@@ -93,6 +102,14 @@ export async function middleware(request: NextRequest) {
   // Security headers
   const response = NextResponse.next();
   response.headers.set('X-Request-ID', crypto.randomUUID());
+  response.headers.set('X-Content-Type-Options', 'nosniff');
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=()');
+
+  // HSTS — only in production
+  if (process.env.NODE_ENV === 'production') {
+    response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
+  }
 
   // Prevent clickjacking
   if (!pathname.startsWith('/api/')) {

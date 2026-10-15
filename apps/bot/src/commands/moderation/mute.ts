@@ -14,7 +14,12 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   const target = interaction.options.getUser('user', true);
   const minutes = interaction.options.getInteger('minutes', true);
   const reason = interaction.options.getString('reason') ?? 'No reason provided.';
-  const member = interaction.guild!.members.cache.get(target.id);
+
+  // Fetch member — cache may be stale after restarts or in large servers
+  let member = interaction.guild!.members.cache.get(target.id);
+  if (!member) {
+    try { member = await interaction.guild!.members.fetch(target.id); } catch {}
+  }
 
   if (!member) return interaction.reply({ ...dangerCV2({ title: '❌ User not found' }), ephemeral: true });
 
