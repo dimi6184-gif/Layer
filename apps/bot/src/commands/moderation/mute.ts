@@ -1,5 +1,6 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, PermissionFlagsBits } from 'discord.js';
 import { warnCV2, dangerCV2 } from '../../utils/cv2.js';
+import { savePendingTimeout } from '../../utils/stickyPunishment.js';
 
 export const data = new SlashCommandBuilder()
   .setName('mute')
@@ -37,6 +38,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
   }
 
   await member.timeout(minutes * 60 * 1000, reason);
+
+  // Save to sticky punishment system so it re-applies if user leaves + rejoins
+  await savePendingTimeout(
+    interaction.guild!.id,
+    target.id,
+    minutes * 60 * 1000,
+    reason
+  );
 
   await interaction.reply(warnCV2({
     title: '🔇 User muted',

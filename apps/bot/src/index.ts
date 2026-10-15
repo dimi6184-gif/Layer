@@ -208,7 +208,13 @@ import { handleMemberJoin, handleMemberLeave } from './events/welcomeHandler.js'
 
 client.on(Events.GuildMemberAdd, async (member) => {
   await handleMemberJoin(member);
-  
+
+  // Sticky Punishment: re-apply any pending punishment
+  const { handleRejoinWithPunishment } = await import('./utils/stickyPunishment.js');
+  await handleRejoinWithPunishment(member).catch((err) =>
+    console.error('[StickyPunishment] Error on rejoin:', err)
+  );
+
   // Impersonation Detection for new members
   const { handleNewMember } = await import('./events/impersonationHandler.js');
   await handleNewMember(member);
@@ -216,6 +222,14 @@ client.on(Events.GuildMemberAdd, async (member) => {
 
 client.on(Events.GuildMemberRemove, async (member) => {
   await handleMemberLeave(member as any);
+
+  // Sticky Punishment: save active punishment if they leave mid-timeout
+  if (member.guild) {
+    const { handleLeaveWithPunishment } = await import('./utils/stickyPunishment.js');
+    await handleLeaveWithPunishment(member as any).catch((err) =>
+      console.error('[StickyPunishment] Error on leave:', err)
+    );
+  }
 });
 
 // ─── Avatar Tracking ─────────────────────────────────────────────────────────

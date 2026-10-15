@@ -650,3 +650,32 @@ model AIImageDetection {
   @@index([guildId, confidence])
   @@index([messageId])
 }
+
+// ─── Sticky Punishment System ─────────────────────────────────────────────────
+// Tracks active punishments so they can be re-applied if a user leaves and rejoins
+
+model PendingPunishment {
+  id        String   @id @default(cuid())
+  guildId   String
+  userId    String
+  type      String   // "timeout" | "mute_role"
+  reason    String   @default("No reason provided.")
+  
+  // For timeout: when the timeout expires (absolute timestamp)
+  expiresAt DateTime?
+  
+  // For mute roles: which role(s) to re-apply
+  roleIds   String[] @default([])
+  
+  // Metadata
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Whether the punishment has been re-applied after rejoin
+  reapplied    Boolean  @default(false)
+  reappliedAt  DateTime?
+  
+  @@unique([guildId, userId, type])
+  @@index([guildId, userId])
+  @@index([guildId, reapplied])
+}
