@@ -128,9 +128,8 @@ function FeatureBlock({
 export default function HomePage() {
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
 
-  // Navbar dropdown & language state
-  const [activeDropdown, setActiveDropdown] = useState<'plugins' | 'resources' | 'lang' | null>(null);
-  const [selectedLang, setSelectedLang] = useState<'EN' | 'DE' | 'FR' | 'ES'>('EN');
+  // Navbar dropdown state
+  const [activeDropdown, setActiveDropdown] = useState<'plugins' | 'resources' | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navRef = useRef<HTMLElement>(null);
 
@@ -222,105 +221,62 @@ export default function HomePage() {
                     }`}
                   >
                     <span>Plugins</span>
-                    <ChevronDown
-                      className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                        activeDropdown === 'plugins' ? 'rotate-180' : ''
-                      }`}
-                    />
+                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${activeDropdown === 'plugins' ? 'rotate-180' : ''}`} />
                   </button>
 
-                  {/* Plugins Menu Dropdown Card */}
                   {activeDropdown === 'plugins' && (
-                    <div className="absolute top-full left-0 mt-2 w-80 rounded-xl bg-[#121522]/95 backdrop-blur-xl border border-white/[0.1] shadow-2xl p-2.5 space-y-1 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                      <Link
-                        href="#features"
-                        onClick={() => setActiveDropdown(null)}
-                        className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.06] transition-colors group"
-                      >
-                        <div className="w-8 h-8 rounded-lg bg-[#1FA7BB]/15 text-[#1FA7BB] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                          <Shield className="w-4 h-4" />
+                    <div className="absolute top-full left-0 mt-2 rounded-xl bg-[#0f1117]/98 backdrop-blur-xl border border-white/[0.09] shadow-2xl z-50"
+                      style={{ width: 560 }}>
+                      <div className="p-3 grid grid-cols-2 gap-1">
+                        {/* Left column */}
+                        <div className="space-y-0.5">
+                          {[
+                            { icon: <Shield className="w-4 h-4" />, color: '#1FA7BB', bg: '#1FA7BB', label: 'Moderation', sub: 'Anti-raid, auto-ban, spam filters' },
+                            { icon: <Eye className="w-4 h-4" />, color: '#3ddc97', bg: '#3ddc97', label: 'AI Scam Detection', sub: 'OCR image & link scanning' },
+                            { icon: <ShieldAlert className="w-4 h-4" />, color: '#f472b6', bg: '#f472b6', label: 'Ban Evasion', sub: 'Pattern-match & auto-reban' },
+                          ].map((item) => (
+                            <a key={item.label} href="#features" onClick={() => setActiveDropdown(null)}
+                              className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.05] transition-colors group cursor-pointer">
+                              <div className="w-7 h-7 rounded-md flex items-center justify-center shrink-0 transition-transform group-hover:scale-105"
+                                style={{ background: `${item.bg}18`, color: item.color }}>
+                                {item.icon}
+                              </div>
+                              <div>
+                                <div className="text-xs font-semibold text-white leading-tight">{item.label}</div>
+                                <div className="text-[11px] text-[#64748b] leading-tight mt-0.5">{item.sub}</div>
+                              </div>
+                            </a>
+                          ))}
                         </div>
-                        <div>
-                          <div className="text-xs font-semibold text-white group-hover:text-[#1FA7BB] transition-colors">
-                            Moderation & Security
-                          </div>
-                          <div className="text-[11px] text-[#94a3b8] leading-tight">
-                            Anti-raid shield, auto-ban, spam filters
-                          </div>
+                        {/* Right column */}
+                        <div className="space-y-0.5">
+                          {[
+                            { icon: <MessageSquare className="w-4 h-4" />, color: '#a78bfa', bg: '#a78bfa', label: 'AI Tickets', sub: 'Auto-routing & transcripts' },
+                            { icon: <Sparkles className="w-4 h-4" />, color: '#fbbf24', bg: '#f59e0b', label: 'Leveling & XP', sub: 'Rank cards, leaderboards' },
+                            { icon: <Volume2 className="w-4 h-4" />, color: '#38bdf8', bg: '#38bdf8', label: 'Music Player', sub: 'YouTube queue, 320kbps' },
+                          ].map((item) => (
+                            <a key={item.label} href="#features" onClick={() => setActiveDropdown(null)}
+                              className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.05] transition-colors group cursor-pointer">
+                              <div className="w-7 h-7 rounded-md flex items-center justify-center shrink-0 transition-transform group-hover:scale-105"
+                                style={{ background: `${item.bg}18`, color: item.color }}>
+                                {item.icon}
+                              </div>
+                              <div>
+                                <div className="text-xs font-semibold text-white leading-tight">{item.label}</div>
+                                <div className="text-[11px] text-[#64748b] leading-tight mt-0.5">{item.sub}</div>
+                              </div>
+                            </a>
+                          ))}
                         </div>
-                      </Link>
-
-                      <Link
-                        href="#features"
-                        onClick={() => setActiveDropdown(null)}
-                        className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.06] transition-colors group"
-                      >
-                        <div className="w-8 h-8 rounded-lg bg-[#3ddc97]/15 text-[#3ddc97] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                          <Eye className="w-4 h-4" />
-                        </div>
-                        <div>
-                          <div className="text-xs font-semibold text-white group-hover:text-[#3ddc97] transition-colors">
-                            Neural OCR Vision
-                          </div>
-                          <div className="text-[11px] text-[#94a3b8] leading-tight">
-                            Real-time scam & fake Nitro image scanning
-                          </div>
-                        </div>
-                      </Link>
-
-                      <Link
-                        href="#features"
-                        onClick={() => setActiveDropdown(null)}
-                        className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.06] transition-colors group"
-                      >
-                        <div className="w-8 h-8 rounded-lg bg-[#8b5cf6]/15 text-[#a78bfa] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                          <Volume2 className="w-4 h-4" />
-                        </div>
-                        <div>
-                          <div className="text-xs font-semibold text-white group-hover:text-[#a78bfa] transition-colors">
-                            High-Fidelity Music
-                          </div>
-                          <div className="text-[11px] text-[#94a3b8] leading-tight">
-                            320kbps lag-free audio streaming & queues
-                          </div>
-                        </div>
-                      </Link>
-
-                      <Link
-                        href="#features"
-                        onClick={() => setActiveDropdown(null)}
-                        className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.06] transition-colors group"
-                      >
-                        <div className="w-8 h-8 rounded-lg bg-[#f59e0b]/15 text-[#fbbf24] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                          <Sparkles className="w-4 h-4" />
-                        </div>
-                        <div>
-                          <div className="text-xs font-semibold text-white group-hover:text-[#fbbf24] transition-colors">
-                            Leveling & XP
-                          </div>
-                          <div className="text-[11px] text-[#94a3b8] leading-tight">
-                            Custom rank cards, leaderboards & role rewards
-                          </div>
-                        </div>
-                      </Link>
-
-                      <Link
-                        href="#features"
-                        onClick={() => setActiveDropdown(null)}
-                        className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.06] transition-colors group"
-                      >
-                        <div className="w-8 h-8 rounded-lg bg-[#ec4899]/15 text-[#f472b6] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                          <MessageSquare className="w-4 h-4" />
-                        </div>
-                        <div>
-                          <div className="text-xs font-semibold text-white group-hover:text-[#f472b6] transition-colors">
-                            Ticket Support
-                          </div>
-                          <div className="text-[11px] text-[#94a3b8] leading-tight">
-                            Interactive buttons, transcripts & threads
-                          </div>
-                        </div>
-                      </Link>
+                      </div>
+                      {/* Bottom CTA strip */}
+                      <div className="border-t border-white/[0.06] px-3 py-2.5 flex items-center justify-between">
+                        <span className="text-[11px] text-[#4d5467]">All modules included in the free plan</span>
+                        <a href="#features" onClick={() => setActiveDropdown(null)}
+                          className="text-[11px] font-semibold text-[#1FA7BB] hover:text-[#25bdd3] transition-colors">
+                          See all features →
+                        </a>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -337,62 +293,76 @@ export default function HomePage() {
                     }`}
                   >
                     <span>Resources</span>
-                    <ChevronDown
-                      className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                        activeDropdown === 'resources' ? 'rotate-180' : ''
-                      }`}
-                    />
+                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${activeDropdown === 'resources' ? 'rotate-180' : ''}`} />
                   </button>
 
-                  {/* Resources Menu Dropdown Card */}
                   {activeDropdown === 'resources' && (
-                    <div className="absolute top-full left-0 mt-2 w-72 rounded-xl bg-[#121522]/95 backdrop-blur-xl border border-white/[0.1] shadow-2xl p-2.5 space-y-1 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                      <Link
-                        href="/about"
-                        onClick={() => setActiveDropdown(null)}
-                        className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.06] transition-colors group"
-                      >
-                        <BookOpen className="w-4 h-4 text-[#1FA7BB] mt-0.5 shrink-0" />
-                        <div>
-                          <div className="text-xs font-semibold text-white group-hover:text-[#1FA7BB]">Documentation</div>
-                          <div className="text-[11px] text-[#94a3b8]">Setup manuals and permissions</div>
+                    <div className="absolute top-full left-0 mt-2 rounded-xl bg-[#0f1117]/98 backdrop-blur-xl border border-white/[0.09] shadow-2xl z-50" style={{ width: 460 }}>
+                      <div className="p-3 grid grid-cols-2 gap-1">
+                        <div className="space-y-0.5">
+                          {[
+                            { icon: <BookOpen className="w-4 h-4" />, color: '#1FA7BB', label: 'Documentation', sub: 'Setup guides & permissions' },
+                            { icon: <Code2 className="w-4 h-4" />, color: '#a78bfa', label: 'Bot Commands', sub: 'Full slash command list', href: '/commands' },
+                          ].map((item) => (
+                            <Link key={item.label} href={item.href ?? '/commands'} onClick={() => setActiveDropdown(null)}
+                              className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.05] transition-colors group">
+                              <div className="w-7 h-7 rounded-md flex items-center justify-center shrink-0"
+                                style={{ background: `${item.color}18`, color: item.color }}>
+                                {item.icon}
+                              </div>
+                              <div>
+                                <div className="text-xs font-semibold text-white leading-tight">{item.label}</div>
+                                <div className="text-[11px] text-[#64748b] leading-tight mt-0.5">{item.sub}</div>
+                              </div>
+                            </Link>
+                          ))}
                         </div>
-                      </Link>
-                      <a
-                        href="https://discord.gg"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() => setActiveDropdown(null)}
-                        className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.06] transition-colors group"
-                      >
-                        <Users className="w-4 h-4 text-[#38bdf8] mt-0.5 shrink-0" />
-                        <div>
-                          <div className="text-xs font-semibold text-white group-hover:text-[#38bdf8]">Support Server</div>
-                          <div className="text-[11px] text-[#94a3b8]">Join 5,000+ members in Discord</div>
+                        <div className="space-y-0.5">
+                          {[
+                            { icon: <Users className="w-4 h-4" />, color: '#38bdf8', label: 'Support Server', sub: 'Get help from our team', href: 'https://discord.gg', external: true },
+                            { icon: <Activity className="w-4 h-4" />, color: '#3ddc97', label: 'Status', sub: '99.98% uptime', href: '/api/health' },
+                          ].map((item) => (
+                            item.external
+                              ? <a key={item.label} href={item.href} target="_blank" rel="noopener noreferrer" onClick={() => setActiveDropdown(null)}
+                                  className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.05] transition-colors group">
+                                  <div className="w-7 h-7 rounded-md flex items-center justify-center shrink-0"
+                                    style={{ background: `${item.color}18`, color: item.color }}>
+                                    {item.icon}
+                                  </div>
+                                  <div>
+                                    <div className="text-xs font-semibold text-white leading-tight">{item.label}</div>
+                                    <div className="text-[11px] text-[#64748b] leading-tight mt-0.5">{item.sub}</div>
+                                  </div>
+                                </a>
+                              : <Link key={item.label} href={item.href} onClick={() => setActiveDropdown(null)}
+                                  className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.05] transition-colors group">
+                                  <div className="w-7 h-7 rounded-md flex items-center justify-center shrink-0"
+                                    style={{ background: `${item.color}18`, color: item.color }}>
+                                    {item.icon}
+                                  </div>
+                                  <div>
+                                    <div className="text-xs font-semibold text-white leading-tight">{item.label}</div>
+                                    <div className="text-[11px] text-[#64748b] leading-tight mt-0.5">{item.sub}</div>
+                                  </div>
+                                </Link>
+                          ))}
                         </div>
-                      </a>
-                      <Link
-                        href="/commands"
-                        onClick={() => setActiveDropdown(null)}
-                        className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.06] transition-colors group"
-                      >
-                        <Code2 className="w-4 h-4 text-[#a78bfa] mt-0.5 shrink-0" />
-                        <div>
-                          <div className="text-xs font-semibold text-white group-hover:text-[#a78bfa]">Bot Commands</div>
-                          <div className="text-[11px] text-[#94a3b8]">Full list of slash commands</div>
+                      </div>
+                      {/* Highlight card at bottom */}
+                      <div className="mx-3 mb-3 rounded-lg p-3 flex items-center gap-3"
+                        style={{ background: 'linear-gradient(135deg, rgba(31,167,187,0.12) 0%, rgba(31,167,187,0.04) 100%)', border: '1px solid rgba(31,167,187,0.18)' }}>
+                        <div className="w-8 h-8 rounded-lg bg-[#1FA7BB]/20 flex items-center justify-center shrink-0">
+                          <Shield className="w-4 h-4 text-[#1FA7BB]" />
                         </div>
-                      </Link>
-                      <Link
-                        href="/api/health"
-                        onClick={() => setActiveDropdown(null)}
-                        className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.06] transition-colors group"
-                      >
-                        <Activity className="w-4 h-4 text-[#3ddc97] mt-0.5 shrink-0" />
-                        <div>
-                          <div className="text-xs font-semibold text-white group-hover:text-[#3ddc97]">Status & Shards</div>
-                          <div className="text-[11px] text-[#94a3b8]">99.98% uptime and cluster health</div>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-xs font-bold text-white">Layer Pro</div>
+                          <div className="text-[11px] text-[#64748b]">Unlock unlimited AI scans & ban evasion</div>
                         </div>
-                      </Link>
+                        <Link href="/premium" onClick={() => setActiveDropdown(null)}
+                          className="text-[11px] font-semibold text-[#1FA7BB] hover:text-[#25bdd3] whitespace-nowrap transition-colors">
+                          Upgrade →
+                        </Link>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -400,52 +370,8 @@ export default function HomePage() {
               </nav>
             </div>
 
-            {/* Right: Language Selector, Premium Button & Login */}
+            {/* Right: Premium + Login */}
             <div className="flex items-center gap-3">
-              
-              {/* Language Selector */}
-              <div className="relative hidden sm:block">
-                <button
-                  type="button"
-                  onClick={() => setActiveDropdown(activeDropdown === 'lang' ? null : 'lang')}
-                  className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-[6px] text-xs font-medium transition-colors ${
-                    activeDropdown === 'lang'
-                      ? 'text-white bg-white/[0.08]'
-                      : 'text-[#cbd5e1] hover:text-white hover:bg-white/[0.04]'
-                  }`}
-                >
-                  <span className="text-sm">🇬🇧</span>
-                  <span className="font-semibold">{selectedLang}</span>
-                  <ChevronDown
-                    className={`w-3 h-3 text-[#94a3b8] transition-transform duration-200 ${
-                      activeDropdown === 'lang' ? 'rotate-180' : ''
-                    }`}
-                  />
-                </button>
-
-                {activeDropdown === 'lang' && (
-                  <div className="absolute right-0 top-full mt-2 w-32 rounded-xl bg-[#121522]/95 backdrop-blur-xl border border-white/[0.1] shadow-xl p-1 z-50 text-xs">
-                    {(['EN', 'DE', 'FR', 'ES'] as const).map((lang) => (
-                      <button
-                        key={lang}
-                        type="button"
-                        onClick={() => {
-                          setSelectedLang(lang);
-                          setActiveDropdown(null);
-                        }}
-                        className={`w-full text-left px-3 py-1.5 rounded-lg flex items-center justify-between hover:bg-white/[0.06] transition-colors ${
-                          selectedLang === lang ? 'text-[#1FA7BB] font-bold' : 'text-[#cbd5e1]'
-                        }`}
-                      >
-                        <span>
-                          {lang === 'EN' ? '🇬🇧 English' : lang === 'DE' ? '🇩🇪 Deutsch' : lang === 'FR' ? '🇫🇷 Français' : '🇪🇸 Español'}
-                        </span>
-                        {selectedLang === lang && <Check className="w-3 h-3" />}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
 
               {/* Highlighted Secondary Premium Button with Crown */}
               <Link
@@ -539,23 +465,6 @@ export default function HomePage() {
                   👑 Premium Upgrade
                 </Link>
               </div>
-
-              <div className="border-t border-white/[0.06] pt-3 flex items-center justify-between">
-                <span className="text-xs text-[#737b91]">Language</span>
-                <div className="flex gap-1.5">
-                  {(['EN', 'DE', 'FR', 'ES'] as const).map((lang) => (
-                    <button
-                      key={lang}
-                      onClick={() => setSelectedLang(lang)}
-                      className={`px-2 py-1 rounded text-xs font-semibold ${
-                        selectedLang === lang ? 'bg-[#1FA7BB] text-white' : 'bg-white/[0.05] text-[#cbd5e1]'
-                      }`}
-                    >
-                      {lang}
-                    </button>
-                  ))}
-                </div>
-              </div>
             </div>
           )}
         </header>
@@ -600,18 +509,18 @@ export default function HomePage() {
               
               {/* Left Column: 3-line Headline, Muted Paragraph, 2 Rounded 6px Buttons */}
               <div className="lg:col-span-6 space-y-6 order-1 text-left">
-                {/* 3-line bold headline (56-64px) */}
+                {/* Headline */}
                 <h1 className="text-4xl sm:text-5xl lg:text-[62px] font-extrabold text-white leading-[1.08] tracking-tight">
-                  The best <br />
-                  all-in-one bot <br />
-                  for Discord
+                  Your server,<br />
+                  finally under<br />
+                  <span className="text-[#1FA7BB]">control.</span>
                 </h1>
 
-                {/* Muted paragraph (about 3 lines, 16-17px) */}
+                {/* Sub */}
                 <p className="text-base sm:text-[17px] text-[#94a3b8] leading-relaxed max-w-lg">
-                  Layer is a complete Discord bot, easy to use, that thousands of
-                  Discord servers worldwide trust to manage, protect, entertain, and grow
-                  their community.
+                  Layer protects your Discord server with AI scam detection,
+                  ban evasion tracking, and smart ticket routing —
+                  zero data stored. Free to start, up in 60 seconds.
                 </p>
 
                 {/* Two buttons side by side (rounded at about 6px) */}
