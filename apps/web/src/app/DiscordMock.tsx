@@ -123,46 +123,95 @@ export function DiscordWindow({ channel, children, minHeight = 240 }: { channel:
    FEATURE VISUALS
    ══════════════════════════════════════════════════════════════ */
 
-/* 1. Scam Detection */
+/* 1. Scam Detection — real crypto scam image demo */
 export function ScamDetectionMock() {
   const [step, setStep] = useState(0);
   useEffect(() => {
-    const t = setInterval(() => setStep(v => (v + 1) % 4), 1800);
+    const t = setInterval(() => setStep(v => (v + 1) % 5), 1800);
     return () => clearInterval(t);
   }, []);
 
   return (
-    <DiscordWindow channel="general" minHeight={320}>
-      {/* Scam message — always rendered, text changes */}
-      <DiscordMessage color="#ed4245" username="FreeNitro99" time="Today at 3:14 PM">
-        <span style={{ textDecoration: step >= 1 ? 'line-through' : 'none', color: step >= 1 ? '#87898c' : '#dbdee1', transition: 'color 0.3s' }}>
-          🎁 FREE DISCORD NITRO — claim now: discord-gift.xyz/nitro
-        </span>
+    <DiscordWindow channel="general" minHeight={360}>
+      {/* User posts the scam image */}
+      <DiscordMessage color="#ed4245" username="MrBeast_Official" time="Today at 3:14 PM">
+        <div style={{ marginTop: 4 }}>
+          <div style={{ fontSize: 13, color: '#dbdee1', marginBottom: 6 }}>
+            🎁 I&apos;m giving away $3,200 in crypto! Register now to claim!
+          </div>
+          {/* Image with scan overlay */}
+          <div style={{ position: 'relative', display: 'inline-block', borderRadius: 8, overflow: 'hidden', maxWidth: 260 }}>
+            <img
+              src="/scam-demo.jpg"
+              alt="Scam image"
+              style={{
+                width: '100%', maxWidth: 260, display: 'block', borderRadius: 8,
+                filter: step >= 1 ? 'brightness(0.55) saturate(0.4)' : 'none',
+                transition: 'filter 0.4s ease',
+              }}
+            />
+            {/* OCR scan line animation */}
+            {step === 1 && (
+              <div style={{
+                position: 'absolute', top: 0, left: 0, right: 0, height: 3,
+                background: 'linear-gradient(to right, transparent, #1FA7BB, transparent)',
+                animation: 'ocr-scan 1.1s ease-in-out forwards',
+                boxShadow: '0 0 12px rgba(31,167,187,0.8)',
+              }} />
+            )}
+            {/* Detected overlay */}
+            {step >= 2 && (
+              <div style={{
+                position: 'absolute', inset: 0, borderRadius: 8,
+                border: '2px solid #ed4245',
+                background: 'rgba(237,66,69,0.08)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <div style={{
+                  background: 'rgba(0,0,0,0.82)', borderRadius: 6, padding: '6px 12px',
+                  fontSize: 11, fontWeight: 700, color: '#ed4245',
+                  display: 'flex', alignItems: 'center', gap: 6,
+                }}>
+                  <span>🚨</span> CRYPTO SCAM DETECTED
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       </DiscordMessage>
 
-      {/* Bot response — always in DOM, opacity transition only */}
-      <div style={{ opacity: step >= 2 ? 1 : 0, transition: 'opacity 0.4s ease', pointerEvents: step >= 2 ? 'auto' : 'none' }}>
+      {/* Layer bot response */}
+      <div style={{ opacity: step >= 3 ? 1 : 0, transition: 'opacity 0.4s ease', pointerEvents: step >= 3 ? 'auto' : 'none' }}>
         <DiscordMessage color={TEAL} username="Layer" isBot time="Today at 3:14 PM">
           <DiscordEmbed
             color="#ed4245"
-            title="🚨 Scam detected & deleted"
-            description="Phishing link matched known pattern. Deleted in 0.3s."
+            title="🚨 Crypto scam image detected & deleted"
+            description='OCR scan extracted: "giving away $3,200 in crypto" — matched fake celebrity giveaway pattern.'
             fields={[
-              { name: 'User', value: 'FreeNitro99', inline: true },
-              { name: 'Action', value: 'Deleted', inline: true },
-              { name: 'Confidence', value: '98%', inline: true },
+              { name: 'User', value: 'MrBeast_Official', inline: true },
+              { name: 'Action', value: 'Image deleted', inline: true },
+              { name: 'Confidence', value: '97%', inline: true },
             ]}
-            footer="Layer AI Scam Detection"
+            footer="Layer Neural OCR Vision"
           />
         </DiscordMessage>
       </div>
 
-      {/* Normal reply — always in DOM */}
-      <div style={{ opacity: step >= 3 ? 1 : 0, transition: 'opacity 0.4s ease', pointerEvents: step >= 3 ? 'auto' : 'none' }}>
+      {/* Normal reply */}
+      <div style={{ opacity: step >= 4 ? 1 : 0, transition: 'opacity 0.4s ease', pointerEvents: step >= 4 ? 'auto' : 'none' }}>
         <DiscordMessage color="#5865F2" username="Alex" time="Today at 3:15 PM">
-          thanks for the protection 👍
+          bro it scanned the image 😭 insane
         </DiscordMessage>
       </div>
+
+      <style>{`
+        @keyframes ocr-scan {
+          0%   { top: 0%;   opacity: 0; }
+          10%  { opacity: 1; }
+          90%  { opacity: 1; }
+          100% { top: 100%; opacity: 0; }
+        }
+      `}</style>
     </DiscordWindow>
   );
 }
