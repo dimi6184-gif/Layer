@@ -860,8 +860,7 @@ export default function HomePage() {
         {/* ─── FEATURES: ZIG-ZAG SECTION ──────────────────────────── */}
         <section id="features" className="relative z-10 py-20 sm:py-28 px-4 sm:px-6 overflow-hidden" style={{ background: 'var(--bg)' }}>
 
-          {/* ── Background: grid + glow blobs — same as hero ── */}
-          <div className="p-backdrop-grid" />
+          {/* ── Background: glow blobs only — no grid ── */}
           {/* Teal glow — top right */}
           <div style={{
             position: 'absolute', top: '-10%', right: '-5%',
