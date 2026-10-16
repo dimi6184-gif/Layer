@@ -1174,62 +1174,6 @@ export default function HomePage() {
 
 
 
-        {/* ─── 6. GETTING STARTED IN 3 STEPS (Protector Steps) ───── */}
-        <section className="relative z-10 py-20 px-6 max-w-6xl mx-auto">
-          <div className="text-center space-y-3 mb-16">
-            <p className="p-kicker">Getting started</p>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#f1f3f9] tracking-tight">
-              Protected in under a minute.
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center relative">
-            
-            {/* Step 1 */}
-            <div className="space-y-3 p-4">
-              <div className="w-20 h-20 rounded-full border border-white/[0.11] bg-[#141722] shadow-xl flex items-center justify-center mx-auto relative">
-                <DiscordIcon size={28} className="text-[#1FA7BB]" />
-                <span className="absolute top-0 right-0 w-6 h-6 rounded-full bg-gradient-to-br from-[#1FA7BB] to-[#146c7a] text-white text-xs font-bold flex items-center justify-center shadow-md">
-                  1
-                </span>
-              </div>
-              <h3 className="text-base font-bold text-[#f1f3f9]">Add Layer to server</h3>
-              <p className="text-xs text-[#aab1c5] leading-relaxed max-w-xs mx-auto">
-                Invite the bot in one click with standard moderation and manage-roles permissions.
-              </p>
-            </div>
-
-            {/* Step 2 */}
-            <div className="space-y-3 p-4">
-              <div className="w-20 h-20 rounded-full border border-white/[0.11] bg-[#141722] shadow-xl flex items-center justify-center mx-auto relative">
-                <Sliders className="w-7 h-7 text-[#1FA7BB]" />
-                <span className="absolute top-0 right-0 w-6 h-6 rounded-full bg-gradient-to-br from-[#1FA7BB] to-[#146c7a] text-white text-xs font-bold flex items-center justify-center shadow-md">
-                  2
-                </span>
-              </div>
-              <h3 className="text-base font-bold text-[#f1f3f9]">Auto-configures defaults</h3>
-              <p className="text-xs text-[#aab1c5] leading-relaxed max-w-xs mx-auto">
-                Layer instantly deploys anti-raid velocity filters, OCR scam scanning, and logs automatically.
-              </p>
-            </div>
-
-            {/* Step 3 */}
-            <div className="space-y-3 p-4">
-              <div className="w-20 h-20 rounded-full border border-white/[0.11] bg-[#141722] shadow-xl flex items-center justify-center mx-auto relative">
-                <ShieldCheck className="w-7 h-7 text-[#3ddc97]" />
-                <span className="absolute top-0 right-0 w-6 h-6 rounded-full bg-gradient-to-br from-[#1FA7BB] to-[#146c7a] text-white text-xs font-bold flex items-center justify-center shadow-md">
-                  3
-                </span>
-              </div>
-              <h3 className="text-base font-bold text-[#f1f3f9]">Sleep peacefully</h3>
-              <p className="text-xs text-[#aab1c5] leading-relaxed max-w-xs mx-auto">
-                Threats are intercepted in milliseconds before members can click. Zero maintenance required.
-              </p>
-            </div>
-
-          </div>
-        </section>
-
         {/* ─── 7. FAQ ──────────────────────────────────────────── */}
         <section id="faq" className="relative z-10 py-24 px-6">
           <div className="max-w-[1100px] mx-auto grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-16 lg:gap-24 items-start">

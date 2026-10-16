@@ -4,6 +4,14 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+function ShieldIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11.25C17.25 22.15 21 17.25 21 12V7L12 2z"/>
+    </svg>
+  );
+}
+
 const MODULES = [
   {
     icon: '👋',
@@ -11,13 +19,16 @@ const MODULES = [
     sub: 'Module active',
     subColor: '#3ddc97',
     right: <Toggle on />,
+    iconColor: undefined,
   },
   {
-    icon: '🛡',
+    icon: null,
+    svgIcon: <ShieldIcon />,
     title: 'Verification',
     sub: '1,265 members verified',
     subColor: '#64748b',
     right: <Dot />,
+    iconColor: '#1FA7BB',
   },
   {
     icon: '🎫',
@@ -25,6 +36,7 @@ const MODULES = [
     sub: '#482',
     subColor: '#64748b',
     right: <Pill label="Solved" color="#3ddc97" />,
+    iconColor: undefined,
   },
   {
     icon: '⭐',
@@ -33,6 +45,7 @@ const MODULES = [
     subColor: '#64748b',
     right: <Pill label="Active" color="#3ddc97" />,
     highlight: true,
+    iconColor: undefined,
   },
 ];
 
@@ -67,9 +80,9 @@ function Pill({ label, color }: { label: string; color: string }) {
   );
 }
 
-function ModuleCard({ icon, title, sub, subColor, right, highlight, delay }: {
-  icon: string; title: string; sub: string; subColor: string;
-  right: React.ReactNode; highlight?: boolean; delay: number;
+function ModuleCard({ icon, svgIcon, title, sub, subColor, right, highlight, iconColor, delay }: {
+  icon: string | null; svgIcon?: React.ReactNode; title: string; sub: string; subColor: string;
+  right: React.ReactNode; highlight?: boolean; iconColor?: string; delay: number;
 }) {
   const [vis, setVis] = useState(false);
   useEffect(() => {
@@ -90,21 +103,18 @@ function ModuleCard({ icon, title, sub, subColor, right, highlight, delay }: {
       transform: vis ? 'translateX(0)' : 'translateX(-16px)',
       transition: 'opacity 0.5s ease, transform 0.5s ease',
     }}>
-      {/* Icon */}
       <div style={{
         width: 32, height: 32, borderRadius: 8, flexShrink: 0,
         background: 'rgba(255,255,255,0.06)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontSize: 15,
-      }}>{icon}</div>
-
-      {/* Text */}
+        fontSize: 15, color: iconColor ?? '#f1f3f9',
+      }}>
+        {svgIcon ?? icon}
+      </div>
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ fontSize: 13, fontWeight: 600, color: '#f1f3f9', lineHeight: 1.2 }}>{title}</div>
         <div style={{ fontSize: 11, color: subColor, marginTop: 2 }}>{sub}</div>
       </div>
-
-      {/* Right */}
       {right}
     </div>
   );
