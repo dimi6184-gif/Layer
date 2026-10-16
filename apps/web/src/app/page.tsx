@@ -1316,24 +1316,125 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ─── 9. Clean Footer (Protector Style) ─────────────────── */}
-        <footer className="relative z-10 border-t border-white/[0.07] bg-[#07080c] py-12 px-6 text-xs text-[#737b91]">
-          <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-2.5">
-              <Image src="/logo.png" alt="Layer" width={20} height={20} className="object-contain" />
-              <span className="font-bold text-[#f1f3f9]">Layer</span>
-              <span className="text-[#4d5467]">·</span>
-              <span>The bot that protects your Discord server before the attack.</span>
-            </div>
+        {/* ─── 9. Footer ──────────────────────────────────────────── */}
+        <footer className="relative z-10 bg-[#07080c]">
 
-            <div className="flex flex-wrap items-center justify-center gap-6 text-[#aab1c5]">
-              <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
-              <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
-              <Link href="/refunds" className="hover:text-white transition-colors">Refunds</Link>
-              <Link href="/commands" className="hover:text-white transition-colors">Commands</Link>
-              <Link href="/premium" className="hover:text-white transition-colors">Pricing</Link>
+          {/* Jagged pine-forest top edge — same motif as the hero section */}
+          <div className="w-full overflow-hidden leading-none" style={{ height: 48 }}>
+            <svg viewBox="0 0 1440 48" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
+              className="w-full h-full" style={{ display: 'block' }}>
+              <path
+                d="M0 48 L0 28
+                  L20 8 L40 28
+                  L60 8 L80 28
+                  L100 8 L120 28
+                  L140 8 L160 28
+                  L180 8 L200 28
+                  L220 8 L240 28
+                  L260 8 L280 28
+                  L300 8 L320 28
+                  L340 8 L360 28
+                  L380 8 L400 28
+                  L420 8 L440 28
+                  L460 8 L480 28
+                  L500 8 L520 28
+                  L540 8 L560 28
+                  L580 8 L600 28
+                  L620 8 L640 28
+                  L660 8 L680 28
+                  L700 8 L720 28
+                  L740 8 L760 28
+                  L780 8 L800 28
+                  L820 8 L840 28
+                  L860 8 L880 28
+                  L900 8 L920 28
+                  L940 8 L960 28
+                  L980 8 L1000 28
+                  L1020 8 L1040 28
+                  L1060 8 L1080 28
+                  L1100 8 L1120 28
+                  L1140 8 L1160 28
+                  L1180 8 L1200 28
+                  L1220 8 L1240 28
+                  L1260 8 L1280 28
+                  L1300 8 L1320 28
+                  L1340 8 L1360 28
+                  L1380 8 L1400 28
+                  L1420 8 L1440 28
+                  L1440 48 Z"
+                fill="#07080c"
+              />
+            </svg>
+          </div>
+
+          {/* Main footer content */}
+          <div className="max-w-[1100px] mx-auto px-6 pt-4 pb-10">
+            <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_auto] gap-10 sm:gap-16">
+
+              {/* About col */}
+              <div className="max-w-[320px]">
+                <div className="flex items-center gap-2.5 mb-4">
+                  <Image src="/logo.png" alt="Layer" width={22} height={22} className="object-contain" />
+                  <span className="font-extrabold text-[15px] text-white tracking-tight">Layer</span>
+                </div>
+                <p className="text-[13px] text-[#4d5467] leading-relaxed">
+                  Layer is the Discord bot that automatically catches scams, bans evaders,
+                  routes tickets with AI, and keeps your community clean — with zero data stored.
+                </p>
+                <p className="text-[12px] text-[#2e3347] mt-3">Not affiliated with Discord, Inc.</p>
+              </div>
+
+              {/* Important links col */}
+              <div>
+                <p className="text-[12px] font-bold text-white mb-4 tracking-wide uppercase">Important links</p>
+                <div className="flex flex-col gap-3">
+                  {[
+                    ['Dashboard', '/dashboard'],
+                    ['Features', '#features'],
+                    ['Pricing', '/premium'],
+                    ['Support', 'https://discord.gg'],
+                  ].map(([label, href]) => (
+                    <Link key={label} href={href}
+                      className="text-[13px] text-[#4d5467] hover:text-white transition-colors">
+                      {label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              {/* Legal col */}
+              <div>
+                <p className="text-[12px] font-bold text-white mb-4 tracking-wide uppercase">Legal</p>
+                <div className="flex flex-col gap-3">
+                  {[
+                    ['Privacy Policy', '/privacy'],
+                    ['Terms of Service', '/terms'],
+                    ['Refunds', '/refunds'],
+                    ['Commands', '/commands'],
+                  ].map(([label, href]) => (
+                    <Link key={label} href={href}
+                      className="text-[13px] text-[#4d5467] hover:text-white transition-colors">
+                      {label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
             </div>
           </div>
+
+          {/* Bottom bar */}
+          <div className="border-t border-white/[0.05]">
+            <div className="max-w-[1100px] mx-auto px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+              <span className="text-[12px] text-[#2e3347]">© 2026 Layer. All rights reserved.</span>
+              <div className="flex items-center gap-5">
+                {[['Privacy', '/privacy'], ['Terms', '/terms'], ['Status', '/api/health']].map(([l, h]) => (
+                  <Link key={l} href={h} className="text-[12px] text-[#2e3347] hover:text-[#4d5467] transition-colors">{l}</Link>
+                ))}
+              </div>
+            </div>
+          </div>
+
         </footer>
 
       </div>
