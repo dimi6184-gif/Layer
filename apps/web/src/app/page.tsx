@@ -539,10 +539,10 @@ export default function HomePage() {
 
           {/* Hero Section (Two Columns, ~1200px Container) */}
           <section className="relative z-20 pt-14 sm:pt-20 pb-40 lg:pb-56 px-4 sm:px-6 lg:px-8 max-w-[1200px] mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-4 items-end">
               
               {/* Left Column: 3-line Headline, Muted Paragraph, 2 Rounded 6px Buttons */}
-              <div className="lg:col-span-6 space-y-6 order-1 text-left">
+              <div className="lg:col-span-5 space-y-6 order-1 text-left">
                 {/* Headline */}
                 <h1 className="text-4xl sm:text-5xl lg:text-[62px] font-extrabold text-white leading-[1.08] tracking-tight">
                   Your server,<br />
@@ -580,17 +580,17 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* Right Column: Illustration of Mascot Characters on Rocky Cliff with Leafy Vines & Glowing Moon */}
-              <div className="lg:col-span-6 order-2 relative flex justify-center lg:justify-end items-end select-none">
+              {/* Right Column: Illustration — full size, anchored to pine spike line */}
+              <div className="lg:col-span-7 order-2 relative select-none hidden lg:block">
                 
-                {/* ─── MASCOT CLIFF ILLUSTRATION (Picture 1 Exact Recreation) ─── */}
-                {/* Custom illustration container: You can also drop your own PNG here */}
-                <div className="w-full max-w-[580px] relative">
+                {/* Positioned to bleed into the pine spike transition zone */}
+                <div className="absolute -bottom-40 -right-8 w-[760px]">
                   <svg
                     viewBox="0 0 640 450"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
-                    className="w-full h-auto drop-shadow-2xl"
+                    className="w-full h-auto"
+                    style={{ filter: 'drop-shadow(0 40px 80px rgba(0,0,0,0.6))' }}
                   >
                     <defs>
                       {/* Moon Ambient Glow */}
