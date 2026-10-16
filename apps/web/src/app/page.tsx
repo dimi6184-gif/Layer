@@ -858,17 +858,41 @@ export default function HomePage() {
         </div>
 
         {/* ─── FEATURES: ZIG-ZAG SECTION ──────────────────────────── */}
-        <section id="features" className="relative z-10 bg-[#07080c] py-20 sm:py-28 px-4 sm:px-6">
+        <section id="features" className="relative z-10 py-20 sm:py-28 px-4 sm:px-6 overflow-hidden" style={{ background: 'var(--bg)' }}>
+
+          {/* ── Background: grid + glow blobs — same as hero ── */}
+          <div className="p-backdrop-grid" />
+          {/* Teal glow — top right */}
+          <div style={{
+            position: 'absolute', top: '-10%', right: '-5%',
+            width: 600, height: 600, borderRadius: '50%', pointerEvents: 'none', zIndex: 0,
+            background: 'radial-gradient(circle, rgba(31,167,187,0.13) 0%, transparent 65%)',
+            filter: 'blur(48px)',
+          }} />
+          {/* Purple glow — bottom left */}
+          <div style={{
+            position: 'absolute', bottom: '10%', left: '-8%',
+            width: 500, height: 500, borderRadius: '50%', pointerEvents: 'none', zIndex: 0,
+            background: 'radial-gradient(circle, rgba(88,101,242,0.10) 0%, transparent 65%)',
+            filter: 'blur(48px)',
+          }} />
+          {/* Teal glow — mid left (second feature row) */}
+          <div style={{
+            position: 'absolute', top: '45%', left: '5%',
+            width: 360, height: 360, borderRadius: '50%', pointerEvents: 'none', zIndex: 0,
+            background: 'radial-gradient(circle, rgba(31,167,187,0.08) 0%, transparent 65%)',
+            filter: 'blur(36px)',
+          }} />
 
           {/* Section eyebrow */}
-          <div className="max-w-[1160px] mx-auto text-center mb-20 sm:mb-28">
+          <div className="max-w-[1160px] mx-auto text-center mb-20 sm:mb-28 relative z-10">
             <p className="p-kicker justify-center mb-3">What Layer does</p>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
               Every attack already has an answer.
             </h2>
           </div>
 
-          <div className="max-w-[1160px] mx-auto space-y-28 sm:space-y-36">
+          <div className="max-w-[1160px] mx-auto space-y-28 sm:space-y-36 relative z-10">
 
             <FeatureBlock
               reverse={false}
