@@ -35,6 +35,7 @@ import {
   BookOpen,
   Code2,
 } from 'lucide-react';
+import { ScamDetectionMock, BanEvasionMock, TicketMock, VerificationMock, DashboardMock } from './DiscordMock';
 
 /* ─── Discord Gamepad SVG Icon ───────────────────────────────── */
 function DiscordIcon({ size = 18, className = '' }: { size?: number; className?: string }) {
@@ -48,7 +49,6 @@ function DiscordIcon({ size = 18, className = '' }: { size?: number; className?:
 /* ─── FeatureBlock: reusable zig-zag block ────────────────────── */
 interface FeatureBlockProps {
   reverse: boolean;
-  label: string;
   heading: React.ReactNode;
   body: string;
   primaryHref: string;
@@ -61,7 +61,6 @@ interface FeatureBlockProps {
 
 function FeatureBlock({
   reverse,
-  label,
   heading,
   body,
   primaryHref,
@@ -94,7 +93,6 @@ function FeatureBlock({
       <div
         className={`order-2 ${reverse ? 'lg:order-1' : 'lg:order-2'} space-y-5 max-w-[480px] mx-auto lg:mx-0`}
       >
-        <p className="p-kicker">{label}</p>
         <h3 className="text-[28px] sm:text-[32px] font-extrabold text-white tracking-tight leading-tight">
           {heading}
         </h3>
@@ -395,7 +393,7 @@ export default function HomePage() {
                 type="button"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="md:hidden p-2 rounded-lg text-[#cbd5e1] hover:text-white hover:bg-white/[0.06] transition-colors"
-                aria-label="Toggle navigation menu"
+                aria-
               >
                 {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
@@ -820,356 +818,58 @@ export default function HomePage() {
 
           <div className="max-w-[1160px] mx-auto space-y-28 sm:space-y-36">
 
-            {/* ── FEATURE 1: Anti-Raid Shield  (visual left, text right) ── */}
             <FeatureBlock
               reverse={false}
-              label="Anti-Raid & Flood Shield"
               heading={<>Stop a raid before it<br />touches your members.</>}
-              body="When join velocity spikes past your threshold Layer freezes the gate: new accounts are quarantined in memory, existing members stay completely unaffected, and the entire lockdown resolves without a single staff ping. The moment the wave stops, the server reopens on its own."
+              body="When join velocity spikes, Layer freezes the gate instantly. New accounts are quarantined, existing members stay unaffected, and the server reopens automatically — zero staff pings."
               primaryHref="/invite"
               primaryLabel="Add to Discord"
               primaryIcon={<DiscordIcon size={16} />}
-              secondaryHref="#"
-              secondaryLabel="See raid settings"
-              visual={
-                <div className="relative">
-                  {/* Floating avatar badges */}
-                  <div className="float-a absolute -top-5 -left-5 w-11 h-11 rounded-full bg-[#ff6b6b]/20 border-2 border-[#ff6b6b]/40 flex items-center justify-center text-[#ff6b6b] shadow-lg">
-                    <Shield className="w-5 h-5" />
-                  </div>
-                  <div className="float-b absolute -bottom-4 -right-4 w-9 h-9 rounded-full bg-[#3ddc97]/15 border border-[#3ddc97]/40 flex items-center justify-center text-[#3ddc97] shadow-lg">
-                    <Check className="w-4 h-4" />
-                  </div>
-
-                  {/* Main card */}
-                  <div className="rounded-2xl bg-[#0d0f18] border border-white/[0.09] shadow-2xl shadow-black/50 overflow-hidden">
-                    {/* Card header */}
-                    <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/[0.07] bg-[#111420]">
-                      <div className="flex items-center gap-2.5">
-                        <Zap className="w-4 h-4 text-[#ffc14d]" />
-                        <span className="text-xs font-bold text-white">Raid Detector — Live</span>
-                      </div>
-                      <span className="flex items-center gap-1.5 text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#ff6b6b]/12 text-[#ff6b6b] border border-[#ff6b6b]/25">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#ff6b6b] animate-pulse" />
-                        LOCKDOWN
-                      </span>
-                    </div>
-
-                    {/* Velocity meter */}
-                    <div className="px-5 py-4 space-y-3">
-                      <div className="flex justify-between text-xs">
-                        <span className="text-[#aab1c5]">Join velocity</span>
-                        <span className="font-mono text-[#ff6b6b] font-bold">47 joins / 1.4s</span>
-                      </div>
-                      <div className="h-2 w-full rounded-full bg-[#1a1e2b] overflow-hidden">
-                        <div className="h-full w-[91%] rounded-full bg-gradient-to-r from-[#ffc14d] to-[#ff6b6b]" />
-                      </div>
-                      <div className="grid grid-cols-3 gap-2 pt-1">
-                        {[
-                          { label: 'Stopped', val: '47', col: 'text-[#ff6b6b]' },
-                          { label: 'Quarantined', val: '47', col: 'text-[#ffc14d]' },
-                          { label: 'Staff Pings', val: '0', col: 'text-[#3ddc97]' },
-                        ].map(s => (
-                          <div key={s.label} className="rounded-xl bg-[#111420] border border-white/[0.06] px-3 py-2 text-center">
-                            <div className={`text-sm font-bold ${s.col}`}>{s.val}</div>
-                            <div className="text-[10px] text-[#737b91] mt-0.5">{s.label}</div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Log feed */}
-                    <div className="px-5 pb-4 space-y-1.5">
-                      {[
-                        { time: '00:00:01', msg: 'Lockdown triggered — threshold exceeded' },
-                        { time: '00:00:01', msg: '47 new accounts held in memory quarantine' },
-                        { time: '00:00:09', msg: 'Raid wave subsided — gate re-opening' },
-                      ].map((l, i) => (
-                        <div key={i} className="flex items-center gap-2.5 text-[11px] font-mono">
-                          <span className="text-[#4d5467] shrink-0">{l.time}</span>
-                          <span className="text-[#aab1c5]">{l.msg}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Layered second mini-card behind */}
-                  <div className="absolute -bottom-3 left-4 right-4 h-10 rounded-xl bg-[#0d0f18] border border-white/[0.06] -z-10 opacity-60" />
-                </div>
-              }
+              visual={<ScamDetectionMock />}
             />
 
-            {/* ── FEATURE 2: Neural OCR Scam Vision  (text left, visual right) ── */}
             <FeatureBlock
               reverse={true}
-              label="Neural OCR Vision"
-              heading={<>Reads the scam inside<br />the image.</>}
-              body="Scammers stopped using text links the moment bots got good at filtering them. Now they send screenshots: fake Nitro gifts, QR codes, phishing URLs embedded inside an image. Layer reads the pixels, extracts the text, matches it against known scam patterns, and pulls the message in under 11 ms — before a single member can tap the image."
+              heading={<>Banned users<br />can&apos;t come back.</>}
+              body="When a banned user creates a new account and rejoins, Layer detects them through behavioral and account pattern matching — and bans the new account automatically."
               primaryHref="/invite"
               primaryLabel="Add to Discord"
               primaryIcon={<DiscordIcon size={16} />}
-              visual={
-                <div className="relative">
-                  {/* Decorative floating icon */}
-                  <div className="float-c absolute -top-5 -right-5 w-12 h-12 rounded-2xl bg-[#1FA7BB]/15 border border-[#1FA7BB]/30 flex items-center justify-center shadow-xl">
-                    <Eye className="w-5 h-5 text-[#1FA7BB]" />
-                  </div>
-
-                  {/* Scan result card stacked on top of "image" card */}
-                  <div className="relative">
-                    {/* Background "image" message */}
-                    <div className="rounded-2xl bg-[#0d0f18] border border-white/[0.09] shadow-2xl p-5 space-y-3">
-                      <div className="flex items-center gap-3 pb-3 border-b border-white/[0.07]">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#1FA7BB] to-[#0d4a54]" />
-                        <div>
-                          <div className="text-xs font-semibold text-white">scammer_account_#1337</div>
-                          <div className="text-[10px] text-[#737b91]">posted in #general</div>
-                        </div>
-                      </div>
-
-                      {/* Fake image preview with scan overlay */}
-                      <div className="relative rounded-xl overflow-hidden border border-white/[0.08]">
-                        {/* Placeholder image */}
-                        <div className="h-28 bg-gradient-to-br from-[#1a1424] to-[#0d0f18] flex items-center justify-center">
-                          <div className="text-center space-y-1.5">
-                            <div className="w-12 h-8 rounded bg-[#1FA7BB]/20 mx-auto flex items-center justify-center">
-                              <span className="text-[10px] font-mono text-[#1FA7BB] font-bold">IMG</span>
-                            </div>
-                            <div className="text-[10px] text-[#4d5467] font-mono">nitro_gift_real.png</div>
-                          </div>
-                        </div>
-
-                        {/* OCR scan overlay */}
-                        <div className="absolute inset-0 bg-[#ff6b6b]/08 border-2 border-[#ff6b6b]/60 rounded-xl flex items-center justify-center">
-                          <div className="bg-[#07080c]/90 rounded-lg px-3 py-2 flex items-center gap-2 shadow-xl">
-                            <Eye className="w-4 h-4 text-[#ff6b6b] shrink-0" />
-                            <div>
-                              <div className="text-[11px] font-bold text-[#ff6b6b]">SCAM DETECTED</div>
-                              <div className="text-[10px] text-[#aab1c5]">OCR matched phishing URL pattern</div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Action taken row */}
-                      <div className="flex items-center justify-between text-[11px]">
-                        <span className="text-[#737b91]">Message deleted · user warned</span>
-                        <span className="font-mono text-[#3ddc97] font-semibold">11ms</span>
-                      </div>
-                    </div>
-
-                    {/* Layered shadow card */}
-                    <div className="absolute -bottom-3 left-4 right-4 h-10 rounded-2xl bg-[#0d0f18] border border-white/[0.06] -z-10 opacity-50" />
-                  </div>
-                </div>
-              }
+              visual={<BanEvasionMock />}
             />
 
-            {/* ── FEATURE 3: Anti-Nuke + Auto-Restore  (visual left, text right) ── */}
             <FeatureBlock
               reverse={false}
-              label="Anti-Nuke & Restore"
-              heading={<>One click undo<br />for nuclear attacks.</>}
-              body="A rogue admin starts bulk-deleting channels, stripping roles, kicking members. Layer detects the pattern in real time, strips the attacker's permissions instantly, then rebuilds every deleted channel, permission overwrite, and role configuration from its last snapshot — in under 60 ms per object. Your server structure comes back as if nothing happened."
+              heading={<>Support tickets that<br />resolve themselves.</>}
+              body="Layer reads the ticket context, searches your server for relevant channels and roles, and answers common questions automatically. Staff only gets involved when actually needed."
               primaryHref="/invite"
               primaryLabel="Add to Discord"
               primaryIcon={<DiscordIcon size={16} />}
-              secondaryHref="#"
-              secondaryLabel="See how restore works"
-              visual={
-                <div className="relative">
-                  <div className="float-a absolute -top-5 -right-5 w-11 h-11 rounded-full bg-[#3ddc97]/15 border border-[#3ddc97]/40 flex items-center justify-center text-[#3ddc97] shadow-lg">
-                    <RotateCcw className="w-4 h-4" />
-                  </div>
-
-                  <div className="rounded-2xl bg-[#0d0f18] border border-white/[0.09] shadow-2xl overflow-hidden">
-                    <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/[0.07] bg-[#111420]">
-                      <div className="flex items-center gap-2">
-                        <RotateCcw className="w-4 h-4 text-[#3ddc97]" />
-                        <span className="text-xs font-bold text-white">Auto-Restore — Running</span>
-                      </div>
-                      <span className="text-[10px] text-[#3ddc97] font-mono font-bold">COMPLETE</span>
-                    </div>
-
-                    <div className="p-4 space-y-2">
-                      {[
-                        { name: '#general', type: 'Channel', ms: '34ms', done: true },
-                        { name: '#announcements', type: 'Channel', ms: '41ms', done: true },
-                        { name: '#rules-and-info', type: 'Channel', ms: '55ms', done: true },
-                        { name: 'Moderator', type: 'Role', ms: '22ms', done: true },
-                        { name: 'Member', type: 'Role', ms: '18ms', done: true },
-                      ].map((item, i) => (
-                        <div
-                          key={i}
-                          className="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-[#111420] border border-white/[0.05]"
-                        >
-                          <div className="flex items-center gap-2.5 text-xs">
-                            <span className="text-[#737b91] font-mono">{item.type === 'Channel' ? '#' : '@'}</span>
-                            <span className="text-white font-medium">{item.name.replace('#', '').replace('@', '')}</span>
-                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#1a1e2b] text-[#737b91] font-mono">{item.type}</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <span className="text-[10px] font-mono text-[#4d5467]">{item.ms}</span>
-                            <div className="w-5 h-5 rounded-full bg-[#3ddc97]/15 flex items-center justify-center">
-                              <Check className="w-3 h-3 text-[#3ddc97]" />
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="px-5 py-3 border-t border-white/[0.07] bg-[#111420]/50 flex items-center justify-between text-xs text-[#737b91]">
-                      <span>5 objects restored from snapshot</span>
-                      <span className="text-[#3ddc97] font-semibold">Avg 34ms per object</span>
-                    </div>
-                  </div>
-
-                  <div className="absolute -bottom-3 left-4 right-4 h-10 rounded-2xl bg-[#0d0f18] border border-white/[0.06] -z-10 opacity-50" />
-                </div>
-              }
+              visual={<TicketMock />}
             />
 
-            {/* ── FEATURE 4: Zero-Storage Verification  (text left, visual right) ── */}
             <FeatureBlock
               reverse={true}
-              label="Zero-Storage Verification"
               heading={<>Verify real people.<br />Store nothing.</>}
-              body="Layer's verification system confirms a user is human through an interactive browser challenge — without storing IPs, device fingerprints, or emails. The result is kept only in Discord's own role system. Bots stay out. Privacy stays intact. There's nothing for a data breach to expose."
+              body="Layer confirms a user is human through an interactive challenge — without storing IPs, device fingerprints, or emails. Nothing to breach. Privacy by design."
               primaryHref="/invite"
               primaryLabel="Add to Discord"
               primaryIcon={<DiscordIcon size={16} />}
-              visual={
-                <div className="relative">
-                  <div className="float-b absolute -top-4 -left-4 w-10 h-10 rounded-full bg-[#8b5cf6]/20 border border-[#8b5cf6]/40 flex items-center justify-center shadow-lg">
-                    <UserCheck className="w-4 h-4 text-[#a78bfa]" />
-                  </div>
-
-                  {/* Verification panel */}
-                  <div className="rounded-2xl bg-[#0d0f18] border border-white/[0.09] shadow-2xl overflow-hidden">
-                    <div className="px-5 py-4 border-b border-white/[0.07] bg-[#111420] text-center space-y-0.5">
-                      <div className="text-xs font-bold text-white">Layer Verification</div>
-                      <div className="text-[10px] text-[#737b91]">Community Server · 4,200 members</div>
-                    </div>
-
-                    <div className="p-5 space-y-4">
-                      {/* Privacy badge row */}
-                      <div className="flex items-center gap-2.5 p-3 rounded-xl bg-[#1FA7BB]/08 border border-[#1FA7BB]/20">
-                        <Lock className="w-4 h-4 text-[#1FA7BB] shrink-0" />
-                        <span className="text-[11px] text-[#aab1c5]">
-                          Zero data stored · No IPs · No emails logged
-                        </span>
-                      </div>
-
-                      {/* Status based on verifyStatus */}
-                      {verifyStatus === 'idle' ? (
-                        <button
-                          onClick={() => setVerifyStatus('verified')}
-                          className="w-full py-3 rounded-[6px] bg-[#1FA7BB] hover:bg-[#25bdd3] text-white text-sm font-semibold transition-colors flex items-center justify-center gap-2"
-                        >
-                          <ShieldCheck className="w-4 h-4" />
-                          Complete verification
-                        </button>
-                      ) : (
-                        <div className="flex items-center justify-center gap-2.5 py-3 rounded-xl bg-[#3ddc97]/10 border border-[#3ddc97]/30">
-                          <Check className="w-4 h-4 text-[#3ddc97]" />
-                          <span className="text-sm font-semibold text-[#3ddc97]">Verified — member role granted</span>
-                        </div>
-                      )}
-
-                      {/* Stat pills */}
-                      <div className="grid grid-cols-3 gap-2 text-center">
-                        {[
-                          { val: '0', label: 'IPs stored' },
-                          { val: '0', label: 'Emails logged' },
-                          { val: '100%', label: 'In-memory' },
-                        ].map(s => (
-                          <div key={s.label} className="rounded-xl bg-[#111420] border border-white/[0.06] py-2">
-                            <div className="text-sm font-bold text-white">{s.val}</div>
-                            <div className="text-[10px] text-[#737b91] mt-0.5">{s.label}</div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              }
+              visual={<VerificationMock />}
             />
 
-            {/* ── FEATURE 5: Web Dashboard & Control Panel  (visual left, text right) ── */}
             <FeatureBlock
               reverse={false}
-              label="Web Dashboard"
               heading={<>Full control from<br />your browser.</>}
-              body="Every Layer module has a dedicated settings page at uselayer.de. Toggle anti-raid thresholds, configure OCR sensitivity, set leveling multipliers, manage ticket categories — live, without a single bot command. Changes sync over websocket and reflect on your server within 12 ms. The dashboard is protected by Discord OAuth and permission-gated per role."
+              body="Every Layer module has a dedicated settings page at uselayer.de. Toggle rules, configure thresholds, manage ticket categories — live, without a single bot command."
               primaryHref="/dashboard"
               primaryLabel="Open Dashboard"
-              primaryIcon={<ExternalLink size={14} />}
-              visual={
-                <div className="relative">
-                  <div className="float-a absolute -top-5 -right-5 w-12 h-12 rounded-2xl bg-[#1FA7BB]/15 border border-[#1FA7BB]/30 flex items-center justify-center shadow-xl">
-                    <Sliders className="w-5 h-5 text-[#1FA7BB]" />
-                  </div>
-                  <div className="float-c absolute -bottom-5 -left-5 w-9 h-9 rounded-full bg-[#3ddc97]/15 border border-[#3ddc97]/30 flex items-center justify-center shadow-lg">
-                    <Activity className="w-3.5 h-3.5 text-[#3ddc97]" />
-                  </div>
-
-                  {/* Dashboard card */}
-                  <div className="rounded-2xl bg-[#0d0f18] border border-white/[0.09] shadow-2xl overflow-hidden">
-                    {/* Header bar */}
-                    <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/[0.07] bg-[#111420]">
-                      <div className="flex items-center gap-2">
-                        <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#1FA7BB] to-[#0d4a54] flex items-center justify-center text-[10px] font-bold text-white">GS</div>
-                        <div>
-                          <div className="text-xs font-semibold text-white">Gaming Server Hub</div>
-                          <div className="text-[10px] text-[#737b91]">Security settings</div>
-                        </div>
-                      </div>
-                      <span className="p-status-pill">
-                        <span className="p-pulse" />
-                        <span>Live</span>
-                      </span>
-                    </div>
-
-                    {/* Toggle rows */}
-                    <div className="p-3 space-y-1">
-                      {[
-                        { key: 'antiRaid' as const, label: 'Anti-Raid Shield', desc: 'Auto-lock on join spike' },
-                        { key: 'antiScam' as const, label: 'Neural OCR Scanner', desc: 'Image scam detection' },
-                        { key: 'botQuarantine' as const, label: 'Bot Quarantine', desc: 'Hold bots for owner approval' },
-                        { key: 'autoRestore' as const, label: 'Auto Structure Restore', desc: 'Rebuild on nuke event' },
-                        { key: 'ocrVision' as const, label: 'AI Ticket Bot', desc: 'Answer common questions' },
-                      ].map(m => {
-                        const checked = switches[m.key];
-                        return (
-                          <div
-                            key={m.key}
-                            onClick={() => toggleSwitch(m.key)}
-                            className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-white/[0.03] cursor-pointer transition-colors"
-                          >
-                            <div>
-                              <div className="text-xs font-semibold text-white">{m.label}</div>
-                              <div className="text-[10px] text-[#737b91]">{m.desc}</div>
-                            </div>
-                            <div className="p-switch" data-checked={checked ? 'true' : 'false'}>
-                              <div className="p-switch-knob" />
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-
-                    <div className="px-5 py-2.5 border-t border-white/[0.07] bg-[#111420]/60 flex items-center justify-between text-[11px] text-[#737b91]">
-                      <span>Changes sync via websocket</span>
-                      <span className="text-[#3ddc97]">Latency: 12ms</span>
-                    </div>
-                  </div>
-
-                  <div className="absolute -bottom-3 left-4 right-4 h-10 rounded-2xl bg-[#0d0f18] border border-white/[0.06] -z-10 opacity-50" />
-                </div>
-              }
+              primaryIcon={<Shield className="w-4 h-4" />}
+              visual={<DashboardMock switches={switches} toggleSwitch={(k) => toggleSwitch(k as keyof typeof switches)} />}
             />
 
           </div>
+
         </section>
 
 
