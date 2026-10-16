@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { db } from '@nexus/db';
 import { ensureServerAccess } from '@/lib/ensure-access';
 import { GiveawayManager } from '@/components/GiveawayManager';

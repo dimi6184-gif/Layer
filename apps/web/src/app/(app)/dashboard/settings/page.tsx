@@ -1,4 +1,5 @@
-﻿import { auth } from "@/auth";
+export const dynamic = 'force-dynamic';
+import { auth } from "@/auth";
 import { db } from "@nexus/db";
 import { redirect } from "next/navigation";
 import { AccountSettings } from "@/components/AccountSettings";

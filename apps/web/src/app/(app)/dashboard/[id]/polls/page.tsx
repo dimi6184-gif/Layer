@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { ensureServerAccess } from "@/lib/ensure-access";
 import { db } from "@nexus/db";
 import { BarChart3, Users, TrendingUp, Calendar, Smile, ArrowLeft } from "lucide-react";

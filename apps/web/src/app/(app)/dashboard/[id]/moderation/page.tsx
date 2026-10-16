@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { db } from "@nexus/db";
 import { redirect } from "next/navigation";
 import { ensureServerAccess } from "@/lib/ensure-access";

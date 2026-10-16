@@ -1,4 +1,4 @@
-﻿import { CreditCard, Sparkles } from "lucide-react";
+import { CreditCard, Sparkles } from "lucide-react";
 
 export const dynamic = 'force-dynamic';
 

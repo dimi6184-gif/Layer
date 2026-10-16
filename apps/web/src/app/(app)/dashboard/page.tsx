@@ -1,4 +1,5 @@
-﻿import { Plus, Server, Users } from "lucide-react";
+export const dynamic = 'force-dynamic';
+import { Plus, Server, Users } from "lucide-react";
 import Link from "next/link";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
