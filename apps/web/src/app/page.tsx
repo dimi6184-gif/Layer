@@ -343,11 +343,16 @@ export default function HomePage() {
             {/* Left: Logo & Dropdowns */}
             <div className="flex items-center gap-6 sm:gap-8">
               {/* Logo */}
-              <Link href="/" className="flex items-center gap-2.5 group">
-                <div className="w-8 h-8 rounded-lg bg-[#1FA7BB]/10 border border-[#1FA7BB]/30 flex items-center justify-center transition-all group-hover:border-[#1FA7BB]/60">
-                  <Image src="/logo.png" alt="Layer" width={22} height={22} className="object-contain" priority />
-                </div>
-                <span className="font-extrabold text-lg tracking-tight text-white">Layer</span>
+              <Link href="/" className="flex items-center gap-3 group">
+                <Image
+                  src="/logo.png"
+                  alt="Layer"
+                  width={46}
+                  height={46}
+                  className="w-10 h-10 sm:w-11 sm:h-11 object-contain transition-transform duration-150 group-hover:scale-105"
+                  priority
+                />
+                <span className="font-extrabold text-xl sm:text-2xl tracking-tight text-white">Layer</span>
               </Link>
 
               {/* Desktop Dropdowns: Plugins & Resources */}
@@ -1029,45 +1034,17 @@ export default function HomePage() {
                 opacity="0.85"
               />
 
-              {/* Front Layer Pine Forest (Dark conifer silhouettes seamlessly merging into Section 3 #0a0c12) */}
+              {/* Front Layer Pine Forest (Dark conifer silhouettes seamlessly merging into #07080c) */}
               <path
                 d="M 0 140 L 0 100 L 12 70 L 22 92 L 34 60 L 48 88 L 60 52 L 74 84 L 90 62 L 104 90 L 122 55 L 138 85 L 154 62 L 170 92 L 190 50 L 208 82 L 224 58 L 240 88 L 258 54 L 274 84 L 292 60 L 308 90 L 328 52 L 346 84 L 362 60 L 380 92 L 400 48 L 418 80 L 434 56 L 450 88 L 470 52 L 488 82 L 504 58 L 520 90 L 540 50 L 558 80 L 574 58 L 590 88 L 610 52 L 628 82 L 644 58 L 660 90 L 680 48 L 698 80 L 714 56 L 730 88 L 750 52 L 768 82 L 784 58 L 800 90 L 820 48 L 838 80 L 854 56 L 870 88 L 890 52 L 908 82 L 924 58 L 940 90 L 960 50 L 978 80 L 994 58 L 1010 88 L 1030 52 L 1048 82 L 1064 58 L 1080 90 L 1100 48 L 1118 80 L 1134 56 L 1150 88 L 1170 52 L 1188 82 L 1204 58 L 1220 90 L 1240 50 L 1258 80 L 1274 58 L 1290 88 L 1310 52 L 1328 82 L 1344 58 L 1360 90 L 1380 48 L 1398 80 L 1414 56 L 1430 88 L 1440 68 L 1440 140 Z"
-                fill="#0a0c12"
+                fill="#07080c"
               />
 
               {/* Bottom Base Solid Strip to guarantee 100% seam-free connection */}
-              <rect x="0" y="128" width="1440" height="12" fill="#0a0c12" />
+              <rect x="0" y="128" width="1440" height="12" fill="#07080c" />
             </svg>
           </div>
         </div>
-
-        {/* ─── 3. Stats Strip (Protector Exact Home-Band) ───────── */}
-        <section className="relative z-10 border-y border-white/[0.07] bg-[#0a0c12] py-8 px-6">
-          <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-            <p className="text-sm text-[#aab1c5] text-center md:text-left">
-              <strong className="text-white font-bold">18,500+</strong> members protected · <strong className="text-white font-bold">100%</strong> zero data retention
-            </p>
-
-            <dl className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-10 text-center">
-              <div>
-                <dt className="text-xs text-[#737b91]">Modules available</dt>
-                <dd className="text-xl font-bold text-[#f1f3f9] mt-0.5">20+</dd>
-              </div>
-              <div>
-                <dt className="text-xs text-[#737b91]">Structure backups</dt>
-                <dd className="text-xl font-bold text-[#1FA7BB] mt-0.5">Every 10m</dd>
-              </div>
-              <div>
-                <dt className="text-xs text-[#737b91]">Reaction speed</dt>
-                <dd className="text-xl font-bold text-[#3ddc97] mt-0.5">&lt; 14ms</dd>
-              </div>
-              <div>
-                <dt className="text-xs text-[#737b91]">Core security</dt>
-                <dd className="text-xl font-bold text-white mt-0.5">Free</dd>
-              </div>
-            </dl>
-          </div>
-        </section>
 
         {/* ─── 4. ZIG-ZAG FEATURE SUITE (Protector Home-Zig) ─────── */}
         <section id="features" className="relative z-10 py-24 px-6 max-w-6xl mx-auto space-y-28">
