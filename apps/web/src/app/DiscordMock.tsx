@@ -92,7 +92,7 @@ export function DiscordEmbed({ color, title, description, fields, footer }: {
 }
 
 /* ── Discord window shell ── */
-export function DiscordWindow({ channel, children }: { channel: string; children: React.ReactNode }) {
+export function DiscordWindow({ channel, children, minHeight = 240 }: { channel: string; children: React.ReactNode; minHeight?: number }) {
   return (
     <div style={{
       borderRadius: 8, overflow: 'hidden',
@@ -101,14 +101,18 @@ export function DiscordWindow({ channel, children }: { channel: string; children
       fontFamily: '"gg sans", "Noto Sans", Whitney, "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif',
       border: '1px solid rgba(255,255,255,0.06)',
       maxWidth: 520,
+      /* Fixed height so animating messages never resize the section */
+      minHeight,
+      display: 'flex',
+      flexDirection: 'column',
     }}>
       {/* Titlebar */}
-      <div style={{ background: CHANNEL_BG, borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '10px 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
+      <div style={{ background: CHANNEL_BG, borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '10px 16px', display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
         <span style={{ fontSize: 15, color: '#87898c' }}>#</span>
         <span style={{ fontSize: 15, fontWeight: 600, color: '#f2f3f5' }}>{channel}</span>
       </div>
-      {/* Messages */}
-      <div style={{ padding: '12px 0', display: 'flex', flexDirection: 'column', gap: 0 }}>
+      {/* Messages — fixed height, no layout shift */}
+      <div style={{ padding: '12px 0', display: 'flex', flexDirection: 'column', gap: 0, flex: 1, overflow: 'hidden' }}>
         {children}
       </div>
     </div>
@@ -128,37 +132,37 @@ export function ScamDetectionMock() {
   }, []);
 
   return (
-    <DiscordWindow channel="general">
-      {/* Scam message */}
+    <DiscordWindow channel="general" minHeight={320}>
+      {/* Scam message — always rendered, text changes */}
       <DiscordMessage color="#ed4245" username="FreeNitro99" time="Today at 3:14 PM">
-        <span style={{ textDecoration: step >= 1 ? 'line-through' : 'none', color: step >= 1 ? '#87898c' : '#dbdee1', transition: 'all 0.3s' }}>
+        <span style={{ textDecoration: step >= 1 ? 'line-through' : 'none', color: step >= 1 ? '#87898c' : '#dbdee1', transition: 'color 0.3s' }}>
           🎁 FREE DISCORD NITRO — claim now: discord-gift.xyz/nitro
         </span>
       </DiscordMessage>
 
-      {/* Layer bot response */}
-      {step >= 2 && (
+      {/* Bot response — always in DOM, opacity transition only */}
+      <div style={{ opacity: step >= 2 ? 1 : 0, transition: 'opacity 0.4s ease', pointerEvents: step >= 2 ? 'auto' : 'none' }}>
         <DiscordMessage color={TEAL} username="Layer" isBot time="Today at 3:14 PM">
           <DiscordEmbed
             color="#ed4245"
             title="🚨 Scam detected & deleted"
-            description="Phishing link matched known scam pattern. Message removed in 0.3s."
+            description="Phishing link matched known pattern. Deleted in 0.3s."
             fields={[
               { name: 'User', value: 'FreeNitro99', inline: true },
-              { name: 'Action', value: 'Message deleted', inline: true },
+              { name: 'Action', value: 'Deleted', inline: true },
               { name: 'Confidence', value: '98%', inline: true },
             ]}
             footer="Layer AI Scam Detection"
           />
         </DiscordMessage>
-      )}
+      </div>
 
-      {/* Normal message after */}
-      {step >= 3 && (
+      {/* Normal reply — always in DOM */}
+      <div style={{ opacity: step >= 3 ? 1 : 0, transition: 'opacity 0.4s ease', pointerEvents: step >= 3 ? 'auto' : 'none' }}>
         <DiscordMessage color="#5865F2" username="Alex" time="Today at 3:15 PM">
           thanks for the protection 👍
         </DiscordMessage>
-      )}
+      </div>
     </DiscordWindow>
   );
 }
@@ -173,7 +177,7 @@ export function BanEvasionMock() {
   }, []);
 
   return (
-    <DiscordWindow channel="layer-logs">
+    <DiscordWindow channel="layer-logs" minHeight={320}>
       <DiscordMessage color="#ed4245" username="Layer" isBot time="Today at 2:09 PM">
         <DiscordEmbed
           color="#ed4245"
@@ -188,7 +192,8 @@ export function BanEvasionMock() {
         />
       </DiscordMessage>
 
-      {show && (
+      {/* Second message — opacity only, no layout shift */}
+      <div style={{ opacity: show ? 1 : 0, transition: 'opacity 0.4s ease', pointerEvents: show ? 'auto' : 'none' }}>
         <DiscordMessage color="#ed4245" username="Layer" isBot time="Today at 2:10 PM" continued>
           <DiscordEmbed
             color="#ed4245"
@@ -196,7 +201,7 @@ export function BanEvasionMock() {
             description="NewUser#9876 was automatically banned. No staff action required."
           />
         </DiscordMessage>
-      )}
+      </div>
     </DiscordWindow>
   );
 }
@@ -204,36 +209,36 @@ export function BanEvasionMock() {
 /* 3. AI Ticket */
 export function TicketMock() {
   const [idx, setIdx] = useState(0);
-  const msgs = [
-    { role: 'user',    color: '#5865F2', name: 'Micha',  text: "Hey I can't access the #announcements channel" },
-    { role: 'bot',     color: TEAL,      name: 'Layer',  text: null }, // embed
-    { role: 'system',  color: '',        name: '',       text: '— Staff joined · AI stepped back —' },
-  ];
   useEffect(() => {
-    const t = setInterval(() => setIdx(v => Math.min(v + 1, msgs.length - 1)), 1800);
+    const t = setInterval(() => setIdx(v => Math.min(v + 1, 2)), 1800);
     return () => clearInterval(t);
-  }, [msgs.length]);
+  }, []);
 
   return (
-    <DiscordWindow channel="ticket-0042">
-      {msgs.slice(0, idx + 1).map((m, i) => {
-        if (m.role === 'system') return (
-          <div key={i} style={{ textAlign: 'center', fontSize: 12, color: '#87898c', padding: '8px 16px' }}>{m.text}</div>
-        );
-        return (
-          <DiscordMessage key={i} color={m.color} username={m.name} isBot={m.role === 'bot'} time="Today at 4:22 PM">
-            {m.role === 'bot'
-              ? <DiscordEmbed
-                  color={TEAL}
-                  title="💡 Quick answer"
-                  description="Your role might be missing. Head to #roles and click the 📢 Announcements button to self-assign access."
-                  footer="Layer AI · Reply generated in 0.8s"
-                />
-              : m.text
-            }
-          </DiscordMessage>
-        );
-      })}
+    <DiscordWindow channel="ticket-0042" minHeight={300}>
+      {/* Message 1 — always visible */}
+      <DiscordMessage color="#5865F2" username="Micha" time="Today at 4:22 PM">
+        Hey I can&apos;t access the #announcements channel
+      </DiscordMessage>
+
+      {/* Message 2 — opacity transition */}
+      <div style={{ opacity: idx >= 1 ? 1 : 0, transition: 'opacity 0.4s ease', pointerEvents: idx >= 1 ? 'auto' : 'none' }}>
+        <DiscordMessage color={TEAL} username="Layer" isBot time="Today at 4:22 PM">
+          <DiscordEmbed
+            color={TEAL}
+            title="💡 Quick answer"
+            description="Head to #roles and click 📢 Announcements to self-assign access."
+            footer="Layer AI · Answered in 0.8s"
+          />
+        </DiscordMessage>
+      </div>
+
+      {/* System message — opacity transition */}
+      <div style={{ opacity: idx >= 2 ? 1 : 0, transition: 'opacity 0.4s ease' }}>
+        <div style={{ textAlign: 'center', fontSize: 12, color: '#87898c', padding: '8px 16px' }}>
+          — Staff joined · AI stepped back —
+        </div>
+      </div>
     </DiscordWindow>
   );
 }
@@ -241,7 +246,7 @@ export function TicketMock() {
 /* 4. Verification */
 export function VerificationMock() {
   return (
-    <DiscordWindow channel="verify">
+    <DiscordWindow channel="verify" minHeight={240}>
       <DiscordMessage color={TEAL} username="Layer" isBot time="Today at 12:00 PM">
         <DiscordEmbed
           color={TEAL}
@@ -249,7 +254,6 @@ export function VerificationMock() {
           description="Welcome to the server! Click the button below to verify you're human and get full access."
           footer="Zero data stored · No email required"
         />
-        {/* Fake button */}
         <div style={{ marginTop: 8 }}>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: TEAL, color: '#080808', fontWeight: 700, fontSize: 13, padding: '8px 18px', borderRadius: 4, cursor: 'default' }}>
             ✔ Verify me
