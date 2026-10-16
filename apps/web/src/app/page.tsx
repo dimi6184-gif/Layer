@@ -71,8 +71,20 @@ function FeatureBlock({
   secondaryLabel,
   visual,
 }: FeatureBlockProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { el.classList.add('in-view'); io.disconnect(); } },
+      { threshold: 0.12 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   return (
-    <div className="feat-block grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+    <div ref={ref} className="feat-block grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
       {/* Visual column — mobile: always first; desktop: alternates via order */}
       <div className={`order-1 ${reverse ? 'lg:order-2' : 'lg:order-1'}`}>
         {visual}
@@ -92,6 +104,7 @@ function FeatureBlock({
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
           <Link
             href={primaryHref}
+            prefetch={false}
             className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-[6px] bg-[#1FA7BB] hover:bg-[#25bdd3] text-white text-sm font-semibold shadow-lg shadow-[#1FA7BB]/20 hover:shadow-[#1FA7BB]/35 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-150"
           >
             {primaryIcon}
@@ -605,7 +618,7 @@ export default function HomePage() {
                 <div className="flex flex-wrap items-center gap-3.5 pt-2">
                   {/* Primary button with Discord icon in main brand color */}
                   <Link
-                    href="/invite"
+                    href="/invite" prefetch={false}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-[6px] bg-[#1FA7BB] hover:bg-[#25bdd3] text-white font-semibold text-sm sm:text-base transition-all duration-150 shadow-lg shadow-[#1FA7BB]/25 hover:shadow-[#1FA7BB]/40 hover:-translate-y-0.5 active:translate-y-0"
@@ -1361,7 +1374,7 @@ export default function HomePage() {
               </p>
               <div className="pt-2 flex flex-wrap justify-center gap-3">
                 <Link
-                  href="/invite"
+                  href="/invite" prefetch={false}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-btn p-btn-primary p-btn-lg"
