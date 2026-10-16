@@ -1038,54 +1038,6 @@ export default function HomePage() {
         {/* ─── 9. Footer ──────────────────────────────────────────── */}
         <footer className="relative z-10 bg-[#07080c]">
 
-          {/* Jagged pine-forest top edge — same motif as the hero section */}
-          <div className="w-full overflow-hidden leading-none" style={{ height: 48 }}>
-            <svg viewBox="0 0 1440 48" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
-              className="w-full h-full" style={{ display: 'block' }}>
-              <path
-                d="M0 48 L0 28
-                  L20 8 L40 28
-                  L60 8 L80 28
-                  L100 8 L120 28
-                  L140 8 L160 28
-                  L180 8 L200 28
-                  L220 8 L240 28
-                  L260 8 L280 28
-                  L300 8 L320 28
-                  L340 8 L360 28
-                  L380 8 L400 28
-                  L420 8 L440 28
-                  L460 8 L480 28
-                  L500 8 L520 28
-                  L540 8 L560 28
-                  L580 8 L600 28
-                  L620 8 L640 28
-                  L660 8 L680 28
-                  L700 8 L720 28
-                  L740 8 L760 28
-                  L780 8 L800 28
-                  L820 8 L840 28
-                  L860 8 L880 28
-                  L900 8 L920 28
-                  L940 8 L960 28
-                  L980 8 L1000 28
-                  L1020 8 L1040 28
-                  L1060 8 L1080 28
-                  L1100 8 L1120 28
-                  L1140 8 L1160 28
-                  L1180 8 L1200 28
-                  L1220 8 L1240 28
-                  L1260 8 L1280 28
-                  L1300 8 L1320 28
-                  L1340 8 L1360 28
-                  L1380 8 L1400 28
-                  L1420 8 L1440 28
-                  L1440 48 Z"
-                fill="#07080c"
-              />
-            </svg>
-          </div>
-
           {/* Main footer content */}
           <div className="max-w-[1100px] mx-auto px-6 pt-4 pb-10">
             <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_auto] gap-10 sm:gap-16">
