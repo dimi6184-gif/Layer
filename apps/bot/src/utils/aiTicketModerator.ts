@@ -59,10 +59,7 @@ export async function shouldAIRespond(message: Message): Promise<boolean> {
         );
         const hasAdminPermission =
           member.permissions.has('Administrator') ||
-          member.permissions.has('ManageGuild') ||
-          member.permissions.has('ManageChannels') ||
-          member.permissions.has('KickMembers') ||
-          member.permissions.has('BanMembers');
+          member.permissions.has('ManageGuild');
 
         if (hasStaffRole || hasAdminPermission) {
           console.log(`[AI Ticket] Staff/Admin has already responded in this ticket — AI staying silent`);
@@ -90,13 +87,10 @@ export async function shouldAIRespond(message: Message): Promise<boolean> {
           guild.aiTicketStaffRoleIds.includes(role.id)
         );
 
-        // Check Discord admin permissions (Administrator, ManageGuild, ManageChannels)
+        // Check Discord admin permissions — only true admin perms, not channel-level ones
         const hasAdminPermission =
           member.permissions.has('Administrator') ||
-          member.permissions.has('ManageGuild') ||
-          member.permissions.has('ManageChannels') ||
-          member.permissions.has('KickMembers') ||
-          member.permissions.has('BanMembers');
+          member.permissions.has('ManageGuild');
 
         if (hasStaffRole || hasAdminPermission) {
           console.log(`[AI Ticket] Staff/Admin member wrote in ticket — AI stepping back`);
