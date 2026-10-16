@@ -186,13 +186,13 @@ export function ScamDetectionMock() {
           <DiscordEmbed
             color="#ed4245"
             title="🚨 Crypto scam image detected & deleted"
-            description='OCR scan extracted: "giving away $3,200 in crypto" — matched fake celebrity giveaway pattern.'
+            description='Image scan extracted: "giving away $3,200 in crypto" — matched fake celebrity giveaway pattern.'
             fields={[
               { name: 'User', value: 'MrBeast_Official', inline: true },
               { name: 'Action', value: 'Image deleted', inline: true },
               { name: 'Confidence', value: '97%', inline: true },
             ]}
-            footer="Layer Neural OCR Vision"
+            footer="Layer AI Image Detection"
           />
         </DiscordMessage>
       </div>
