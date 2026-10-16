@@ -812,8 +812,8 @@ export default function HomePage() {
 
             <FeatureBlock
               reverse={false}
-              heading={<>Stop a raid before it<br />touches your members.</>}
-              body="When join velocity spikes, Layer freezes the gate instantly. New accounts are quarantined, existing members stay unaffected, and the server reopens automatically — zero staff pings."
+              heading={<>AI that knows scams.<br />You don&apos;t have to.</>}
+              body="No blocklists to maintain. No dedicated honeypot channel. Layer's AI understands context — it knows what a scam looks like, even inside an image, without you ever updating a single rule."
               primaryHref="/invite"
               primaryLabel="Add to Discord"
               primaryIcon={<DiscordIcon size={16} />}

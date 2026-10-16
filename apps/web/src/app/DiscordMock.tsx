@@ -150,12 +150,12 @@ export function ScamDetectionMock() {
                 transition: 'filter 0.4s ease',
               }}
             />
-            {/* OCR scan line animation */}
+            {/* Scan line animation */}
             {step === 1 && (
               <div style={{
                 position: 'absolute', top: 0, left: 0, right: 0, height: 3,
                 background: 'linear-gradient(to right, transparent, #1FA7BB, transparent)',
-                animation: 'ocr-scan 1.1s ease-in-out forwards',
+                animation: 'img-scan 1.1s ease-in-out forwards',
                 boxShadow: '0 0 12px rgba(31,167,187,0.8)',
               }} />
             )}
@@ -186,7 +186,7 @@ export function ScamDetectionMock() {
           <DiscordEmbed
             color="#ed4245"
             title="🚨 Crypto scam image detected & deleted"
-            description='Image scan extracted: "giving away $3,200 in crypto" — matched fake celebrity giveaway pattern.'
+            description='Fake celebrity crypto giveaway — matched known scam pattern. Deleted before any member could interact.'
             fields={[
               { name: 'User', value: 'MrBeast_Official', inline: true },
               { name: 'Action', value: 'Image deleted', inline: true },
@@ -205,7 +205,7 @@ export function ScamDetectionMock() {
       </div>
 
       <style>{`
-        @keyframes ocr-scan {
+        @keyframes img-scan {
           0%   { top: 0%;   opacity: 0; }
           10%  { opacity: 1; }
           90%  { opacity: 1; }
@@ -346,7 +346,7 @@ export function DashboardMock({ switches, toggleSwitch }: {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
           {[
             { key: 'antiRaid',       label: 'Anti-Raid Shield',   desc: 'Auto-lock on join spike' },
-            { key: 'antiScam',       label: 'AI Scam Scanner',    desc: 'OCR image detection' },
+            { key: 'antiScam',       label: 'AI Scam Scanner',    desc: 'Image & link detection' },
             { key: 'botQuarantine',  label: 'Bot Quarantine',     desc: 'Hold bots for approval' },
             { key: 'autoRestore',    label: 'Auto-Restore',       desc: 'Undo nuke in <60ms' },
             { key: 'ocrVision',      label: 'Ban Evasion',        desc: 'Pattern-match accounts' },
