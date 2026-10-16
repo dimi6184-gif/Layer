@@ -423,15 +423,6 @@ export default function HomePage() {
             {/* Right: Premium + Login */}
             <div className="flex items-center gap-3">
 
-              {/* Highlighted Secondary Premium Button with Crown */}
-              <Link
-                href="/premium"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] text-xs sm:text-sm font-semibold bg-[#262014] text-[#facc15] border border-[#eab308]/30 hover:bg-[#342b1a] hover:border-[#eab308]/50 shadow-sm transition-all duration-150"
-              >
-                <Crown className="w-3.5 h-3.5 text-[#facc15]" />
-                <span>Premium</span>
-              </Link>
-
               {/* Primary Login Button in Main Brand Color */}
               <Link
                 href="/login"
@@ -536,21 +527,14 @@ export default function HomePage() {
             aria-hidden="true"
           />
 
-          {/* Announcement Banner (Centered Below Navbar) */}
+          {/* Early Access Banner */}
           <div className="pt-6 sm:pt-8 pb-4 flex justify-center px-4 relative z-20">
-            <Link
-              href="/dashboard"
-              className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.1] hover:border-white/[0.22] hover:bg-white/[0.07] text-xs sm:text-sm text-[#cbd5e1] transition-all duration-150 backdrop-blur-sm group shadow-lg shadow-black/20"
-            >
+            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.1] backdrop-blur-sm shadow-lg shadow-black/20">
               <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-[#1FA7BB]/20 text-[#1FA7BB] border border-[#1FA7BB]/35">
-                NEW!
+                Early Access
               </span>
-              <span>Turn your ideas into a Discord bot.</span>
-              <span className="font-semibold text-white group-hover:text-[#1FA7BB] transition-colors inline-flex items-center gap-1">
-                Explore Bot Maker{' '}
-                <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
-              </span>
-            </Link>
+              <span className="text-xs sm:text-sm text-[#cbd5e1]">We&apos;re launching soon — be among the first servers.</span>
+            </div>
           </div>
 
           {/* Hero Section (Two Columns, ~1200px Container) */}
