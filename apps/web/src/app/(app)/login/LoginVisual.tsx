@@ -95,7 +95,7 @@ export default function LoginVisual() {
   return (
     <div style={{
       flex: 1, position: 'relative', overflow: 'hidden',
-      background: '#0b0c14',
+      background: 'linear-gradient(160deg, #0d0e1a 0%, #0a0c16 40%, #07090f 100%)',
       display: 'flex', flexDirection: 'column',
       minHeight: '100vh',
     }}>
@@ -109,25 +109,15 @@ export default function LoginVisual() {
       `}</style>
 
       {/* ── Clean grid background ── */}
-      <div style={{
-        position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0,
-        backgroundImage: `
-          linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)
-        `,
-        backgroundSize: '40px 40px',
-        maskImage: 'radial-gradient(ellipse 80% 70% at 50% 40%, #000 30%, transparent 80%)',
-        WebkitMaskImage: 'radial-gradient(ellipse 80% 70% at 50% 40%, #000 30%, transparent 80%)',
-      }} />
 
       {/* ── Radial glow blobs ── */}
       <div style={{ position: 'absolute', top: '8%', left: '15%', width: 380, height: 380, borderRadius: '50%', pointerEvents: 'none', background: 'radial-gradient(circle, rgba(88,101,242,0.16) 0%, transparent 65%)', filter: 'blur(44px)' }} />
       <div style={{ position: 'absolute', bottom: '18%', right: '8%', width: 260, height: 260, borderRadius: '50%', pointerEvents: 'none', background: 'radial-gradient(circle, rgba(31,167,187,0.11) 0%, transparent 65%)', filter: 'blur(32px)' }} />
 
       {/* ── Logo ── */}
-      <Link href="/" style={{ position: 'absolute', top: 24, left: 28, display: 'flex', alignItems: 'center', gap: 9, textDecoration: 'none', zIndex: 10 }}>
-        <Image src="/logo.png" alt="Layer" width={28} height={28} style={{ objectFit: 'contain' }} />
-        <span style={{ fontWeight: 700, fontSize: 15, color: '#f1f3f9', letterSpacing: '-0.02em' }}>Layer</span>
+      <Link href="/" style={{ position: 'absolute', top: 24, left: 28, display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', zIndex: 10 }}>
+        <Image src="/logo.png" alt="Layer" width={36} height={36} style={{ objectFit: 'contain' }} />
+        <span style={{ fontWeight: 700, fontSize: 18, color: '#f1f3f9', letterSpacing: '-0.02em' }}>Layer</span>
       </Link>
 
       {/* ── Module cards — centered ── */}
@@ -152,11 +142,11 @@ export default function LoginVisual() {
       </div>
 
       {/* ── Bottom tagline ── */}
-      <div style={{ padding: '0 28px 32px', position: 'relative', zIndex: 2 }}>
-        <p style={{ fontSize: 22, fontWeight: 800, color: '#f1f3f9', lineHeight: 1.25, letterSpacing: '-0.03em', maxWidth: 270 }}>
+      <div style={{ padding: '0 32px 36px', position: 'relative', zIndex: 2 }}>
+        <p style={{ fontSize: 28, fontWeight: 800, color: '#f1f3f9', lineHeight: 1.2, letterSpacing: '-0.03em', maxWidth: 300 }}>
           Configure your<br />server in one place.
         </p>
-        <p style={{ fontSize: 13, color: '#4d5467', marginTop: 8, maxWidth: 260, lineHeight: 1.6 }}>
+        <p style={{ fontSize: 14, color: '#4d5467', marginTop: 10, maxWidth: 300, lineHeight: 1.65 }}>
           Modules, moderation, tickets, server protection and more, all at a glance in one dashboard.
         </p>
       </div>
