@@ -126,6 +126,14 @@ function FeatureBlock({
 export default function HomePage() {
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
 
+  // Page intro animation — one-shot on mount
+  const [introGone, setIntroGone] = useState(false);
+  useEffect(() => {
+    // After 1.4s start fade-out, remove after 1.7s
+    const t1 = setTimeout(() => setIntroGone(true), 1400);
+    return () => clearTimeout(t1);
+  }, []);
+
   // Navbar dropdown state
   const [activeDropdown, setActiveDropdown] = useState<'features' | 'resources' | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -182,7 +190,47 @@ export default function HomePage() {
 
   return (
     <div suppressHydrationWarning className="min-h-screen bg-[#07080c] text-[#f1f3f9] font-sans selection:bg-[#1FA7BB] selection:text-white overflow-x-hidden relative">
-        
+
+        {/* ─── Page intro animation ─────────────────────────────── */}
+        {!introGone && (
+          <div style={{
+            position: 'fixed', inset: 0, zIndex: 999,
+            background: '#07080c',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            flexDirection: 'column', gap: 16,
+            opacity: introGone ? 0 : 1,
+            transition: 'opacity 0.35s ease',
+            pointerEvents: 'none',
+          }}>
+            <style>{`
+              @keyframes intro-up {
+                from { opacity: 0; transform: translateY(14px); }
+                to   { opacity: 1; transform: translateY(0); }
+              }
+              @keyframes intro-fade {
+                0%   { opacity: 0; }
+                30%  { opacity: 1; }
+                75%  { opacity: 1; }
+                100% { opacity: 0; }
+              }
+              .intro-wrap { animation: intro-fade 1.45s ease forwards; }
+              .intro-logo  { animation: intro-up 0.45s ease 0.05s both; }
+              .intro-text  { animation: intro-up 0.45s ease 0.18s both; }
+              .intro-sub   { animation: intro-up 0.45s ease 0.3s  both; }
+            `}</style>
+            <div className="intro-wrap" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 }}>
+              <div className="intro-logo" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/logo.png" alt="Layer" style={{ width: 40, height: 40, objectFit: 'contain' }} />
+                <span style={{ fontSize: 28, fontWeight: 900, color: '#f1f3f9', letterSpacing: '-0.04em' }}>Layer</span>
+              </div>
+              <p className="intro-text" style={{ fontSize: 14, color: 'rgba(255,255,255,0.35)', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                Your server, finally under control.
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* ─── 1. Header / Sticky Navbar (Picture 1 style) ──────── */}
         <header
           ref={navRef}
@@ -1061,13 +1109,8 @@ export default function HomePage() {
 
           {/* Bottom bar */}
           <div className="border-t border-white/[0.05]">
-            <div className="max-w-[1100px] mx-auto px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <div className="max-w-[1100px] mx-auto px-6 py-4">
               <span className="text-[12px] text-[#2e3347]">© 2026 Layer. All rights reserved.</span>
-              <div className="flex items-center gap-5">
-                {[['Privacy', '/privacy'], ['Terms', '/terms'], ['Status', '/api/health']].map(([l, h]) => (
-                  <Link key={l} href={h} className="text-[12px] text-[#2e3347] hover:text-[#4d5467] transition-colors">{l}</Link>
-                ))}
-              </div>
             </div>
           </div>
 
