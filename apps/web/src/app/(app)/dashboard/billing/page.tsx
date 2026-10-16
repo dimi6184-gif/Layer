@@ -1,5 +1,7 @@
 ﻿import { CreditCard, Sparkles } from "lucide-react";
 
+export const dynamic = 'force-dynamic';
+
 export default function BillingPage() {
   return (
     <div className="w-full animate-fade-up">
