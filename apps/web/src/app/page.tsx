@@ -255,26 +255,158 @@ export default function HomePage() {
               {/* Desktop nav — Features, Resources, Support with slide transition */}
               <nav className="hidden md:flex items-center gap-2">
 
-                {/* Shared dropdown — single container, slides between panels */}
-                {(['features', 'resources'] as const).map((key) => (
-                  <div key={key} className="relative">
-                    <button
-                      type="button"
-                      onMouseEnter={() => setActiveDropdown(key)}
-                      onClick={() => setActiveDropdown(activeDropdown === key ? null : key)}
-                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] text-sm font-medium transition-colors ${
-                        activeDropdown === key
-                          ? 'text-white bg-white/[0.08]'
-                          : 'text-[#cbd5e1] hover:text-white hover:bg-white/[0.04]'
-                      }`}
-                    >
-                      <span>{key === 'features' ? 'Features' : 'Resources'}</span>
-                      <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${activeDropdown === key ? 'rotate-180' : ''}`} />
-                    </button>
-                  </div>
-                ))}
+                {/* Each button has its own relative container + the dropdown lives in Features button */}
+                <div className="relative">
+                  <button
+                    type="button"
+                    onMouseEnter={() => setActiveDropdown('features')}
+                    onClick={() => setActiveDropdown(activeDropdown === 'features' ? null : 'features')}
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] text-sm font-medium transition-colors ${
+                      activeDropdown === 'features'
+                        ? 'text-white bg-white/[0.08]'
+                        : 'text-[#cbd5e1] hover:text-white hover:bg-white/[0.04]'
+                    }`}
+                  >
+                    <span>Features</span>
+                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${activeDropdown === 'features' ? 'rotate-180' : ''}`} />
+                  </button>
 
-                {/* Support — plain link, no dropdown */}
+                  {/* Dropdown anchored to this button */}
+                  {activeDropdown && (
+                    <div
+                      className="absolute top-full mt-2 rounded-xl bg-[#0f1117]/98 backdrop-blur-xl border border-white/[0.09] shadow-2xl z-50 overflow-hidden"
+                      style={{
+                        left: 0,
+                        width: activeDropdown === 'features' ? 560 : 460,
+                        transition: 'width 0.22s cubic-bezier(0.16,1,0.3,1)',
+                      }}
+                      onMouseLeave={() => setActiveDropdown(null)}
+                    >
+                      {/* Sliding inner */}
+                      <div style={{
+                        display: 'flex',
+                        transform: activeDropdown === 'features' ? 'translateX(0%)' : 'translateX(-50%)',
+                        transition: 'transform 0.26s cubic-bezier(0.16,1,0.3,1)',
+                        width: '200%',
+                      }}>
+
+                        {/* ── Features panel ── */}
+                        <div style={{ width: '50%', flexShrink: 0 }}>
+                          <div className="p-3 grid grid-cols-2 gap-1">
+                            <div className="space-y-0.5">
+                              {[
+                                { icon: <Shield className="w-4 h-4" />, color: '#1FA7BB', bg: '#1FA7BB', label: 'Moderation', sub: 'Anti-raid, auto-ban, spam filters' },
+                                { icon: <Eye className="w-4 h-4" />, color: '#3ddc97', bg: '#3ddc97', label: 'AI Scam Detection', sub: 'Image & link scanning' },
+                                { icon: <ShieldAlert className="w-4 h-4" />, color: '#f472b6', bg: '#f472b6', label: 'Ban Evasion', sub: 'Pattern-match & auto-reban' },
+                              ].map((item) => (
+                                <a key={item.label} href="#features" onClick={() => setActiveDropdown(null)}
+                                  className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.05] transition-colors group cursor-pointer">
+                                  <div className="w-7 h-7 rounded-md flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform"
+                                    style={{ background: `${item.bg}18`, color: item.color }}>{item.icon}</div>
+                                  <div>
+                                    <div className="text-xs font-semibold text-white leading-tight">{item.label}</div>
+                                    <div className="text-[11px] text-[#64748b] leading-tight mt-0.5">{item.sub}</div>
+                                  </div>
+                                </a>
+                              ))}
+                            </div>
+                            <div className="space-y-0.5">
+                              {[
+                                { icon: <MessageSquare className="w-4 h-4" />, color: '#a78bfa', bg: '#a78bfa', label: 'AI Tickets', sub: 'Auto-routing & transcripts' },
+                                { icon: <Sparkles className="w-4 h-4" />, color: '#fbbf24', bg: '#f59e0b', label: 'Leveling & XP', sub: 'Rank cards, leaderboards' },
+                                { icon: <Volume2 className="w-4 h-4" />, color: '#38bdf8', bg: '#38bdf8', label: 'Music Player', sub: 'YouTube queue, 320kbps' },
+                              ].map((item) => (
+                                <a key={item.label} href="#features" onClick={() => setActiveDropdown(null)}
+                                  className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.05] transition-colors group cursor-pointer">
+                                  <div className="w-7 h-7 rounded-md flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform"
+                                    style={{ background: `${item.bg}18`, color: item.color }}>{item.icon}</div>
+                                  <div>
+                                    <div className="text-xs font-semibold text-white leading-tight">{item.label}</div>
+                                    <div className="text-[11px] text-[#64748b] leading-tight mt-0.5">{item.sub}</div>
+                                  </div>
+                                </a>
+                              ))}
+                            </div>
+                          </div>
+                          <div className="border-t border-white/[0.06] px-3 py-2.5 flex items-center justify-between">
+                            <span className="text-[11px] text-[#4d5467]">All modules in the free plan</span>
+                            <a href="#features" onClick={() => setActiveDropdown(null)}
+                              className="text-[11px] font-semibold text-[#1FA7BB] hover:text-[#25bdd3] transition-colors">
+                              See all features →
+                            </a>
+                          </div>
+                        </div>
+
+                        {/* ── Resources panel ── */}
+                        <div style={{ width: '50%', flexShrink: 0 }}>
+                          <div className="p-3 grid grid-cols-2 gap-1">
+                            <div className="space-y-0.5">
+                              {[
+                                { icon: <BookOpen className="w-4 h-4" />, color: '#1FA7BB', label: 'Documentation', sub: 'Setup guides & permissions', href: '/commands' },
+                                { icon: <Code2 className="w-4 h-4" />, color: '#a78bfa', label: 'Bot Commands', sub: 'Full slash command list', href: '/commands' },
+                              ].map((item) => (
+                                <Link key={item.label} href={item.href} onClick={() => setActiveDropdown(null)}
+                                  className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.05] transition-colors group">
+                                  <div className="w-7 h-7 rounded-md flex items-center justify-center shrink-0"
+                                    style={{ background: `${item.color}18`, color: item.color }}>{item.icon}</div>
+                                  <div>
+                                    <div className="text-xs font-semibold text-white leading-tight">{item.label}</div>
+                                    <div className="text-[11px] text-[#64748b] leading-tight mt-0.5">{item.sub}</div>
+                                  </div>
+                                </Link>
+                              ))}
+                            </div>
+                            <div className="space-y-0.5">
+                              <Link href="/api/health" onClick={() => setActiveDropdown(null)}
+                                className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.05] transition-colors group">
+                                <div className="w-7 h-7 rounded-md flex items-center justify-center shrink-0"
+                                  style={{ background: '#3ddc9718', color: '#3ddc97' }}><Activity className="w-4 h-4" /></div>
+                                <div>
+                                  <div className="text-xs font-semibold text-white leading-tight">Status</div>
+                                  <div className="text-[11px] text-[#64748b] leading-tight mt-0.5">99.98% uptime</div>
+                                </div>
+                              </Link>
+                            </div>
+                          </div>
+                          <div className="mx-3 mb-3 rounded-lg p-3 flex items-center gap-3"
+                            style={{ background: 'linear-gradient(135deg, rgba(31,167,187,0.12) 0%, rgba(31,167,187,0.04) 100%)', border: '1px solid rgba(31,167,187,0.18)' }}>
+                            <div className="w-8 h-8 rounded-lg bg-[#1FA7BB]/20 flex items-center justify-center shrink-0">
+                              <Shield className="w-4 h-4 text-[#1FA7BB]" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="text-xs font-bold text-white">Layer Pro</div>
+                              <div className="text-[11px] text-[#64748b]">Unlock unlimited AI scans & ban evasion</div>
+                            </div>
+                            <Link href="/premium" onClick={() => setActiveDropdown(null)}
+                              className="text-[11px] font-semibold text-[#1FA7BB] hover:text-[#25bdd3] whitespace-nowrap transition-colors">
+                              Upgrade →
+                            </Link>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Resources button — triggers same dropdown, switches panel */}
+                <div className="relative">
+                  <button
+                    type="button"
+                    onMouseEnter={() => setActiveDropdown('resources')}
+                    onClick={() => setActiveDropdown(activeDropdown === 'resources' ? null : 'resources')}
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] text-sm font-medium transition-colors ${
+                      activeDropdown === 'resources'
+                        ? 'text-white bg-white/[0.08]'
+                        : 'text-[#cbd5e1] hover:text-white hover:bg-white/[0.04]'
+                    }`}
+                  >
+                    <span>Resources</span>
+                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${activeDropdown === 'resources' ? 'rotate-180' : ''}`} />
+                  </button>
+                </div>
+
+                {/* Support — plain link */}
                 <a
                   href="https://discord.gg/W2XjhvBbtn"
                   target="_blank"
@@ -284,128 +416,8 @@ export default function HomePage() {
                   Support
                 </a>
 
-                {/* Shared dropdown panel — positioned under the nav, slides between features/resources */}
-                {activeDropdown && (
-                  <div
-                    className="absolute top-full mt-2 rounded-xl bg-[#0f1117]/98 backdrop-blur-xl border border-white/[0.09] shadow-2xl z-50 overflow-hidden"
-                    style={{
-                      left: 0,
-                      width: activeDropdown === 'features' ? 560 : 460,
-                      transition: 'width 0.22s cubic-bezier(0.16,1,0.3,1)',
-                    }}
-                    onMouseLeave={() => setActiveDropdown(null)}
-                  >
-                    {/* Sliding inner — both panels side by side, translateX moves between them */}
-                    <div style={{
-                      display: 'flex',
-                      transform: activeDropdown === 'features' ? 'translateX(0%)' : 'translateX(-50%)',
-                      transition: 'transform 0.26s cubic-bezier(0.16,1,0.3,1)',
-                      width: '200%',
-                    }}>
-
-                      {/* ── Features panel ── */}
-                      <div style={{ width: '50%', flexShrink: 0 }}>
-                        <div className="p-3 grid grid-cols-2 gap-1">
-                          <div className="space-y-0.5">
-                            {[
-                              { icon: <Shield className="w-4 h-4" />, color: '#1FA7BB', bg: '#1FA7BB', label: 'Moderation', sub: 'Anti-raid, auto-ban, spam filters' },
-                              { icon: <Eye className="w-4 h-4" />, color: '#3ddc97', bg: '#3ddc97', label: 'AI Scam Detection', sub: 'OCR image & link scanning' },
-                              { icon: <ShieldAlert className="w-4 h-4" />, color: '#f472b6', bg: '#f472b6', label: 'Ban Evasion', sub: 'Pattern-match & auto-reban' },
-                            ].map((item) => (
-                              <a key={item.label} href="#features" onClick={() => setActiveDropdown(null)}
-                                className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.05] transition-colors group cursor-pointer">
-                                <div className="w-7 h-7 rounded-md flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform"
-                                  style={{ background: `${item.bg}18`, color: item.color }}>{item.icon}</div>
-                                <div>
-                                  <div className="text-xs font-semibold text-white leading-tight">{item.label}</div>
-                                  <div className="text-[11px] text-[#64748b] leading-tight mt-0.5">{item.sub}</div>
-                                </div>
-                              </a>
-                            ))}
-                          </div>
-                          <div className="space-y-0.5">
-                            {[
-                              { icon: <MessageSquare className="w-4 h-4" />, color: '#a78bfa', bg: '#a78bfa', label: 'AI Tickets', sub: 'Auto-routing & transcripts' },
-                              { icon: <Sparkles className="w-4 h-4" />, color: '#fbbf24', bg: '#f59e0b', label: 'Leveling & XP', sub: 'Rank cards, leaderboards' },
-                              { icon: <Volume2 className="w-4 h-4" />, color: '#38bdf8', bg: '#38bdf8', label: 'Music Player', sub: 'YouTube queue, 320kbps' },
-                            ].map((item) => (
-                              <a key={item.label} href="#features" onClick={() => setActiveDropdown(null)}
-                                className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.05] transition-colors group cursor-pointer">
-                                <div className="w-7 h-7 rounded-md flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform"
-                                  style={{ background: `${item.bg}18`, color: item.color }}>{item.icon}</div>
-                                <div>
-                                  <div className="text-xs font-semibold text-white leading-tight">{item.label}</div>
-                                  <div className="text-[11px] text-[#64748b] leading-tight mt-0.5">{item.sub}</div>
-                                </div>
-                              </a>
-                            ))}
-                          </div>
-                        </div>
-                        <div className="border-t border-white/[0.06] px-3 py-2.5 flex items-center justify-between">
-                          <span className="text-[11px] text-[#4d5467]">All modules in the free plan</span>
-                          <a href="#features" onClick={() => setActiveDropdown(null)}
-                            className="text-[11px] font-semibold text-[#1FA7BB] hover:text-[#25bdd3] transition-colors">
-                            See all features →
-                          </a>
-                        </div>
-                      </div>
-
-                      {/* ── Resources panel ── */}
-                      <div style={{ width: '50%', flexShrink: 0 }}>
-                        <div className="p-3 grid grid-cols-2 gap-1">
-                          <div className="space-y-0.5">
-                            {[
-                              { icon: <BookOpen className="w-4 h-4" />, color: '#1FA7BB', label: 'Documentation', sub: 'Setup guides & permissions', href: '/commands' },
-                              { icon: <Code2 className="w-4 h-4" />, color: '#a78bfa', label: 'Bot Commands', sub: 'Full slash command list', href: '/commands' },
-                            ].map((item) => (
-                              <Link key={item.label} href={item.href} onClick={() => setActiveDropdown(null)}
-                                className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.05] transition-colors group">
-                                <div className="w-7 h-7 rounded-md flex items-center justify-center shrink-0"
-                                  style={{ background: `${item.color}18`, color: item.color }}>{item.icon}</div>
-                                <div>
-                                  <div className="text-xs font-semibold text-white leading-tight">{item.label}</div>
-                                  <div className="text-[11px] text-[#64748b] leading-tight mt-0.5">{item.sub}</div>
-                                </div>
-                              </Link>
-                            ))}
-                          </div>
-                          <div className="space-y-0.5">
-                            {[
-                              { icon: <Activity className="w-4 h-4" />, color: '#3ddc97', label: 'Status', sub: '99.98% uptime', href: '/api/health' },
-                            ].map((item) => (
-                              <Link key={item.label} href={item.href} onClick={() => setActiveDropdown(null)}
-                                className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.05] transition-colors group">
-                                <div className="w-7 h-7 rounded-md flex items-center justify-center shrink-0"
-                                  style={{ background: `${item.color}18`, color: item.color }}>{item.icon}</div>
-                                <div>
-                                  <div className="text-xs font-semibold text-white leading-tight">{item.label}</div>
-                                  <div className="text-[11px] text-[#64748b] leading-tight mt-0.5">{item.sub}</div>
-                                </div>
-                              </Link>
-                            ))}
-                          </div>
-                        </div>
-                        <div className="mx-3 mb-3 rounded-lg p-3 flex items-center gap-3"
-                          style={{ background: 'linear-gradient(135deg, rgba(31,167,187,0.12) 0%, rgba(31,167,187,0.04) 100%)', border: '1px solid rgba(31,167,187,0.18)' }}>
-                          <div className="w-8 h-8 rounded-lg bg-[#1FA7BB]/20 flex items-center justify-center shrink-0">
-                            <Shield className="w-4 h-4 text-[#1FA7BB]" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="text-xs font-bold text-white">Layer Pro</div>
-                            <div className="text-[11px] text-[#64748b]">Unlock unlimited AI scans & ban evasion</div>
-                          </div>
-                          <Link href="/premium" onClick={() => setActiveDropdown(null)}
-                            className="text-[11px] font-semibold text-[#1FA7BB] hover:text-[#25bdd3] whitespace-nowrap transition-colors">
-                            Upgrade →
-                          </Link>
-                        </div>
-                      </div>
-
-                    </div>
-                  </div>
-                )}
-
               </nav>
+
             </div>
 
             {/* Right: Premium + Login */}
