@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
@@ -29,6 +29,11 @@ import {
   UserCheck,
   HelpCircle,
   Hash,
+  Crown,
+  Menu,
+  X,
+  BookOpen,
+  Code2,
 } from 'lucide-react';
 
 /* ─── Discord Gamepad SVG Icon ───────────────────────────────── */
@@ -42,6 +47,22 @@ function DiscordIcon({ size = 18, className = '' }: { size?: number; className?:
 
 export default function HomePage() {
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
+
+  // Navbar dropdown & language state
+  const [activeDropdown, setActiveDropdown] = useState<'plugins' | 'resources' | 'lang' | null>(null);
+  const [selectedLang, setSelectedLang] = useState<'EN' | 'DE' | 'FR' | 'ES'>('EN');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (navRef.current && !navRef.current.contains(event.target as Node)) {
+        setActiveDropdown(null);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // Interactive Verification Demo State
   const [verifyStatus, setVerifyStatus] = useState<'idle' | 'verified'>('idle');
@@ -313,213 +334,712 @@ export default function HomePage() {
 
       <div className="min-h-screen bg-[#07080c] text-[#f1f3f9] font-sans selection:bg-[#1FA7BB] selection:text-white overflow-x-hidden relative">
         
-        {/* ─── Ambient Backdrop Grid (Exact Protector Style) ──── */}
-        <div className="p-backdrop-grid" aria-hidden="true" />
+        {/* ─── 1. Header / Sticky Navbar (Picture 1 style) ──────── */}
+        <header
+          ref={navRef}
+          className="sticky top-0 z-50 w-full bg-[#0c0e17]/95 backdrop-blur-md border-b border-white/[0.08] transition-colors"
+        >
+          <div className="max-w-[1240px] w-full mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+            {/* Left: Logo & Dropdowns */}
+            <div className="flex items-center gap-6 sm:gap-8">
+              {/* Logo */}
+              <Link href="/" className="flex items-center gap-2.5 group">
+                <div className="w-8 h-8 rounded-lg bg-[#1FA7BB]/10 border border-[#1FA7BB]/30 flex items-center justify-center transition-all group-hover:border-[#1FA7BB]/60">
+                  <Image src="/logo.png" alt="Layer" width={22} height={22} className="object-contain" priority />
+                </div>
+                <span className="font-extrabold text-lg tracking-tight text-white">Layer</span>
+              </Link>
 
-        {/* ─── 1. Header / Navbar ───────────────────────────────── */}
-        <header className="fixed top-0 left-0 right-0 z-50 bg-[#07080c]/85 backdrop-blur-xl border-b border-white/[0.07] h-16 flex items-center px-6">
-          <div className="max-w-6xl w-full mx-auto flex items-center justify-between">
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="w-8 h-8 rounded-lg bg-[#1FA7BB]/10 border border-[#1FA7BB]/30 flex items-center justify-center transition-all group-hover:border-[#1FA7BB]/60">
-                <Image src="/logo.png" alt="Layer" width={22} height={22} className="object-contain" priority />
-              </div>
-              <span className="font-bold text-base tracking-tight text-[#f1f3f9]">Layer</span>
-            </Link>
+              {/* Desktop Dropdowns: Plugins & Resources */}
+              <nav className="hidden md:flex items-center gap-2">
+                
+                {/* Plugins Dropdown */}
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setActiveDropdown(activeDropdown === 'plugins' ? null : 'plugins')}
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] text-sm font-medium transition-colors ${
+                      activeDropdown === 'plugins'
+                        ? 'text-white bg-white/[0.08]'
+                        : 'text-[#cbd5e1] hover:text-white hover:bg-white/[0.04]'
+                    }`}
+                  >
+                    <span>Plugins</span>
+                    <ChevronDown
+                      className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                        activeDropdown === 'plugins' ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </button>
 
-            {/* Nav Links */}
-            <nav className="hidden md:flex items-center gap-1 text-sm font-medium text-[#aab1c5]">
-              <a href="#features" className="px-3 py-1.5 rounded-lg hover:text-[#f1f3f9] hover:bg-white/[0.05] transition-colors">Features</a>
-              <a href="#stats" className="px-3 py-1.5 rounded-lg hover:text-[#f1f3f9] hover:bg-white/[0.05] transition-colors">Live Stats</a>
-              <a href="#dashboard" className="px-3 py-1.5 rounded-lg hover:text-[#f1f3f9] hover:bg-white/[0.05] transition-colors">Dashboard</a>
-              <a href="#faq" className="px-3 py-1.5 rounded-lg hover:text-[#f1f3f9] hover:bg-white/[0.05] transition-colors">FAQ</a>
-              <Link href="/commands" className="px-3 py-1.5 rounded-lg hover:text-[#f1f3f9] hover:bg-white/[0.05] transition-colors">Commands</Link>
-              <Link href="/premium" className="px-3 py-1.5 rounded-lg hover:text-[#f1f3f9] hover:bg-white/[0.05] transition-colors">Pricing</Link>
-            </nav>
+                  {/* Plugins Menu Dropdown Card */}
+                  {activeDropdown === 'plugins' && (
+                    <div className="absolute top-full left-0 mt-2 w-80 rounded-xl bg-[#121522]/95 backdrop-blur-xl border border-white/[0.1] shadow-2xl p-2.5 space-y-1 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                      <Link
+                        href="#features"
+                        onClick={() => setActiveDropdown(null)}
+                        className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.06] transition-colors group"
+                      >
+                        <div className="w-8 h-8 rounded-lg bg-[#1FA7BB]/15 text-[#1FA7BB] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                          <Shield className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <div className="text-xs font-semibold text-white group-hover:text-[#1FA7BB] transition-colors">
+                            Moderation & Security
+                          </div>
+                          <div className="text-[11px] text-[#94a3b8] leading-tight">
+                            Anti-raid shield, auto-ban, spam filters
+                          </div>
+                        </div>
+                      </Link>
 
-            {/* Actions */}
+                      <Link
+                        href="#features"
+                        onClick={() => setActiveDropdown(null)}
+                        className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.06] transition-colors group"
+                      >
+                        <div className="w-8 h-8 rounded-lg bg-[#3ddc97]/15 text-[#3ddc97] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                          <Eye className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <div className="text-xs font-semibold text-white group-hover:text-[#3ddc97] transition-colors">
+                            Neural OCR Vision
+                          </div>
+                          <div className="text-[11px] text-[#94a3b8] leading-tight">
+                            Real-time scam & fake Nitro image scanning
+                          </div>
+                        </div>
+                      </Link>
+
+                      <Link
+                        href="#features"
+                        onClick={() => setActiveDropdown(null)}
+                        className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.06] transition-colors group"
+                      >
+                        <div className="w-8 h-8 rounded-lg bg-[#8b5cf6]/15 text-[#a78bfa] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                          <Volume2 className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <div className="text-xs font-semibold text-white group-hover:text-[#a78bfa] transition-colors">
+                            High-Fidelity Music
+                          </div>
+                          <div className="text-[11px] text-[#94a3b8] leading-tight">
+                            320kbps lag-free audio streaming & queues
+                          </div>
+                        </div>
+                      </Link>
+
+                      <Link
+                        href="#features"
+                        onClick={() => setActiveDropdown(null)}
+                        className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.06] transition-colors group"
+                      >
+                        <div className="w-8 h-8 rounded-lg bg-[#f59e0b]/15 text-[#fbbf24] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                          <Sparkles className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <div className="text-xs font-semibold text-white group-hover:text-[#fbbf24] transition-colors">
+                            Leveling & XP
+                          </div>
+                          <div className="text-[11px] text-[#94a3b8] leading-tight">
+                            Custom rank cards, leaderboards & role rewards
+                          </div>
+                        </div>
+                      </Link>
+
+                      <Link
+                        href="#features"
+                        onClick={() => setActiveDropdown(null)}
+                        className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.06] transition-colors group"
+                      >
+                        <div className="w-8 h-8 rounded-lg bg-[#ec4899]/15 text-[#f472b6] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                          <MessageSquare className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <div className="text-xs font-semibold text-white group-hover:text-[#f472b6] transition-colors">
+                            Ticket Support
+                          </div>
+                          <div className="text-[11px] text-[#94a3b8] leading-tight">
+                            Interactive buttons, transcripts & threads
+                          </div>
+                        </div>
+                      </Link>
+                    </div>
+                  )}
+                </div>
+
+                {/* Resources Dropdown */}
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setActiveDropdown(activeDropdown === 'resources' ? null : 'resources')}
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] text-sm font-medium transition-colors ${
+                      activeDropdown === 'resources'
+                        ? 'text-white bg-white/[0.08]'
+                        : 'text-[#cbd5e1] hover:text-white hover:bg-white/[0.04]'
+                    }`}
+                  >
+                    <span>Resources</span>
+                    <ChevronDown
+                      className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                        activeDropdown === 'resources' ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </button>
+
+                  {/* Resources Menu Dropdown Card */}
+                  {activeDropdown === 'resources' && (
+                    <div className="absolute top-full left-0 mt-2 w-72 rounded-xl bg-[#121522]/95 backdrop-blur-xl border border-white/[0.1] shadow-2xl p-2.5 space-y-1 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                      <Link
+                        href="/about"
+                        onClick={() => setActiveDropdown(null)}
+                        className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.06] transition-colors group"
+                      >
+                        <BookOpen className="w-4 h-4 text-[#1FA7BB] mt-0.5 shrink-0" />
+                        <div>
+                          <div className="text-xs font-semibold text-white group-hover:text-[#1FA7BB]">Documentation</div>
+                          <div className="text-[11px] text-[#94a3b8]">Setup manuals and permissions</div>
+                        </div>
+                      </Link>
+                      <a
+                        href="https://discord.gg"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => setActiveDropdown(null)}
+                        className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.06] transition-colors group"
+                      >
+                        <Users className="w-4 h-4 text-[#38bdf8] mt-0.5 shrink-0" />
+                        <div>
+                          <div className="text-xs font-semibold text-white group-hover:text-[#38bdf8]">Support Server</div>
+                          <div className="text-[11px] text-[#94a3b8]">Join 5,000+ members in Discord</div>
+                        </div>
+                      </a>
+                      <Link
+                        href="/commands"
+                        onClick={() => setActiveDropdown(null)}
+                        className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.06] transition-colors group"
+                      >
+                        <Code2 className="w-4 h-4 text-[#a78bfa] mt-0.5 shrink-0" />
+                        <div>
+                          <div className="text-xs font-semibold text-white group-hover:text-[#a78bfa]">Bot Commands</div>
+                          <div className="text-[11px] text-[#94a3b8]">Full list of slash commands</div>
+                        </div>
+                      </Link>
+                      <Link
+                        href="/api/health"
+                        onClick={() => setActiveDropdown(null)}
+                        className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.06] transition-colors group"
+                      >
+                        <Activity className="w-4 h-4 text-[#3ddc97] mt-0.5 shrink-0" />
+                        <div>
+                          <div className="text-xs font-semibold text-white group-hover:text-[#3ddc97]">Status & Shards</div>
+                          <div className="text-[11px] text-[#94a3b8]">99.98% uptime and cluster health</div>
+                        </div>
+                      </Link>
+                    </div>
+                  )}
+                </div>
+
+              </nav>
+            </div>
+
+            {/* Right: Language Selector, Premium Button & Login */}
             <div className="flex items-center gap-3">
+              
+              {/* Language Selector */}
+              <div className="relative hidden sm:block">
+                <button
+                  type="button"
+                  onClick={() => setActiveDropdown(activeDropdown === 'lang' ? null : 'lang')}
+                  className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-[6px] text-xs font-medium transition-colors ${
+                    activeDropdown === 'lang'
+                      ? 'text-white bg-white/[0.08]'
+                      : 'text-[#cbd5e1] hover:text-white hover:bg-white/[0.04]'
+                  }`}
+                >
+                  <span className="text-sm">🇬🇧</span>
+                  <span className="font-semibold">{selectedLang}</span>
+                  <ChevronDown
+                    className={`w-3 h-3 text-[#94a3b8] transition-transform duration-200 ${
+                      activeDropdown === 'lang' ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
+
+                {activeDropdown === 'lang' && (
+                  <div className="absolute right-0 top-full mt-2 w-32 rounded-xl bg-[#121522]/95 backdrop-blur-xl border border-white/[0.1] shadow-xl p-1 z-50 text-xs">
+                    {(['EN', 'DE', 'FR', 'ES'] as const).map((lang) => (
+                      <button
+                        key={lang}
+                        type="button"
+                        onClick={() => {
+                          setSelectedLang(lang);
+                          setActiveDropdown(null);
+                        }}
+                        className={`w-full text-left px-3 py-1.5 rounded-lg flex items-center justify-between hover:bg-white/[0.06] transition-colors ${
+                          selectedLang === lang ? 'text-[#1FA7BB] font-bold' : 'text-[#cbd5e1]'
+                        }`}
+                      >
+                        <span>
+                          {lang === 'EN' ? '🇬🇧 English' : lang === 'DE' ? '🇩🇪 Deutsch' : lang === 'FR' ? '🇫🇷 Français' : '🇪🇸 Español'}
+                        </span>
+                        {selectedLang === lang && <Check className="w-3 h-3" />}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Highlighted Secondary Premium Button with Crown */}
               <Link
-                href="/dashboard"
-                className="text-xs font-semibold text-[#aab1c5] hover:text-white px-3 py-1.5 transition-colors hidden sm:block"
+                href="/premium"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] text-xs sm:text-sm font-semibold bg-[#262014] text-[#facc15] border border-[#eab308]/30 hover:bg-[#342b1a] hover:border-[#eab308]/50 shadow-sm transition-all duration-150"
               >
-                Dashboard
+                <Crown className="w-3.5 h-3.5 text-[#facc15]" />
+                <span>Premium</span>
               </Link>
+
+              {/* Primary Login Button in Main Brand Color */}
               <Link
-                href="/invite"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-btn p-btn-primary"
+                href="/login"
+                className="inline-flex items-center justify-center px-4 py-2 rounded-[6px] text-xs sm:text-sm font-semibold text-white bg-[#1FA7BB] hover:bg-[#25bdd3] shadow-md shadow-[#1FA7BB]/20 hover:shadow-[#1FA7BB]/35 transition-all duration-150"
               >
-                <DiscordIcon size={16} />
-                <span>Add to Discord</span>
+                <span>Login with Discord</span>
               </Link>
+
+              {/* Mobile Hamburger Toggle */}
+              <button
+                type="button"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="md:hidden p-2 rounded-lg text-[#cbd5e1] hover:text-white hover:bg-white/[0.06] transition-colors"
+                aria-label="Toggle navigation menu"
+              >
+                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </button>
             </div>
           </div>
+
+          {/* Collapsible Mobile Menu Drawer */}
+          {mobileMenuOpen && (
+            <div className="md:hidden border-t border-white/[0.08] bg-[#0c0e17] px-6 py-5 space-y-4 animate-in fade-in slide-in-from-top-2 duration-150">
+              <div className="space-y-1">
+                <div className="text-[11px] uppercase tracking-wider font-bold text-[#737b91] px-2 mb-1">
+                  Features & Plugins
+                </div>
+                <Link
+                  href="#features"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-3 py-2 rounded-lg text-sm text-[#cbd5e1] hover:bg-white/[0.05]"
+                >
+                  Moderation & Security
+                </Link>
+                <Link
+                  href="#features"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-3 py-2 rounded-lg text-sm text-[#cbd5e1] hover:bg-white/[0.05]"
+                >
+                  Neural OCR Scam Vision
+                </Link>
+                <Link
+                  href="#features"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-3 py-2 rounded-lg text-sm text-[#cbd5e1] hover:bg-white/[0.05]"
+                >
+                  High-Fidelity Music
+                </Link>
+                <Link
+                  href="#features"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-3 py-2 rounded-lg text-sm text-[#cbd5e1] hover:bg-white/[0.05]"
+                >
+                  Leveling & Leaderboards
+                </Link>
+              </div>
+
+              <div className="border-t border-white/[0.06] pt-3 space-y-1">
+                <div className="text-[11px] uppercase tracking-wider font-bold text-[#737b91] px-2 mb-1">
+                  Resources
+                </div>
+                <Link
+                  href="/commands"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-3 py-2 rounded-lg text-sm text-[#cbd5e1] hover:bg-white/[0.05]"
+                >
+                  Commands List
+                </Link>
+                <Link
+                  href="/dashboard"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-3 py-2 rounded-lg text-sm text-[#cbd5e1] hover:bg-white/[0.05]"
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  href="/premium"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-3 py-2 rounded-lg text-sm text-[#facc15] hover:bg-white/[0.05]"
+                >
+                  👑 Premium Upgrade
+                </Link>
+              </div>
+
+              <div className="border-t border-white/[0.06] pt-3 flex items-center justify-between">
+                <span className="text-xs text-[#737b91]">Language</span>
+                <div className="flex gap-1.5">
+                  {(['EN', 'DE', 'FR', 'ES'] as const).map((lang) => (
+                    <button
+                      key={lang}
+                      onClick={() => setSelectedLang(lang)}
+                      className={`px-2 py-1 rounded text-xs font-semibold ${
+                        selectedLang === lang ? 'bg-[#1FA7BB] text-white' : 'bg-white/[0.05] text-[#cbd5e1]'
+                      }`}
+                    >
+                      {lang}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </header>
 
-        {/* ─── 2. Hero Section (Protector Exact Two-Column Layout) ─ */}
-        <section className="relative z-10 pt-32 sm:pt-40 pb-16 px-6 max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            
-            {/* Left Copy */}
-            <div className="lg:col-span-7 space-y-6">
-              
-              {/* Eyebrow Pill */}
-              <div className="inline-flex items-center gap-2.5 h-8 px-3 rounded-full border border-white/[0.11] bg-white/[0.03] text-xs font-medium text-[#aab1c5]">
-                <span className="inline-flex items-center h-5 px-2 rounded-full bg-[#1FA7BB]/15 text-[#1FA7BB] font-bold text-[11px]">
-                  New
-                </span>
-                <span>Layer 2.0 autonomous security engine</span>
-                <ArrowRight className="w-3.5 h-3.5 text-[#737b91]" />
-              </div>
+        {/* ─── 2. HERO CONTAINER (Mood Dark + Dusk Gradient + Pine Forest Edge) ─── */}
+        <div
+          className="relative overflow-hidden"
+          style={{
+            background:
+              'linear-gradient(180deg, #10131f 0%, #151829 40%, #231a2c 78%, #1a1424 100%)',
+          }}
+        >
+          {/* Subtle Ambient Top Star/Atmosphere Glow */}
+          <div
+            className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[340px] pointer-events-none"
+            style={{
+              background: 'radial-gradient(ellipse 65% 55% at 50% 0%, rgba(31, 167, 187, 0.14), transparent 70%)',
+            }}
+            aria-hidden="true"
+          />
 
-              {/* Main Headline */}
-              <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-[#f1f3f9] leading-[1.05]">
-                Your Discord server, <br />
-                <span className="bg-gradient-to-r from-[#1FA7BB] via-[#25bdd3] to-[#7be0ee] bg-clip-text text-transparent">
-                  protected before the attack.
-                </span>
-              </h1>
-
-              {/* Lead Paragraph */}
-              <p className="text-sm sm:text-base text-[#aab1c5] leading-relaxed max-w-xl">
-                Layer stops token raids, scans scam images with neural OCR, quarantines malicious bot joins, and restores your server on its own. Free, zero data logged, ready in a minute.
-              </p>
-
-              {/* Primary & Secondary Buttons */}
-              <div className="flex flex-wrap items-center gap-3.5 pt-1">
-                <Link
-                  href="/invite"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-btn p-btn-primary p-btn-lg"
-                >
-                  <DiscordIcon size={18} />
-                  <span>Add to Discord</span>
-                </Link>
-
-                <a
-                  href="#features"
-                  className="p-btn p-btn-secondary p-btn-lg"
-                >
-                  <span>Explore Protections</span>
-                  <ArrowRight className="w-4 h-4 text-[#737b91]" />
-                </a>
-              </div>
-
-              {/* Proof Badges List */}
-              <ul className="flex flex-wrap items-center gap-5 pt-2 text-xs text-[#737b91]">
-                <li className="inline-flex items-center gap-2">
-                  <Check className="w-4 h-4 text-[#3ddc97]" />
-                  <span>Full protection for free</span>
-                </li>
-                <li className="inline-flex items-center gap-2">
-                  <Check className="w-4 h-4 text-[#3ddc97]" />
-                  <span>Zero data retention (0 IPs logged)</span>
-                </li>
-                <li className="inline-flex items-center gap-2">
-                  <Check className="w-4 h-4 text-[#3ddc97]" />
-                  <span>One-click setup in 60s</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Right Visual Console (Protector Live Security Console Mockup) */}
-            <div className="lg:col-span-5 relative">
-              <div className="p-console">
-                {/* Console Head */}
-                <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/[0.07]">
-                  <div className="flex items-center gap-2">
-                    <span className="text-base text-[#737b91]">#</span>
-                    <span className="text-sm font-semibold text-[#f1f3f9]">logs-security</span>
-                  </div>
-                  <span className="p-status-pill">
-                    <span className="p-pulse" />
-                    <span>Server protected</span>
-                  </span>
-                </div>
-
-                {/* Console Event Feed */}
-                <ol className="p-3 divide-y divide-white/[0.03] space-y-1">
-                  
-                  {/* Event 1 */}
-                  <li className="flex items-center gap-3 p-2.5 rounded-xl bg-white/[0.03]">
-                    <div className="w-9 h-9 rounded-xl bg-[#ff6b6b]/15 text-[#ff6b6b] flex items-center justify-center shrink-0">
-                      <ShieldAlert className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <strong className="block text-xs font-semibold text-[#f1f3f9]">Raid blocked</strong>
-                      <span className="block text-[11px] text-[#737b91] truncate">42 accounts created yesterday stopped at the door</span>
-                    </div>
-                    <time className="text-[10px] text-[#737b91] shrink-0 font-mono">just now</time>
-                  </li>
-
-                  {/* Event 2 */}
-                  <li className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-white/[0.02] transition-colors">
-                    <div className="w-9 h-9 rounded-xl bg-[#ffc14d]/15 text-[#ffc14d] flex items-center justify-center shrink-0">
-                      <Bot className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <strong className="block text-xs font-semibold text-[#f1f3f9]">Bot quarantined</strong>
-                      <span className="block text-[11px] text-[#737b91] truncate">NukeBot is waiting for the owner&apos;s approval</span>
-                    </div>
-                    <time className="text-[10px] text-[#737b91] shrink-0 font-mono">7 min</time>
-                  </li>
-
-                  {/* Event 3 */}
-                  <li className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-white/[0.02] transition-colors">
-                    <div className="w-9 h-9 rounded-xl bg-[#ff6b6b]/15 text-[#ff6b6b] flex items-center justify-center shrink-0">
-                      <Eye className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <strong className="block text-xs font-semibold text-[#f1f3f9]">Scam image removed</strong>
-                      <span className="block text-[11px] text-[#737b91] truncate">Fake Nitro OCR detected in #general</span>
-                    </div>
-                    <time className="text-[10px] text-[#737b91] shrink-0 font-mono">14 min</time>
-                  </li>
-
-                  {/* Event 4 */}
-                  <li className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-white/[0.02] transition-colors">
-                    <div className="w-9 h-9 rounded-xl bg-[#3ddc97]/15 text-[#3ddc97] flex items-center justify-center shrink-0">
-                      <RotateCcw className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <strong className="block text-xs font-semibold text-[#f1f3f9]">Channels restored</strong>
-                      <span className="block text-[11px] text-[#737b91] truncate">12 channels and permissions rebuilt automatically</span>
-                    </div>
-                    <time className="text-[10px] text-[#737b91] shrink-0 font-mono">21 min</time>
-                  </li>
-
-                </ol>
-
-                {/* Console Foot Meters */}
-                <div className="grid grid-cols-3 border-t border-white/[0.07] bg-white/[0.01]">
-                  <div className="p-3 text-center border-r border-white/[0.07]">
-                    <span className="block text-[10px] text-[#737b91] uppercase tracking-wider font-semibold">Anti-raid</span>
-                    <b className="text-xs text-[#3ddc97] font-semibold flex items-center justify-center gap-1.5 mt-0.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#3ddc97]" /> Active
-                    </b>
-                  </div>
-                  <div className="p-3 text-center border-r border-white/[0.07]">
-                    <span className="block text-[10px] text-[#737b91] uppercase tracking-wider font-semibold">OCR Vision</span>
-                    <b className="text-xs text-[#3ddc97] font-semibold flex items-center justify-center gap-1.5 mt-0.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#3ddc97]" /> Active
-                    </b>
-                  </div>
-                  <div className="p-3 text-center">
-                    <span className="block text-[10px] text-[#737b91] uppercase tracking-wider font-semibold">Backup</span>
-                    <b className="text-xs text-[#f1f3f9] font-semibold flex items-center justify-center gap-1.5 mt-0.5">
-                      4 min ago
-                    </b>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-
+          {/* Announcement Banner (Centered Below Navbar) */}
+          <div className="pt-6 sm:pt-8 pb-4 flex justify-center px-4 relative z-20">
+            <Link
+              href="/dashboard"
+              className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.1] hover:border-white/[0.22] hover:bg-white/[0.07] text-xs sm:text-sm text-[#cbd5e1] transition-all duration-150 backdrop-blur-sm group shadow-lg shadow-black/20"
+            >
+              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-[#1FA7BB]/20 text-[#1FA7BB] border border-[#1FA7BB]/35">
+                NEW!
+              </span>
+              <span>Turn your ideas into a Discord bot.</span>
+              <span className="font-semibold text-white group-hover:text-[#1FA7BB] transition-colors inline-flex items-center gap-1">
+                Explore Bot Maker{' '}
+                <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+              </span>
+            </Link>
           </div>
-        </section>
+
+          {/* Hero Section (Two Columns, ~1200px Container) */}
+          <section className="relative z-20 pt-6 sm:pt-10 pb-28 lg:pb-36 px-4 sm:px-6 lg:px-8 max-w-[1200px] mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+              
+              {/* Left Column: 3-line Headline, Muted Paragraph, 2 Rounded 6px Buttons */}
+              <div className="lg:col-span-6 space-y-6 order-1 text-left">
+                {/* 3-line bold headline (56-64px) */}
+                <h1 className="text-4xl sm:text-5xl lg:text-[62px] font-extrabold text-white leading-[1.08] tracking-tight">
+                  The best <br />
+                  all-in-one bot <br />
+                  for Discord
+                </h1>
+
+                {/* Muted paragraph (about 3 lines, 16-17px) */}
+                <p className="text-base sm:text-[17px] text-[#94a3b8] leading-relaxed max-w-lg">
+                  Layer is a complete Discord bot, easy to use, that thousands of
+                  Discord servers worldwide trust to manage, protect, entertain, and grow
+                  their community.
+                </p>
+
+                {/* Two buttons side by side (rounded at about 6px) */}
+                <div className="flex flex-wrap items-center gap-3.5 pt-2">
+                  {/* Primary button with Discord icon in main brand color */}
+                  <Link
+                    href="/invite"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-[6px] bg-[#1FA7BB] hover:bg-[#25bdd3] text-white font-semibold text-sm sm:text-base transition-all duration-150 shadow-lg shadow-[#1FA7BB]/25 hover:shadow-[#1FA7BB]/40 hover:-translate-y-0.5 active:translate-y-0"
+                  >
+                    <DiscordIcon size={20} />
+                    <span>Add to Discord</span>
+                  </Link>
+
+                  {/* Darker secondary button */}
+                  <a
+                    href="#features"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-[6px] bg-[#222634] hover:bg-[#2b3142] border border-white/[0.1] text-white/90 font-medium text-sm sm:text-base transition-all duration-150 hover:-translate-y-0.5 active:translate-y-0"
+                  >
+                    <span>See features</span>
+                  </a>
+                </div>
+              </div>
+
+              {/* Right Column: Illustration of Mascot Characters on Rocky Cliff with Leafy Vines & Glowing Moon */}
+              <div className="lg:col-span-6 order-2 relative flex justify-center lg:justify-end items-end select-none">
+                
+                {/* ─── MASCOT CLIFF ILLUSTRATION (Picture 1 Exact Recreation) ─── */}
+                {/* Custom illustration container: You can also drop your own PNG here */}
+                <div className="w-full max-w-[580px] relative">
+                  <svg
+                    viewBox="0 0 640 450"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-full h-auto drop-shadow-2xl"
+                  >
+                    <defs>
+                      {/* Moon Ambient Glow */}
+                      <radialGradient id="moonGlow" cx="62%" cy="65%" r="48%">
+                        <stop offset="0%" stopColor="#fff8db" stopOpacity="0.45" />
+                        <stop offset="35%" stopColor="#ffd880" stopOpacity="0.2" />
+                        <stop offset="100%" stopColor="#ffd880" stopOpacity="0" />
+                      </radialGradient>
+
+                      {/* Cliff Gradient */}
+                      <linearGradient id="cliffGrad" x1="20%" y1="0%" x2="90%" y2="100%">
+                        <stop offset="0%" stopColor="#252b3d" />
+                        <stop offset="35%" stopColor="#1a1e2b" />
+                        <stop offset="100%" stopColor="#0e1017" />
+                      </linearGradient>
+
+                      {/* Mascot Cyan / Brand Shading */}
+                      <linearGradient id="mascotBlue" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stopColor="#5edff3" />
+                        <stop offset="100%" stopColor="#1FA7BB" />
+                      </linearGradient>
+
+                      {/* Crown Gold Gradient */}
+                      <linearGradient id="crownGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#fde047" />
+                        <stop offset="100%" stopColor="#d97706" />
+                      </linearGradient>
+
+                      {/* Straw Hat Gradient */}
+                      <linearGradient id="strawGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#fef08a" />
+                        <stop offset="100%" stopColor="#ca8a04" />
+                      </linearGradient>
+
+                      {/* Helmet Silver Gradient */}
+                      <linearGradient id="ironGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#64748b" />
+                        <stop offset="100%" stopColor="#334155" />
+                      </linearGradient>
+                    </defs>
+
+                    {/* 1. Moon & Radiant Atmospheric Halo behind cliff */}
+                    <circle cx="410" cy="350" r="180" fill="url(#moonGlow)" />
+                    <circle cx="410" cy="355" r="75" fill="#fff7d6" opacity="0.9" />
+
+                    {/* 2. Rocky Cliff Face (Jutting from bottom right) */}
+                    {/* Shadow Body */}
+                    <path
+                      d="M 370 450 L 388 322 Q 402 316 430 318 L 640 318 L 640 450 Z"
+                      fill="url(#cliffGrad)"
+                    />
+                    {/* Cliff Top Ledge Highlights & Crevices */}
+                    <path
+                      d="M 388 322 Q 410 316 440 318 L 640 318 L 640 326 Q 440 326 405 328 Z"
+                      fill="#2e3549"
+                    />
+                    {/* Craggy facets & cracks on cliff wall */}
+                    <path
+                      d="M 400 340 L 420 375 L 415 410 L 435 450 M 460 330 L 475 365 L 470 405 M 540 330 L 555 380 L 570 450"
+                      stroke="#141822"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                    />
+                    <path
+                      d="M 392 328 L 410 355 M 480 340 L 500 370"
+                      stroke="#38435d"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+
+                    {/* 3. Lush Leafy Vines hanging over cliff */}
+                    {/* Vine Stem 1 */}
+                    <path
+                      d="M 394 322 Q 380 360 395 395 Q 405 425 398 450"
+                      stroke="#166534"
+                      strokeWidth="3.5"
+                      fill="none"
+                      strokeLinecap="round"
+                    />
+                    {/* Leaves along Vine 1 */}
+                    <ellipse cx="384" cy="340" rx="7" ry="4" fill="#22c55e" transform="rotate(-30 384 340)" />
+                    <ellipse cx="396" cy="360" rx="8" ry="4.5" fill="#16a34a" transform="rotate(20 396 360)" />
+                    <ellipse cx="388" cy="380" rx="7" ry="4" fill="#4ade80" transform="rotate(-40 388 380)" />
+                    <ellipse cx="403" cy="405" rx="7.5" ry="4" fill="#22c55e" transform="rotate(15 403 405)" />
+                    <ellipse cx="394" cy="430" rx="6" ry="3.5" fill="#15803d" transform="rotate(-25 394 430)" />
+
+                    {/* Vine Stem 2 (Right side) */}
+                    <path
+                      d="M 590 322 Q 605 350 595 385 Q 588 415 600 450"
+                      stroke="#166534"
+                      strokeWidth="3"
+                      fill="none"
+                    />
+                    <ellipse cx="602" cy="345" rx="7" ry="4" fill="#22c55e" transform="rotate(35 602 345)" />
+                    <ellipse cx="590" cy="370" rx="7.5" ry="4" fill="#16a34a" transform="rotate(-20 590 370)" />
+                    <ellipse cx="600" cy="400" rx="6.5" ry="3.5" fill="#4ade80" transform="rotate(40 600 400)" />
+                    <ellipse cx="592" cy="425" rx="6" ry="3" fill="#15803d" transform="rotate(-15 592 425)" />
+
+                    {/* ─── 4. FOUR MASCOTS ON CLIFF EDGE (Picture 1 style) ─── */}
+
+                    {/* MASCOT 1: Viking (Leftmost, near cliff edge) */}
+                    <g transform="translate(408, 280)">
+                      {/* Shadow */}
+                      <ellipse cx="0" cy="38" rx="16" ry="4" fill="#000" opacity="0.4" />
+                      {/* Body */}
+                      <circle cx="0" cy="12" r="23" fill="url(#mascotBlue)" />
+                      {/* Eyes */}
+                      <circle cx="-6" cy="10" r="3" fill="#0f172a" />
+                      <circle cx="-5" cy="9" r="1" fill="#fff" />
+                      <circle cx="6" cy="10" r="3" fill="#0f172a" />
+                      <circle cx="7" cy="9" r="1" fill="#fff" />
+                      {/* Open Battle Mouth */}
+                      <path d="M -4 18 Q 0 25 4 18 Z" fill="#0f172a" />
+                      {/* Belt */}
+                      <path d="M -21 21 Q 0 28 21 21" stroke="#78350f" strokeWidth="3" fill="none" />
+                      {/* Viking Horned Helmet */}
+                      <path d="M -20 2 Q 0 -12 20 2 L 18 8 Q 0 -2 -18 8 Z" fill="url(#ironGrad)" />
+                      {/* Left Horn */}
+                      <path d="M -18 2 Q -30 -2 -26 -14 Q -20 -10 -14 -1 Z" fill="#f8fafc" stroke="#64748b" strokeWidth="1" />
+                      {/* Right Horn */}
+                      <path d="M 18 2 Q 30 -2 26 -14 Q 20 -10 14 -1 Z" fill="#f8fafc" stroke="#64748b" strokeWidth="1" />
+                      {/* Mini Sword */}
+                      <path d="M -24 16 L -32 -2 L -29 -4 L -21 14 Z" fill="#cbd5e1" stroke="#475569" strokeWidth="0.8" />
+                      <rect x="-26" y="14" width="7" height="2" rx="1" fill="#d97706" transform="rotate(-30 -26 14)" />
+                      {/* Boots */}
+                      <ellipse cx="-7" cy="35" rx="5" ry="3" fill="#78350f" />
+                      <ellipse cx="7" cy="35" rx="5" ry="3" fill="#78350f" />
+                    </g>
+
+                    {/* MASCOT 2: Explorer / Farmer with Straw Hat & Shovel */}
+                    <g transform="translate(468, 276)">
+                      {/* Shadow */}
+                      <ellipse cx="0" cy="42" rx="17" ry="4" fill="#000" opacity="0.4" />
+                      {/* Body */}
+                      <circle cx="0" cy="14" r="24" fill="url(#mascotBlue)" />
+                      {/* Eyes */}
+                      <circle cx="-6" cy="12" r="3" fill="#0f172a" />
+                      <circle cx="-5" cy="11" r="1" fill="#fff" />
+                      <circle cx="6" cy="12" r="3" fill="#0f172a" />
+                      <circle cx="7" cy="11" r="1" fill="#fff" />
+                      {/* Friendly Smile */}
+                      <path d="M -5 19 Q 0 24 5 19" stroke="#0f172a" strokeWidth="2" strokeLinecap="round" fill="none" />
+                      {/* Straw Hat */}
+                      <ellipse cx="0" cy="2" rx="27" ry="7" fill="url(#strawGrad)" stroke="#a16207" strokeWidth="1" />
+                      <path d="M -13 2 Q 0 -15 13 2 Z" fill="url(#strawGrad)" stroke="#a16207" strokeWidth="1" />
+                      <rect x="-13" y="0" width="26" height="3" fill="#dc2626" />
+                      {/* Shovel resting over shoulder */}
+                      <line x1="18" y1="36" x2="34" y2="-6" stroke="#92400e" strokeWidth="3" strokeLinecap="round" />
+                      <path d="M 28 -6 L 38 -12 L 44 -4 L 34 2 Z" fill="#94a3b8" stroke="#475569" strokeWidth="1" />
+                      {/* Boots */}
+                      <ellipse cx="-7" cy="38" rx="6" ry="3.5" fill="#854d0e" />
+                      <ellipse cx="7" cy="38" rx="6" ry="3.5" fill="#854d0e" />
+                    </g>
+
+                    {/* MASCOT 3: Greek / Roman Toga with Laurel Wreath (Jumping Joyfully) */}
+                    <g transform="translate(534, 252)">
+                      {/* Shadow on cliff below */}
+                      <ellipse cx="0" cy="66" rx="14" ry="3" fill="#000" opacity="0.3" />
+                      {/* Floating / Jumping Body */}
+                      <circle cx="0" cy="12" r="23" fill="url(#mascotBlue)" />
+                      {/* Happy Closed Wink Eyes */}
+                      <path d="M -8 11 Q -5 7 -2 11" stroke="#0f172a" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+                      <path d="M 2 11 Q 5 7 8 11" stroke="#0f172a" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+                      {/* Joyful Laughing Mouth */}
+                      <path d="M -4 17 Q 0 25 4 17 Z" fill="#0f172a" />
+                      {/* White Toga Drape */}
+                      <path d="M -21 16 Q 0 32 21 16 L 16 32 Q 0 35 -16 32 Z" fill="#f8fafc" stroke="#e2e8f0" strokeWidth="1" />
+                      <path d="M -18 16 L 12 32" stroke="#eab308" strokeWidth="2" fill="none" />
+                      {/* Golden Laurel Wreath Leaves on Head */}
+                      <path d="M -16 2 Q -8 -6 0 -2 Q 8 -6 16 2" stroke="#ca8a04" strokeWidth="2" fill="none" />
+                      <circle cx="-12" cy="0" r="2.5" fill="#eab308" />
+                      <circle cx="-6" cy="-4" r="2.5" fill="#eab308" />
+                      <circle cx="0" cy="-3" r="2.5" fill="#fde047" />
+                      <circle cx="6" cy="-4" r="2.5" fill="#eab308" />
+                      <circle cx="12" cy="0" r="2.5" fill="#eab308" />
+                      {/* Joyful Outstretched Arms */}
+                      <ellipse cx="-24" cy="5" rx="5" ry="3" fill="#1FA7BB" transform="rotate(-30 -24 5)" />
+                      <ellipse cx="24" cy="5" rx="5" ry="3" fill="#1FA7BB" transform="rotate(30 24 5)" />
+                      {/* Golden Winged Sandals */}
+                      <ellipse cx="-8" cy="38" rx="5" ry="3" fill="#eab308" />
+                      <ellipse cx="8" cy="36" rx="5" ry="3" fill="#eab308" />
+                    </g>
+
+                    {/* MASCOT 4: King (Rightmost, Crown & Royal Crimson Cape) */}
+                    <g transform="translate(594, 274)">
+                      {/* Shadow */}
+                      <ellipse cx="0" cy="44" rx="18" ry="4" fill="#000" opacity="0.4" />
+                      {/* Royal Red Cape Drape Behind */}
+                      <path d="M -22 16 Q -30 42 -18 46 L 22 46 Q 32 42 22 16 Z" fill="#dc2626" stroke="#991b1b" strokeWidth="1" />
+                      {/* Body */}
+                      <circle cx="0" cy="14" r="25" fill="url(#mascotBlue)" />
+                      {/* Eyes */}
+                      <circle cx="-6" cy="11" r="3" fill="#0f172a" />
+                      <circle cx="-5" cy="10" r="1" fill="#fff" />
+                      <circle cx="6" cy="11" r="3" fill="#0f172a" />
+                      <circle cx="7" cy="10" r="1" fill="#fff" />
+                      {/* Regal Beard & Mustache in Warm Brown */}
+                      <path
+                        d="M -16 16 Q -10 13 -2 18 Q 6 13 16 16 Q 14 36 0 38 Q -14 36 -16 16 Z"
+                        fill="#78350f"
+                      />
+                      <ellipse cx="0" cy="20" rx="3" ry="1.5" fill="#451a03" />
+                      {/* Ornate Gold Crown with Jewels */}
+                      <path
+                        d="M -16 0 L -18 -14 L -8 -7 L 0 -17 L 8 -7 L 18 -14 L 16 0 Z"
+                        fill="url(#crownGold)"
+                        stroke="#b45309"
+                        strokeWidth="1"
+                      />
+                      <circle cx="-16" cy="-13" r="2" fill="#ef4444" />
+                      <circle cx="0" cy="-16" r="2.5" fill="#ef4444" />
+                      <circle cx="16" cy="-13" r="2" fill="#ef4444" />
+                      <circle cx="0" cy="-3" r="2" fill="#3b82f6" />
+                    </g>
+                  </svg>
+                </div>
+
+              </div>
+
+            </div>
+          </section>
+
+          {/* ─── 3. PINE TREE SILHOUETTE ALONG BOTTOM EDGE (Picture 1 exact match) ─── */}
+          <div className="absolute bottom-0 left-0 right-0 w-full overflow-hidden pointer-events-none z-10 leading-none">
+            <svg
+              viewBox="0 0 1440 140"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-full h-[75px] sm:h-[105px] md:h-[135px] object-cover"
+              preserveAspectRatio="none"
+            >
+              {/* Back Layer Conifer Silhouette (Dusky purple conifer horizon) */}
+              <path
+                d="M 0 140 L 0 85 L 18 52 L 28 75 L 42 45 L 56 72 L 72 38 L 86 68 L 105 48 L 120 78 L 140 40 L 158 70 L 180 50 L 202 78 L 225 36 L 244 68 L 268 44 L 290 74 L 315 40 L 336 72 L 360 48 L 382 76 L 405 35 L 428 68 L 452 42 L 476 74 L 500 48 L 522 75 L 546 38 L 568 70 L 592 45 L 615 76 L 638 38 L 660 70 L 685 45 L 710 75 L 734 36 L 758 70 L 782 45 L 805 76 L 828 38 L 850 70 L 875 42 L 898 74 L 922 45 L 945 76 L 968 38 L 990 70 L 1015 45 L 1038 75 L 1062 38 L 1085 70 L 1108 45 L 1132 76 L 1155 38 L 1178 70 L 1202 45 L 1225 76 L 1250 40 L 1272 72 L 1295 45 L 1318 75 L 1342 38 L 1365 70 L 1390 45 L 1414 74 L 1440 50 L 1440 140 Z"
+                fill="#1c162b"
+                opacity="0.85"
+              />
+
+              {/* Front Layer Pine Forest (Dark conifer silhouettes seamlessly merging into Section 3 #0a0c12) */}
+              <path
+                d="M 0 140 L 0 100 L 12 70 L 22 92 L 34 60 L 48 88 L 60 52 L 74 84 L 90 62 L 104 90 L 122 55 L 138 85 L 154 62 L 170 92 L 190 50 L 208 82 L 224 58 L 240 88 L 258 54 L 274 84 L 292 60 L 308 90 L 328 52 L 346 84 L 362 60 L 380 92 L 400 48 L 418 80 L 434 56 L 450 88 L 470 52 L 488 82 L 504 58 L 520 90 L 540 50 L 558 80 L 574 58 L 590 88 L 610 52 L 628 82 L 644 58 L 660 90 L 680 48 L 698 80 L 714 56 L 730 88 L 750 52 L 768 82 L 784 58 L 800 90 L 820 48 L 838 80 L 854 56 L 870 88 L 890 52 L 908 82 L 924 58 L 940 90 L 960 50 L 978 80 L 994 58 L 1010 88 L 1030 52 L 1048 82 L 1064 58 L 1080 90 L 1100 48 L 1118 80 L 1134 56 L 1150 88 L 1170 52 L 1188 82 L 1204 58 L 1220 90 L 1240 50 L 1258 80 L 1274 58 L 1290 88 L 1310 52 L 1328 82 L 1344 58 L 1360 90 L 1380 48 L 1398 80 L 1414 56 L 1430 88 L 1440 68 L 1440 140 Z"
+                fill="#0a0c12"
+              />
+
+              {/* Bottom Base Solid Strip to guarantee 100% seam-free connection */}
+              <rect x="0" y="128" width="1440" height="12" fill="#0a0c12" />
+            </svg>
+          </div>
+        </div>
 
         {/* ─── 3. Stats Strip (Protector Exact Home-Band) ───────── */}
         <section className="relative z-10 border-y border-white/[0.07] bg-[#0a0c12] py-8 px-6">
