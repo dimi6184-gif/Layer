@@ -1230,44 +1230,58 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ─── 7. FAQ Section (Accordion) ───────────────────────── */}
-        <section id="faq" className="relative z-10 py-16 px-6 max-w-4xl mx-auto">
-          <div className="text-center space-y-3 mb-12">
-            <p className="p-kicker">FAQ</p>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#f1f3f9] tracking-tight">
-              What people ask us.
-            </h2>
-          </div>
+        {/* ─── 7. FAQ ──────────────────────────────────────────── */}
+        <section id="faq" className="relative z-10 py-24 px-6">
+          <div className="max-w-[1100px] mx-auto grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-16 lg:gap-24 items-start">
 
-          <div className="space-y-3">
-            {faqs.map((faq, idx) => {
-              const isOpen = faqOpen === idx;
-              return (
-                <div
-                  key={idx}
-                  className="rounded-xl bg-[#0f1118] border border-white/[0.08] overflow-hidden transition-all"
-                >
-                  <button
-                    type="button"
-                    onClick={() => setFaqOpen(isOpen ? null : idx)}
-                    className="w-full p-5 text-left flex items-center justify-between gap-4 cursor-pointer"
-                  >
-                    <span className="text-sm font-bold text-[#f1f3f9]">{faq.q}</span>
-                    <ChevronDown
-                      className={`w-4 h-4 text-[#737b91] transition-transform duration-200 shrink-0 ${
-                        isOpen ? 'rotate-180 text-white' : ''
-                      }`}
-                    />
-                  </button>
+            {/* Left — title */}
+            <div className="lg:sticky lg:top-28">
+              <h2 className="text-4xl sm:text-5xl font-extrabold text-[#f1f3f9] tracking-tight leading-[1.1]">
+                Frequently<br />asked <span className="text-[#1FA7BB]">questions</span>
+              </h2>
+              <p className="mt-5 text-sm text-[#4d5467] leading-relaxed max-w-[280px]">
+                Still have questions?{' '}
+                <a href="https://discord.gg" target="_blank" rel="noopener noreferrer"
+                  className="text-[#1FA7BB] hover:text-[#25bdd3] transition-colors">
+                  Join our Discord
+                </a>{' '}and we&apos;ll help you out.
+              </p>
+            </div>
 
-                  {isOpen && (
-                    <div className="px-5 pb-5 text-xs text-[#aab1c5] leading-relaxed border-t border-white/[0.04] pt-3">
-                      {faq.a}
+            {/* Right — accordion */}
+            <div>
+              {faqs.map((faq, idx) => {
+                const isOpen = faqOpen === idx;
+                return (
+                  <div key={idx} className="border-b border-white/[0.07]">
+                    <button
+                      type="button"
+                      onClick={() => setFaqOpen(isOpen ? null : idx)}
+                      className="w-full py-5 text-left flex items-center justify-between gap-6 group cursor-pointer"
+                    >
+                      <span className={`text-[15px] font-semibold leading-snug transition-colors ${isOpen ? 'text-white' : 'text-[#c8cdd8] group-hover:text-white'}`}>
+                        {faq.q}
+                      </span>
+                      <ChevronDown
+                        className={`w-4 h-4 shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180 text-[#1FA7BB]' : 'text-[#4d5467]'}`}
+                      />
+                    </button>
+                    <div
+                      style={{
+                        maxHeight: isOpen ? 300 : 0,
+                        overflow: 'hidden',
+                        transition: 'max-height 0.28s cubic-bezier(0.16,1,0.3,1)',
+                      }}
+                    >
+                      <p className="pb-5 text-sm text-[#737b91] leading-relaxed">
+                        {faq.a}
+                      </p>
                     </div>
-                  )}
-                </div>
-              );
-            })}
+                  </div>
+                );
+              })}
+            </div>
+
           </div>
         </section>
 
