@@ -972,3 +972,8 @@ body {
 .float-a { animation: float-a 4.2s ease-in-out infinite; }
 .float-b { animation: float-b 5.6s ease-in-out infinite; }
 .float-c { animation: float-a 3.8s ease-in-out infinite 0.9s; }
+
+/* ─── Login page ─── */
+.login-discord-btn:hover { opacity: 0.88; }
+.login-discord-btn:active { transform: scale(0.99); }
+.login-legal-link:hover { color: #64748b !important; }
