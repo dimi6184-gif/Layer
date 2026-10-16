@@ -9,7 +9,8 @@ const RATE_LIMITS = {
   '/dashboard': { requests: 60, window: 60000 },
 };
 
-export async function middleware(request: NextRequest) {
+// Next.js 16: renamed from middleware.ts — function must be named `proxy`
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Skip rate limiting for static files
