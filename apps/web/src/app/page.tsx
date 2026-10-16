@@ -689,121 +689,99 @@ export default function HomePage() {
                     <ellipse cx="600" cy="400" rx="6.5" ry="3.5" fill="#4ade80" transform="rotate(40 600 400)" />
                     <ellipse cx="592" cy="425" rx="6" ry="3" fill="#15803d" transform="rotate(-15 592 425)" />
 
-                    {/* ─── 4. FOUR MASCOTS ON CLIFF EDGE (Picture 1 style) ─── */}
+                    {/* ─── 4. FOUR MASCOTS ON CLIFF EDGE (hex logo-style heads) ─── */}
 
-                    {/* MASCOT 1: Viking (Leftmost, near cliff edge) */}
+                    {/* MASCOT 1: Viking */}
                     <g transform="translate(408, 280)">
-                      {/* Shadow */}
                       <ellipse cx="0" cy="38" rx="16" ry="4" fill="#000" opacity="0.4" />
-                      {/* Body */}
-                      <circle cx="0" cy="12" r="23" fill="url(#mascotBlue)" />
+                      {/* Hex head */}
+                      <polygon points="0,-24 21,-12 21,12 0,24 -21,12 -21,-12" fill="#1a2233" stroke="#1FA7BB" strokeWidth="1.5" />
+                      <polygon points="0,-16 13,-8 13,8 0,16 -13,8 -13,-8" fill="#0d1117" />
                       {/* Eyes */}
-                      <circle cx="-6" cy="10" r="3" fill="#0f172a" />
-                      <circle cx="-5" cy="9" r="1" fill="#fff" />
-                      <circle cx="6" cy="10" r="3" fill="#0f172a" />
-                      <circle cx="7" cy="9" r="1" fill="#fff" />
-                      {/* Open Battle Mouth */}
-                      <path d="M -4 18 Q 0 25 4 18 Z" fill="#0f172a" />
-                      {/* Belt */}
-                      <path d="M -21 21 Q 0 28 21 21" stroke="#78350f" strokeWidth="3" fill="none" />
-                      {/* Viking Horned Helmet */}
-                      <path d="M -20 2 Q 0 -12 20 2 L 18 8 Q 0 -2 -18 8 Z" fill="url(#ironGrad)" />
-                      {/* Left Horn */}
-                      <path d="M -18 2 Q -30 -2 -26 -14 Q -20 -10 -14 -1 Z" fill="#f8fafc" stroke="#64748b" strokeWidth="1" />
-                      {/* Right Horn */}
-                      <path d="M 18 2 Q 30 -2 26 -14 Q 20 -10 14 -1 Z" fill="#f8fafc" stroke="#64748b" strokeWidth="1" />
-                      {/* Mini Sword */}
-                      <path d="M -24 16 L -32 -2 L -29 -4 L -21 14 Z" fill="#cbd5e1" stroke="#475569" strokeWidth="0.8" />
-                      <rect x="-26" y="14" width="7" height="2" rx="1" fill="#d97706" transform="rotate(-30 -26 14)" />
+                      <circle cx="-6" cy="2" r="2.5" fill="#1FA7BB" />
+                      <circle cx="6" cy="2" r="2.5" fill="#1FA7BB" />
+                      <circle cx="-5" cy="1" r="1" fill="#e0f7fa" />
+                      <circle cx="7" cy="1" r="1" fill="#e0f7fa" />
+                      {/* Mouth */}
+                      <path d="M -3 10 Q 0 14 3 10" stroke="#1FA7BB" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+                      {/* Viking Horns */}
+                      <path d="M -21 -10 Q -34 -16 -28 -26 Q -20 -18 -14 -10 Z" fill="#d1d5db" stroke="#6b7280" strokeWidth="1" />
+                      <path d="M 21 -10 Q 34 -16 28 -26 Q 20 -18 14 -10 Z" fill="#d1d5db" stroke="#6b7280" strokeWidth="1" />
                       {/* Boots */}
                       <ellipse cx="-7" cy="35" rx="5" ry="3" fill="#78350f" />
                       <ellipse cx="7" cy="35" rx="5" ry="3" fill="#78350f" />
                     </g>
 
-                    {/* MASCOT 2: Explorer / Farmer with Straw Hat & Shovel */}
+                    {/* MASCOT 2: Explorer with Straw Hat */}
                     <g transform="translate(468, 276)">
-                      {/* Shadow */}
                       <ellipse cx="0" cy="42" rx="17" ry="4" fill="#000" opacity="0.4" />
-                      {/* Body */}
-                      <circle cx="0" cy="14" r="24" fill="url(#mascotBlue)" />
+                      {/* Hex head */}
+                      <polygon points="0,-26 22,-13 22,13 0,26 -22,13 -22,-13" fill="#1a2233" stroke="#1FA7BB" strokeWidth="1.5" />
+                      <polygon points="0,-17 14,-8 14,8 0,17 -14,8 -14,-8" fill="#0d1117" />
                       {/* Eyes */}
-                      <circle cx="-6" cy="12" r="3" fill="#0f172a" />
-                      <circle cx="-5" cy="11" r="1" fill="#fff" />
-                      <circle cx="6" cy="12" r="3" fill="#0f172a" />
-                      <circle cx="7" cy="11" r="1" fill="#fff" />
-                      {/* Friendly Smile */}
-                      <path d="M -5 19 Q 0 24 5 19" stroke="#0f172a" strokeWidth="2" strokeLinecap="round" fill="none" />
+                      <circle cx="-6" cy="2" r="2.5" fill="#1FA7BB" />
+                      <circle cx="6" cy="2" r="2.5" fill="#1FA7BB" />
+                      <circle cx="-5" cy="1" r="1" fill="#e0f7fa" />
+                      <circle cx="7" cy="1" r="1" fill="#e0f7fa" />
+                      {/* Smile */}
+                      <path d="M -4 10 Q 0 15 4 10" stroke="#1FA7BB" strokeWidth="1.5" strokeLinecap="round" fill="none" />
                       {/* Straw Hat */}
-                      <ellipse cx="0" cy="2" rx="27" ry="7" fill="url(#strawGrad)" stroke="#a16207" strokeWidth="1" />
-                      <path d="M -13 2 Q 0 -15 13 2 Z" fill="url(#strawGrad)" stroke="#a16207" strokeWidth="1" />
-                      <rect x="-13" y="0" width="26" height="3" fill="#dc2626" />
-                      {/* Shovel resting over shoulder */}
-                      <line x1="18" y1="36" x2="34" y2="-6" stroke="#92400e" strokeWidth="3" strokeLinecap="round" />
-                      <path d="M 28 -6 L 38 -12 L 44 -4 L 34 2 Z" fill="#94a3b8" stroke="#475569" strokeWidth="1" />
+                      <ellipse cx="0" cy="-24" rx="28" ry="6" fill="#fef08a" stroke="#a16207" strokeWidth="1" />
+                      <path d="M -14 -24 Q 0 -38 14 -24 Z" fill="#fde047" stroke="#a16207" strokeWidth="1" />
+                      <rect x="-14" y="-26" width="28" height="3" fill="#dc2626" />
                       {/* Boots */}
                       <ellipse cx="-7" cy="38" rx="6" ry="3.5" fill="#854d0e" />
                       <ellipse cx="7" cy="38" rx="6" ry="3.5" fill="#854d0e" />
                     </g>
 
-                    {/* MASCOT 3: Greek / Roman Toga with Laurel Wreath (Jumping Joyfully) */}
+                    {/* MASCOT 3: Toga / Laurel, jumping */}
                     <g transform="translate(534, 252)">
-                      {/* Shadow on cliff below */}
                       <ellipse cx="0" cy="66" rx="14" ry="3" fill="#000" opacity="0.3" />
-                      {/* Floating / Jumping Body */}
-                      <circle cx="0" cy="12" r="23" fill="url(#mascotBlue)" />
-                      {/* Happy Closed Wink Eyes */}
-                      <path d="M -8 11 Q -5 7 -2 11" stroke="#0f172a" strokeWidth="2.5" strokeLinecap="round" fill="none" />
-                      <path d="M 2 11 Q 5 7 8 11" stroke="#0f172a" strokeWidth="2.5" strokeLinecap="round" fill="none" />
-                      {/* Joyful Laughing Mouth */}
-                      <path d="M -4 17 Q 0 25 4 17 Z" fill="#0f172a" />
-                      {/* White Toga Drape */}
-                      <path d="M -21 16 Q 0 32 21 16 L 16 32 Q 0 35 -16 32 Z" fill="#f8fafc" stroke="#e2e8f0" strokeWidth="1" />
-                      <path d="M -18 16 L 12 32" stroke="#eab308" strokeWidth="2" fill="none" />
-                      {/* Golden Laurel Wreath Leaves on Head */}
-                      <path d="M -16 2 Q -8 -6 0 -2 Q 8 -6 16 2" stroke="#ca8a04" strokeWidth="2" fill="none" />
-                      <circle cx="-12" cy="0" r="2.5" fill="#eab308" />
-                      <circle cx="-6" cy="-4" r="2.5" fill="#eab308" />
-                      <circle cx="0" cy="-3" r="2.5" fill="#fde047" />
-                      <circle cx="6" cy="-4" r="2.5" fill="#eab308" />
-                      <circle cx="12" cy="0" r="2.5" fill="#eab308" />
-                      {/* Joyful Outstretched Arms */}
-                      <ellipse cx="-24" cy="5" rx="5" ry="3" fill="#1FA7BB" transform="rotate(-30 -24 5)" />
-                      <ellipse cx="24" cy="5" rx="5" ry="3" fill="#1FA7BB" transform="rotate(30 24 5)" />
-                      {/* Golden Winged Sandals */}
+                      {/* Hex head */}
+                      <polygon points="0,-24 21,-12 21,12 0,24 -21,12 -21,-12" fill="#1a2233" stroke="#1FA7BB" strokeWidth="1.5" />
+                      <polygon points="0,-16 13,-8 13,8 0,16 -13,8 -13,-8" fill="#0d1117" />
+                      {/* Wink eyes */}
+                      <path d="M -8 2 Q -5 -2 -2 2" stroke="#1FA7BB" strokeWidth="2" strokeLinecap="round" fill="none" />
+                      <circle cx="6" cy="2" r="2.5" fill="#1FA7BB" />
+                      <circle cx="7" cy="1" r="1" fill="#e0f7fa" />
+                      {/* Laughing mouth */}
+                      <path d="M -4 10 Q 0 16 4 10 Z" fill="#1FA7BB" />
+                      {/* Laurel dots on top */}
+                      <circle cx="-10" cy="-20" r="2" fill="#eab308" />
+                      <circle cx="-5" cy="-23" r="2" fill="#eab308" />
+                      <circle cx="0" cy="-24" r="2.5" fill="#fde047" />
+                      <circle cx="5" cy="-23" r="2" fill="#eab308" />
+                      <circle cx="10" cy="-20" r="2" fill="#eab308" />
+                      {/* Toga drape */}
+                      <path d="M -21 16 Q 0 30 21 16 L 16 32 Q 0 35 -16 32 Z" fill="#f8fafc" opacity="0.9" />
+                      {/* Arms out */}
+                      <ellipse cx="-24" cy="4" rx="5" ry="3" fill="#162030" transform="rotate(-30 -24 4)" />
+                      <ellipse cx="24" cy="4" rx="5" ry="3" fill="#162030" transform="rotate(30 24 4)" />
+                      {/* Sandals */}
                       <ellipse cx="-8" cy="38" rx="5" ry="3" fill="#eab308" />
                       <ellipse cx="8" cy="36" rx="5" ry="3" fill="#eab308" />
                     </g>
 
-                    {/* MASCOT 4: King (Rightmost, Crown & Royal Crimson Cape) */}
+                    {/* MASCOT 4: King with Crown */}
                     <g transform="translate(594, 274)">
-                      {/* Shadow */}
                       <ellipse cx="0" cy="44" rx="18" ry="4" fill="#000" opacity="0.4" />
-                      {/* Royal Red Cape Drape Behind */}
+                      {/* Royal Cape */}
                       <path d="M -22 16 Q -30 42 -18 46 L 22 46 Q 32 42 22 16 Z" fill="#dc2626" stroke="#991b1b" strokeWidth="1" />
-                      {/* Body */}
-                      <circle cx="0" cy="14" r="25" fill="url(#mascotBlue)" />
+                      {/* Hex head — slightly bigger for king */}
+                      <polygon points="0,-26 23,-13 23,13 0,26 -23,13 -23,-13" fill="#1a2233" stroke="#1FA7BB" strokeWidth="2" />
+                      <polygon points="0,-17 15,-8 15,8 0,17 -15,8 -15,-8" fill="#0d1117" />
                       {/* Eyes */}
-                      <circle cx="-6" cy="11" r="3" fill="#0f172a" />
-                      <circle cx="-5" cy="10" r="1" fill="#fff" />
-                      <circle cx="6" cy="11" r="3" fill="#0f172a" />
-                      <circle cx="7" cy="10" r="1" fill="#fff" />
-                      {/* Regal Beard & Mustache in Warm Brown */}
-                      <path
-                        d="M -16 16 Q -10 13 -2 18 Q 6 13 16 16 Q 14 36 0 38 Q -14 36 -16 16 Z"
-                        fill="#78350f"
-                      />
-                      <ellipse cx="0" cy="20" rx="3" ry="1.5" fill="#451a03" />
-                      {/* Ornate Gold Crown with Jewels */}
-                      <path
-                        d="M -16 0 L -18 -14 L -8 -7 L 0 -17 L 8 -7 L 18 -14 L 16 0 Z"
-                        fill="url(#crownGold)"
-                        stroke="#b45309"
-                        strokeWidth="1"
-                      />
-                      <circle cx="-16" cy="-13" r="2" fill="#ef4444" />
-                      <circle cx="0" cy="-16" r="2.5" fill="#ef4444" />
-                      <circle cx="16" cy="-13" r="2" fill="#ef4444" />
-                      <circle cx="0" cy="-3" r="2" fill="#3b82f6" />
+                      <circle cx="-7" cy="2" r="2.8" fill="#1FA7BB" />
+                      <circle cx="7" cy="2" r="2.8" fill="#1FA7BB" />
+                      <circle cx="-6" cy="1" r="1.1" fill="#e0f7fa" />
+                      <circle cx="8" cy="1" r="1.1" fill="#e0f7fa" />
+                      {/* Regal beard */}
+                      <path d="M -12 12 Q 0 20 12 12 Q 10 24 0 26 Q -10 24 -12 12 Z" fill="#78350f" />
+                      {/* Crown */}
+                      <path d="M -16 -13 L -18 -26 L -8 -19 L 0 -30 L 8 -19 L 18 -26 L 16 -13 Z" fill="#fde047" stroke="#b45309" strokeWidth="1" />
+                      <circle cx="-14" cy="-25" r="2" fill="#ef4444" />
+                      <circle cx="0" cy="-29" r="2.5" fill="#ef4444" />
+                      <circle cx="14" cy="-25" r="2" fill="#ef4444" />
                     </g>
                   </svg>
                 </div>
