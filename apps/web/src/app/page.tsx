@@ -65,39 +65,55 @@ function Icon({ name, size = 18, color = 'currentColor' }: { name: string; size?
   return <>{icons[name] ?? null}</>;
 }
 
-/* ─── Invite button (uiverse.io 3D style) ───────────────────── */
+/* ─── Invite button — jubayer-10 exact blue palette ─────────── */
 function InviteBtn({ large }: { large?: boolean }) {
-  const pad = large ? '4px' : '3px';
-  const innerPx = large ? '13px 26px' : '7px 16px';
+  const [pressed, setPressed] = useState(false);
+  const px = large ? '13px 26px' : '7px 16px';
   const fs = large ? 15 : 13;
-  const iconSz = large ? 16 : 13;
+  const iconSz = large ? 15 : 12;
+  const br = large ? 12 : 9;
 
   return (
-    <Link href="/invite" style={{ textDecoration: 'none', display: 'inline-block' }}>
+    <Link href="/invite" style={{ textDecoration: 'none', display: 'inline-block' }}
+      onMouseDown={() => setPressed(true)}
+      onMouseUp={() => setPressed(false)}
+      onMouseLeave={() => setPressed(false)}>
+      {/* Outer ring — bg-blue-50 equivalent */}
       <div style={{
-        background: 'linear-gradient(to bottom, rgba(31,167,187,0.3) 0%, transparent 100%)',
-        padding: pad, borderRadius: large ? 14 : 11,
+        background: 'rgba(219,234,254,0.06)',
+        borderRadius: br + 4,
+        padding: '3px',
+        boxShadow: 'inset 0px 0px 1px 1px rgba(0,0,0,0.3), 2px 3px 5px rgba(0,0,0,0.1)',
+        transition: 'box-shadow 0.1s',
       }}>
+        {/* Black blur depth layer */}
         <div style={{
-          padding: '3px', borderRadius: large ? 11 : 8,
-          background: 'linear-gradient(to bottom, #1b8fa0, #156e7c)',
-          boxShadow: '0 2px 4px rgba(0,0,0,0.7)',
-          transition: 'box-shadow 0.15s, transform 0.1s',
-        }}
-          onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = '0 4px 12px rgba(0,0,0,0.5)'; }}
-          onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.boxShadow = '0 2px 4px rgba(0,0,0,0.7)'; }}
-          onMouseDown={e => { (e.currentTarget as HTMLDivElement).style.transform = 'scale(0.99)'; }}
-          onMouseUp={e => { (e.currentTarget as HTMLDivElement).style.transform = 'scale(1)'; }}
-        >
+          background: '#000',
+          borderRadius: br + 1,
+          padding: pressed ? '4px 0 2px' : '3px 0 3px',
+          filter: 'blur(0.5px)',
+          transition: 'padding 0.08s',
+        }}>
+          {/* Face: from-blue-600 to-blue-400, exact template shadows */}
           <div style={{
-            background: 'linear-gradient(to bottom, #1ea0b5, #197d8e)',
-            borderRadius: large ? 8 : 5,
-            padding: innerPx,
+            background: 'linear-gradient(to bottom, #2563eb, #60a5fa)',
+            borderRadius: br,
+            padding: px,
             display: 'flex', alignItems: 'center', gap: 7,
+            boxShadow: pressed
+              ? 'inset 0px 4px 2px rgba(96,165,250,0.5), inset 0px -4px 2px rgba(37,99,235,0.5), 0px 0px 2px rgba(0,0,0,1)'
+              : 'inset 0px 4px 2px #60a5fa, inset 0px -4px 0px #1e3a8a, 0px 0px 2px rgba(0,0,0,1)',
+            transform: pressed ? 'translateY(1px)' : 'translateY(0)',
+            transition: 'box-shadow 0.08s, transform 0.08s',
           }}>
-            <Icon name="plus" size={iconSz} color="#080808" />
-            <span style={{ fontWeight: 700, fontSize: fs, color: '#080808', letterSpacing: '-0.01em', whiteSpace: 'nowrap' }}>
-              Invite to Discord
+            <Icon name="plus" size={iconSz} color="#bfdbfe" />
+            <span style={{
+              fontWeight: 700, fontSize: fs,
+              color: '#bfdbfe',
+              letterSpacing: '-0.01em', whiteSpace: 'nowrap',
+              filter: 'drop-shadow(0px 2px 2px rgba(0,0,0,0.5))',
+            }}>
+              Add to Discord
             </span>
           </div>
         </div>
