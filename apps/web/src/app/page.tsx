@@ -554,7 +554,7 @@ export default function HomePage() {
           </div>
 
           {/* Hero Section (Two Columns, ~1200px Container) */}
-          <section className="relative z-20 pt-6 sm:pt-10 pb-28 lg:pb-36 px-4 sm:px-6 lg:px-8 max-w-[1200px] mx-auto">
+          <section className="relative z-20 pt-14 sm:pt-20 pb-40 lg:pb-56 px-4 sm:px-6 lg:px-8 max-w-[1200px] mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
               
               {/* Left Column: 3-line Headline, Muted Paragraph, 2 Rounded 6px Buttons */}
@@ -858,40 +858,21 @@ export default function HomePage() {
         </div>
 
         {/* ─── FEATURES: ZIG-ZAG SECTION ──────────────────────────── */}
-        <section id="features" className="relative z-10 py-20 sm:py-28 px-4 sm:px-6 overflow-hidden" style={{ background: 'var(--bg)' }}>
+        <section id="features" className="relative z-10 bg-[#07080c] py-20 sm:py-28 px-4 sm:px-6">
 
-          {/* ── Background: glow blobs only — no grid ── */}
-          {/* Teal glow — top right */}
-          <div style={{
-            position: 'absolute', top: '-10%', right: '-5%',
-            width: 600, height: 600, borderRadius: '50%', pointerEvents: 'none', zIndex: 0,
-            background: 'radial-gradient(circle, rgba(31,167,187,0.13) 0%, transparent 65%)',
-            filter: 'blur(48px)',
-          }} />
-          {/* Purple glow — bottom left */}
-          <div style={{
-            position: 'absolute', bottom: '10%', left: '-8%',
-            width: 500, height: 500, borderRadius: '50%', pointerEvents: 'none', zIndex: 0,
-            background: 'radial-gradient(circle, rgba(88,101,242,0.10) 0%, transparent 65%)',
-            filter: 'blur(48px)',
-          }} />
-          {/* Teal glow — mid left (second feature row) */}
-          <div style={{
-            position: 'absolute', top: '45%', left: '5%',
-            width: 360, height: 360, borderRadius: '50%', pointerEvents: 'none', zIndex: 0,
-            background: 'radial-gradient(circle, rgba(31,167,187,0.08) 0%, transparent 65%)',
-            filter: 'blur(36px)',
-          }} />
+          {/* Gradient fade from #07080c at top — softens the pine forest edge */}
+          <div className="absolute top-0 left-0 right-0 h-32 pointer-events-none"
+            style={{ background: 'linear-gradient(to bottom, #07080c 0%, transparent 100%)' }} />
 
           {/* Section eyebrow */}
-          <div className="max-w-[1160px] mx-auto text-center mb-20 sm:mb-28 relative z-10">
+          <div className="max-w-[1160px] mx-auto text-center mb-20 sm:mb-28">
             <p className="p-kicker justify-center mb-3">What Layer does</p>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
               Every attack already has an answer.
             </h2>
           </div>
 
-          <div className="max-w-[1160px] mx-auto space-y-28 sm:space-y-36 relative z-10">
+          <div className="max-w-[1160px] mx-auto space-y-28 sm:space-y-36">
 
             <FeatureBlock
               reverse={false}
@@ -1037,6 +1018,54 @@ export default function HomePage() {
 
         {/* ─── 9. Footer ──────────────────────────────────────────── */}
         <footer className="relative z-10 bg-[#07080c]">
+
+          {/* Jagged pine-forest top edge — same motif as the hero section */}
+          <div className="w-full overflow-hidden leading-none" style={{ height: 48 }}>
+            <svg viewBox="0 0 1440 48" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
+              className="w-full h-full" style={{ display: 'block' }}>
+              <path
+                d="M0 48 L0 28
+                  L20 8 L40 28
+                  L60 8 L80 28
+                  L100 8 L120 28
+                  L140 8 L160 28
+                  L180 8 L200 28
+                  L220 8 L240 28
+                  L260 8 L280 28
+                  L300 8 L320 28
+                  L340 8 L360 28
+                  L380 8 L400 28
+                  L420 8 L440 28
+                  L460 8 L480 28
+                  L500 8 L520 28
+                  L540 8 L560 28
+                  L580 8 L600 28
+                  L620 8 L640 28
+                  L660 8 L680 28
+                  L700 8 L720 28
+                  L740 8 L760 28
+                  L780 8 L800 28
+                  L820 8 L840 28
+                  L860 8 L880 28
+                  L900 8 L920 28
+                  L940 8 L960 28
+                  L980 8 L1000 28
+                  L1020 8 L1040 28
+                  L1060 8 L1080 28
+                  L1100 8 L1120 28
+                  L1140 8 L1160 28
+                  L1180 8 L1200 28
+                  L1220 8 L1240 28
+                  L1260 8 L1280 28
+                  L1300 8 L1320 28
+                  L1340 8 L1360 28
+                  L1380 8 L1400 28
+                  L1420 8 L1440 28
+                  L1440 48 Z"
+                fill="#07080c"
+              />
+            </svg>
+          </div>
 
           {/* Main footer content */}
           <div className="max-w-[1100px] mx-auto px-6 pt-4 pb-10">
