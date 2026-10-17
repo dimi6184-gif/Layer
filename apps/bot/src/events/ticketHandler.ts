@@ -150,7 +150,7 @@ export async function handleTicketButton(interaction: ButtonInteraction | String
           userId: guild.client.user?.id || 'system',
           userName: '🤖 Ticket System',
           content: `🎫 **Ticket opened** by ${user.tag} for **${reasonLabel}**.\nSupport will be with you shortly.`,
-          isAI: false,
+          isAI: true,
         },
       }).catch(() => {});
 
@@ -284,7 +284,7 @@ export async function handleTicketButton(interaction: ButtonInteraction | String
           userId: guild.client.user?.id || 'system',
           userName: '🤖 Ticket System',
           content: `🎫 **Ticket opened** by ${user.tag} for **General Support**.\nSupport will be with you shortly.`,
-          isAI: false,
+          isAI: true,
         },
       }).catch(() => {});
 

@@ -41,11 +41,18 @@ export async function shouldAIRespond(message: Message): Promise<boolean> {
   if (!guild || !guild.aiTicketModeratorEnabled) return false;
 
   // Check if a staff member has already written in this ticket
+  const botUserId = message.client.user?.id;
   const staffHasWritten = await db.ticketMessage.findFirst({
     where: {
       ticketId: message.channel.id,
       isAI: false,
-      userId: { not: message.author.id }, // Not the ticket creator
+      userId: {
+        notIn: [
+          message.author.id,       // not the current user
+          ...(botUserId ? [botUserId] : []), // not the bot itself
+          'system',                 // not system messages
+        ],
+      },
     },
   });
 
