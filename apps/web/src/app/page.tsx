@@ -725,96 +725,124 @@ export default function HomePage() {
             </h2>
           </div>
 
-          <div className="max-w-[1160px] mx-auto space-y-28 sm:space-y-36">
-
-            <FeatureBlock
-              reverse={false}
-              heading={<>AI that knows scams.<br />You don&apos;t have to.</>}
-              body="No blocklists to maintain. No dedicated honeypot channel. Layer's AI understands context - it knows what a scam looks like, even inside an image, without you ever updating a single rule."
-              primaryHref="/invite"
-              primaryLabel="Add to Discord"
-              primaryIcon={<DiscordIcon size={16} />}
-              visual={<ScamDetectionMock />}
-            />
-
-            <FeatureBlock
-              reverse={true}
-              heading={<>Banned users<br />can&apos;t come back.</>}
-              body="When a banned user creates a new account and rejoins, Layer detects them through behavioral and account pattern matching - and bans the new account automatically."
-              primaryHref="/invite"
-              primaryLabel="Add to Discord"
-              primaryIcon={<DiscordIcon size={16} />}
-              visual={<BanEvasionMock />}
-            />
-
+          {/* ── Feature 1 — Teal wave bg (scam detection) ── */}
+          <div className="relative overflow-hidden py-20 sm:py-28 -mx-4 sm:-mx-6 px-4 sm:px-6 mb-2">
+            <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+              <svg viewBox="0 0 1440 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
+                <path d="M0,120 C360,220 720,20 1080,140 C1260,200 1380,80 1440,120 L1440,400 L0,400 Z"
+                  fill="rgba(31,167,187,0.06)" />
+                <path d="M0,160 C300,60 600,240 900,160 C1150,100 1320,200 1440,160 L1440,400 L0,400 Z"
+                  fill="rgba(31,167,187,0.04)" />
+              </svg>
+            </div>
+            <div className="max-w-[1160px] mx-auto relative z-10">
+              <FeatureBlock
+                reverse={false}
+                heading={<>AI that knows scams.<br />You don&apos;t have to.</>}
+                body="No blocklists to maintain. No dedicated honeypot channel. Layer's AI understands context - it knows what a scam looks like, even inside an image, without you ever updating a single rule."
+                primaryHref="/invite"
+                primaryLabel="Add to Discord"
+                primaryIcon={<DiscordIcon size={16} />}
+                visual={<ScamDetectionMock />}
+              />
+            </div>
           </div>
 
-          {/* --- Inner wave 1 — teal accent stripe --- */}
-          <div className="relative my-16" style={{ lineHeight: 0 }}>
-            <svg viewBox="0 0 1440 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
-              style={{ display: 'block', width: '100%', height: 100 }}>
-              <path
-                d="M0,50 C240,100 480,0 720,50 C960,100 1200,0 1440,50 L1440,100 L0,100 Z"
-                fill="rgba(31,167,187,0.07)"
+          {/* ── Feature 2 — Red/danger wave bg (ban evasion) ── */}
+          <div className="relative overflow-hidden py-20 sm:py-28 -mx-4 sm:-mx-6 px-4 sm:px-6 mb-2">
+            <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+              <svg viewBox="0 0 1440 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
+                <path d="M0,80 C480,200 960,0 1440,100 L1440,400 L0,400 Z"
+                  fill="rgba(239,68,68,0.05)" />
+                <path d="M0,140 C240,40 480,220 720,140 C960,60 1200,180 1440,120 L1440,400 L0,400 Z"
+                  fill="rgba(239,68,68,0.03)" />
+              </svg>
+            </div>
+            <div className="max-w-[1160px] mx-auto relative z-10">
+              <FeatureBlock
+                reverse={true}
+                heading={<>Banned users<br />can&apos;t come back.</>}
+                body="When a banned user creates a new account and rejoins, Layer detects them through behavioral and account pattern matching - and bans the new account automatically."
+                primaryHref="/invite"
+                primaryLabel="Add to Discord"
+                primaryIcon={<DiscordIcon size={16} />}
+                visual={<BanEvasionMock />}
               />
-              <path
-                d="M0,60 C200,20 400,90 600,60 C800,30 1000,80 1200,60 C1320,48 1400,70 1440,60 L1440,100 L0,100 Z"
-                fill="rgba(31,167,187,0.04)"
-              />
-            </svg>
+            </div>
           </div>
 
-          <div className="max-w-[1160px] mx-auto space-y-28 sm:space-y-36">
-
-            <FeatureBlock
-              reverse={false}
-              heading={<>Support tickets that<br />resolve themselves.</>}
-              body="Layer reads the ticket context, searches your server for relevant channels and roles, and answers common questions automatically. Staff only gets involved when actually needed."
-              primaryHref="/invite"
-              primaryLabel="Add to Discord"
-              primaryIcon={<DiscordIcon size={16} />}
-              visual={<TicketMock />}
-            />
-
-            <FeatureBlock
-              reverse={true}
-              heading={<>Verify real people.<br />Store nothing.</>}
-              body="Layer confirms a user is human through an interactive challenge - without storing IPs, device fingerprints, or emails. Nothing to breach. Privacy by design."
-              primaryHref="/invite"
-              primaryLabel="Add to Discord"
-              primaryIcon={<DiscordIcon size={16} />}
-              visual={<VerificationMock />}
-            />
-
+          {/* ── Feature 3 — Purple wave bg (AI tickets) ── */}
+          <div className="relative overflow-hidden py-20 sm:py-28 -mx-4 sm:-mx-6 px-4 sm:px-6 mb-2">
+            <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+              <svg viewBox="0 0 1440 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
+                <path d="M0,100 C300,0 600,200 900,100 C1150,20 1320,160 1440,80 L1440,400 L0,400 Z"
+                  fill="rgba(167,139,250,0.06)" />
+                <path d="M0,180 C400,280 800,80 1200,180 C1340,220 1400,140 1440,160 L1440,400 L0,400 Z"
+                  fill="rgba(167,139,250,0.04)" />
+              </svg>
+            </div>
+            <div className="max-w-[1160px] mx-auto relative z-10">
+              <FeatureBlock
+                reverse={false}
+                heading={<>Support tickets that<br />resolve themselves.</>}
+                body="Layer reads the ticket context, searches your server for relevant channels and roles, and answers common questions automatically. Staff only gets involved when actually needed."
+                primaryHref="/invite"
+                primaryLabel="Add to Discord"
+                primaryIcon={<DiscordIcon size={16} />}
+                visual={<TicketMock />}
+              />
+            </div>
           </div>
 
-          {/* --- Inner wave 2 — slightly different curve --- */}
-          <div className="relative my-16" style={{ lineHeight: 0 }}>
-            <svg viewBox="0 0 1440 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
-              style={{ display: 'block', width: '100%', height: 100 }}>
-              <path
-                d="M0,30 C300,90 600,10 900,60 C1100,90 1300,20 1440,50 L1440,0 L0,0 Z"
-                fill="rgba(31,167,187,0.06)"
+          {/* ── Feature 4 — Green wave bg (verification/privacy) ── */}
+          <div className="relative overflow-hidden py-20 sm:py-28 -mx-4 sm:-mx-6 px-4 sm:px-6 mb-2">
+            <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+              <svg viewBox="0 0 1440 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
+                <path d="M0,60 C360,180 720,0 1080,120 C1280,180 1380,60 1440,100 L1440,400 L0,400 Z"
+                  fill="rgba(61,220,151,0.05)" />
+                <path d="M0,160 C200,80 400,240 600,160 C800,80 1100,220 1440,140 L1440,400 L0,400 Z"
+                  fill="rgba(61,220,151,0.03)" />
+              </svg>
+            </div>
+            <div className="max-w-[1160px] mx-auto relative z-10">
+              <FeatureBlock
+                reverse={true}
+                heading={<>Verify real people.<br />Store nothing.</>}
+                body="Layer confirms a user is human through an interactive challenge - without storing IPs, device fingerprints, or emails. Nothing to breach. Privacy by design."
+                primaryHref="/invite"
+                primaryLabel="Add to Discord"
+                primaryIcon={<DiscordIcon size={16} />}
+                visual={<VerificationMock />}
               />
-              <path
-                d="M0,20 C360,80 720,0 1080,50 C1260,75 1380,30 1440,40 L1440,0 L0,0 Z"
-                fill="rgba(31,167,187,0.03)"
-              />
-            </svg>
+            </div>
           </div>
 
-          <div className="max-w-[1160px] mx-auto space-y-28 sm:space-y-36">
-
-            <FeatureBlock
-              reverse={false}
-              heading={<>Full control from<br />your browser.</>}
-              body="Every Layer module has a dedicated settings page at uselayer.de. Toggle rules, configure thresholds, manage ticket categories - live, without a single bot command."
-              primaryHref="/dashboard"
-              primaryLabel="Open Dashboard"
-              primaryIcon={<Shield className="w-4 h-4" />}
-              visual={<DashboardMock switches={switches} toggleSwitch={(k) => toggleSwitch(k as keyof typeof switches)} />}
-            />
-
+          {/* ── Feature 5 — Blue wave bg (dashboard) ── */}
+          <div className="relative overflow-hidden py-20 sm:py-28 -mx-4 sm:-mx-6 px-4 sm:px-6">
+            <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+              <svg viewBox="0 0 1440 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
+                <path d="M0,140 C480,40 960,240 1440,100 L1440,400 L0,400 Z"
+                  fill="rgba(56,189,248,0.05)" />
+                <path d="M0,200 C300,100 600,280 900,180 C1100,120 1300,220 1440,160 L1440,400 L0,400 Z"
+                  fill="rgba(56,189,248,0.03)" />
+              </svg>
+            </div>
+            <div className="max-w-[1160px] mx-auto relative z-10">
+              <FeatureBlock
+                reverse={false}
+                heading={<>Full control from<br />your browser.</>}
+                body="Every Layer module has a dedicated settings page at uselayer.de. Toggle rules, configure thresholds, manage ticket categories - live, without a single bot command."
+                primaryHref="/dashboard"
+                primaryLabel="Open Dashboard"
+                primaryIcon={<Shield className="w-4 h-4" />}
+                visual={<DashboardMock switches={switches} toggleSwitch={(k) => toggleSwitch(k as keyof typeof switches)} />}
+              />
+            </div>
           </div>
 
         </section>
