@@ -703,12 +703,19 @@ export default function HomePage() {
             </svg>
           </div>
 
-        {/* --- FEATURES: ZIG-ZAG SECTION ---------------------------- */}
-        <section id="features" className="relative z-10 bg-[#07080c] py-20 sm:py-28 px-4 sm:px-6">
+        {/* --- Wave divider INTO features --- */}
+        <div className="relative z-10 -mb-1" style={{ lineHeight: 0 }}>
+          <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
+            className="w-full" style={{ display: 'block', height: 80 }}>
+            <path
+              d="M0,40 C180,80 360,0 540,40 C720,80 900,0 1080,40 C1260,80 1380,20 1440,40 L1440,80 L0,80 Z"
+              fill="#0c0f1a"
+            />
+          </svg>
+        </div>
 
-          {/* Gradient fade from #07080c at top - softens the pine forest edge */}
-          <div className="absolute top-0 left-0 right-0 h-32 pointer-events-none"
-            style={{ background: 'linear-gradient(to bottom, #07080c 0%, transparent 100%)' }} />
+        {/* --- FEATURES: ZIG-ZAG SECTION ---------------------------- */}
+        <section id="features" className="relative z-10 py-20 sm:py-28 px-4 sm:px-6" style={{ background: '#0c0f1a' }}>
 
           {/* Section eyebrow */}
           <div className="max-w-[1160px] mx-auto text-center mb-20 sm:mb-28">
@@ -774,7 +781,16 @@ export default function HomePage() {
 
         </section>
 
-
+        {/* --- Wave divider OUT of features --- */}
+        <div className="relative z-10 -mt-1" style={{ lineHeight: 0, background: '#07080c' }}>
+          <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
+            className="w-full" style={{ display: 'block', height: 80 }}>
+            <path
+              d="M0,40 C200,0 400,80 600,40 C800,0 1000,80 1200,40 C1320,20 1400,60 1440,40 L1440,0 L0,0 Z"
+              fill="#0c0f1a"
+            />
+          </svg>
+        </div>
 
         {/* --- 7. FAQ -------------------------------------------- */}
         <section id="faq" className="relative z-10 py-24 px-6">
