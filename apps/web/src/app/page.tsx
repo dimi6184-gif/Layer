@@ -357,7 +357,7 @@ export default function HomePage() {
                               ))}
                             </div>
                             <div className="space-y-0.5">
-                              <Link href="/api/health" onClick={() => setActiveDropdown(null)}
+                              <Link href="https://status.uselayer.de" onClick={() => setActiveDropdown(null)} target="_blank" rel="noopener noreferrer"
                                 className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-white/[0.05] transition-colors group">
                                 <div className="w-7 h-7 rounded-md flex items-center justify-center shrink-0"
                                   style={{ background: '#3ddc9718', color: '#3ddc97' }}><Activity className="w-4 h-4" /></div>
@@ -367,20 +367,6 @@ export default function HomePage() {
                                 </div>
                               </Link>
                             </div>
-                          </div>
-                          <div className="mx-3 mb-3 rounded-lg p-3 flex items-center gap-3"
-                            style={{ background: 'linear-gradient(135deg, rgba(31,167,187,0.12) 0%, rgba(31,167,187,0.04) 100%)', border: '1px solid rgba(31,167,187,0.18)' }}>
-                            <div className="w-8 h-8 rounded-lg bg-[#1FA7BB]/20 flex items-center justify-center shrink-0">
-                              <Shield className="w-4 h-4 text-[#1FA7BB]" />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="text-xs font-bold text-white">Layer Pro</div>
-                              <div className="text-[11px] text-[#64748b]">Unlock unlimited AI scans & ban evasion</div>
-                            </div>
-                            <Link href="/premium" onClick={() => setActiveDropdown(null)}
-                              className="text-[11px] font-semibold text-[#1FA7BB] hover:text-[#25bdd3] whitespace-nowrap transition-colors">
-                              Upgrade →
-                            </Link>
                           </div>
                         </div>
 
