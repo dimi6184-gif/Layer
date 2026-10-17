@@ -717,148 +717,96 @@ export default function HomePage() {
           </div>
 
           {/*
-            ── COLOR VARIABLES — edit these to change feature bg colors ──
-            F1: #0e1f1d  (dark teal)
-            F2: #1a0e0e  (dark red)
-            F3: #14102a  (dark purple)
-            F4: #0d1a14  (dark green)
-            F5: #0e1624  (dark blue)
+            ── CHANGE COLORS HERE — one line per feature ──────────────────
+            Format: [bgFrom, bgTo, glowColor, waveNextColor]
+            bgFrom/bgTo    = linear-gradient top→bottom of the section
+            glowColor      = radial glow behind the visual card (hex, used with opacity)
+            waveNextColor  = fill color of the NEXT section's bg (for the wave transition)
           */}
 
-          {/* ── Feature 1 ── bg: #0e1f1d, wave out → F2 color ── */}
-          {/* Entry wave: base (#07080c) → F1 (#0e1f1d) */}
-          <div style={{ lineHeight: 0, display: 'block', marginBottom: -1 }}>
-            <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
-              style={{ display: 'block', width: '100%', height: 80 }}>
-              <path d="M0,0 L0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,0 Z" fill="#07080c" />
-              <path d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z" fill="#0e1f1d" />
+          {/* ── F1: AI Scam — teal ── */}
+          <div style={{ background: 'linear-gradient(180deg, hsl(185,40%,9%) 0%, hsl(185,35%,7%) 100%)', position: 'relative', overflow: 'hidden' }}>
+            {/* Radial glow behind visual */}
+            <div style={{ position: 'absolute', right: '-5%', top: '50%', transform: 'translateY(-50%)', width: 700, height: 700, borderRadius: '50%', background: 'radial-gradient(circle, rgba(31,167,187,0.18) 0%, transparent 65%)', pointerEvents: 'none', filter: 'blur(40px)' }} />
+            {/* Noise grain overlay */}
+            <div style={{ position: 'absolute', inset: 0, opacity: 0.03, backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")', backgroundSize: '200px 200px', pointerEvents: 'none' }} />
+            <div className="py-36 px-4 sm:px-6 relative z-10" style={{ paddingTop: 140, paddingBottom: 140 }}>
+              <div className="max-w-[1160px] mx-auto">
+                <FeatureBlock reverse={false} heading={<>AI that knows scams.<br />You don&apos;t have to.</>} body="No blocklists to maintain. No dedicated honeypot channel. Layer's AI understands context — it knows what a scam looks like, even inside an image, without you ever updating a single rule." primaryHref="/invite" primaryLabel="Add to Discord" primaryIcon={<DiscordIcon size={16} />} visual={<ScamDetectionMock />} />
+              </div>
+            </div>
+            {/* Wave out → F2 bg */}
+            <svg viewBox="0 0 1440 140" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style={{ display: 'block', width: '100%', height: 140, marginBottom: -1 }}>
+              <path d="M0,0 C240,120 480,20 720,80 C960,140 1200,20 1440,80 L1440,140 L0,140 Z" fill="hsl(185,37%,8%)" opacity="0.4"/>
+              <path d="M0,30 C360,120 720,10 1080,70 C1260,100 1380,40 1440,60 L1440,140 L0,140 Z" fill="hsl(340,40%,8%)" opacity="0.6"/>
+              <path d="M0,60 C200,130 400,40 720,90 C960,130 1200,50 1440,90 L1440,140 L0,140 Z" fill="hsl(340,40%,8%)"/>
             </svg>
           </div>
-          <div className="relative" style={{ background: '#0e1f1d' }}>
-            <div className="py-20 sm:py-28 px-4 sm:px-6 relative z-10">
+
+          {/* ── F2: Ban Evasion — crimson ── */}
+          <div style={{ background: 'linear-gradient(180deg, hsl(340,40%,9%) 0%, hsl(340,35%,7%) 100%)', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ position: 'absolute', left: '-5%', top: '50%', transform: 'translateY(-50%)', width: 700, height: 700, borderRadius: '50%', background: 'radial-gradient(circle, rgba(225,70,90,0.18) 0%, transparent 65%)', pointerEvents: 'none', filter: 'blur(40px)' }} />
+            <div style={{ position: 'absolute', inset: 0, opacity: 0.03, backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")', backgroundSize: '200px 200px', pointerEvents: 'none' }} />
+            <div className="relative z-10 px-4 sm:px-6" style={{ paddingTop: 140, paddingBottom: 140 }}>
               <div className="max-w-[1160px] mx-auto">
-                <FeatureBlock
-                  reverse={false}
-                  heading={<>AI that knows scams.<br />You don&apos;t have to.</>}
-                  body="No blocklists to maintain. No dedicated honeypot channel. Layer's AI understands context - it knows what a scam looks like, even inside an image, without you ever updating a single rule."
-                  primaryHref="/invite"
-                  primaryLabel="Add to Discord"
-                  primaryIcon={<DiscordIcon size={16} />}
-                  visual={<ScamDetectionMock />}
-                />
+                <FeatureBlock reverse={true} heading={<>Banned users<br />can&apos;t come back.</>} body="When a banned user creates a new account and rejoins, Layer detects them through behavioral and account pattern matching — and bans the new account automatically." primaryHref="/invite" primaryLabel="Add to Discord" primaryIcon={<DiscordIcon size={16} />} visual={<BanEvasionMock />} />
               </div>
             </div>
-            {/* Wave out → F2 (#1a0e0e) */}
-            <div style={{ lineHeight: 0, display: 'block', marginBottom: -1 }}>
-              <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
-                style={{ display: 'block', width: '100%', height: 80 }}>
-                <path d="M0,0 L0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,0 Z" fill="#0e1f1d" />
-                <path d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z" fill="#1a0e0e" />
-              </svg>
-            </div>
+            <svg viewBox="0 0 1440 140" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style={{ display: 'block', width: '100%', height: 140, marginBottom: -1 }}>
+              <path d="M0,0 C360,100 720,20 1080,80 C1260,110 1380,50 1440,70 L1440,140 L0,140 Z" fill="hsl(340,37%,8%)" opacity="0.4"/>
+              <path d="M0,40 C300,120 600,20 900,80 C1100,120 1300,40 1440,70 L1440,140 L0,140 Z" fill="hsl(255,38%,8%)" opacity="0.6"/>
+              <path d="M0,70 C240,140 480,50 720,100 C960,140 1200,60 1440,90 L1440,140 L0,140 Z" fill="hsl(255,38%,8%)"/>
+            </svg>
           </div>
 
-          {/* ── Feature 2 ── bg: #1a0e0e, wave out → F3 color ── */}
-          <div className="relative" style={{ background: '#1a0e0e' }}>
-            <div className="py-20 sm:py-28 px-4 sm:px-6 relative z-10">
+          {/* ── F3: AI Tickets — indigo ── */}
+          <div style={{ background: 'linear-gradient(180deg, hsl(255,38%,10%) 0%, hsl(255,33%,7%) 100%)', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ position: 'absolute', right: '-5%', top: '50%', transform: 'translateY(-50%)', width: 700, height: 700, borderRadius: '50%', background: 'radial-gradient(circle, rgba(139,110,245,0.18) 0%, transparent 65%)', pointerEvents: 'none', filter: 'blur(40px)' }} />
+            <div style={{ position: 'absolute', inset: 0, opacity: 0.03, backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")', backgroundSize: '200px 200px', pointerEvents: 'none' }} />
+            <div className="relative z-10 px-4 sm:px-6" style={{ paddingTop: 140, paddingBottom: 140 }}>
               <div className="max-w-[1160px] mx-auto">
-                <FeatureBlock
-                  reverse={true}
-                  heading={<>Banned users<br />can&apos;t come back.</>}
-                  body="When a banned user creates a new account and rejoins, Layer detects them through behavioral and account pattern matching - and bans the new account automatically."
-                  primaryHref="/invite"
-                  primaryLabel="Add to Discord"
-                  primaryIcon={<DiscordIcon size={16} />}
-                  visual={<BanEvasionMock />}
-                />
+                <FeatureBlock reverse={false} heading={<>Support tickets that<br />resolve themselves.</>} body="Layer reads the ticket context, searches your server for relevant channels and roles, and answers common questions automatically. Staff only gets involved when actually needed." primaryHref="/invite" primaryLabel="Add to Discord" primaryIcon={<DiscordIcon size={16} />} visual={<TicketMock />} />
               </div>
             </div>
-            {/* Wave out → F3 (#14102a) */}
-            <div style={{ lineHeight: 0, display: 'block', marginBottom: -1 }}>
-              <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
-                style={{ display: 'block', width: '100%', height: 80 }}>
-                <path d="M0,0 L0,40 C360,0 720,80 1080,40 C1260,20 1380,60 1440,40 L1440,0 Z" fill="#1a0e0e" />
-                <path d="M0,40 C360,0 720,80 1080,40 C1260,20 1380,60 1440,40 L1440,80 L0,80 Z" fill="#14102a" />
-              </svg>
-            </div>
+            <svg viewBox="0 0 1440 140" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style={{ display: 'block', width: '100%', height: 140, marginBottom: -1 }}>
+              <path d="M0,0 C200,110 400,20 720,70 C1000,120 1250,30 1440,60 L1440,140 L0,140 Z" fill="hsl(255,35%,8%)" opacity="0.4"/>
+              <path d="M0,40 C360,130 720,20 1080,80 C1300,120 1400,50 1440,80 L1440,140 L0,140 Z" fill="hsl(155,38%,8%)" opacity="0.6"/>
+              <path d="M0,70 C300,140 600,40 900,100 C1100,140 1300,60 1440,90 L1440,140 L0,140 Z" fill="hsl(155,38%,8%)"/>
+            </svg>
           </div>
 
-          {/* ── Feature 3 ── bg: #14102a, wave out → F4 color ── */}
-          <div className="relative" style={{ background: '#14102a' }}>
-            <div className="py-20 sm:py-28 px-4 sm:px-6 relative z-10">
+          {/* ── F4: Verification — emerald ── */}
+          <div style={{ background: 'linear-gradient(180deg, hsl(155,38%,9%) 0%, hsl(155,33%,7%) 100%)', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ position: 'absolute', left: '-5%', top: '50%', transform: 'translateY(-50%)', width: 700, height: 700, borderRadius: '50%', background: 'radial-gradient(circle, rgba(52,211,153,0.16) 0%, transparent 65%)', pointerEvents: 'none', filter: 'blur(40px)' }} />
+            <div style={{ position: 'absolute', inset: 0, opacity: 0.03, backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")', backgroundSize: '200px 200px', pointerEvents: 'none' }} />
+            <div className="relative z-10 px-4 sm:px-6" style={{ paddingTop: 140, paddingBottom: 140 }}>
               <div className="max-w-[1160px] mx-auto">
-                <FeatureBlock
-                  reverse={false}
-                  heading={<>Support tickets that<br />resolve themselves.</>}
-                  body="Layer reads the ticket context, searches your server for relevant channels and roles, and answers common questions automatically. Staff only gets involved when actually needed."
-                  primaryHref="/invite"
-                  primaryLabel="Add to Discord"
-                  primaryIcon={<DiscordIcon size={16} />}
-                  visual={<TicketMock />}
-                />
+                <FeatureBlock reverse={true} heading={<>Verify real people.<br />Store nothing.</>} body="Layer confirms a user is human through an interactive challenge — without storing IPs, device fingerprints, or emails. Nothing to breach. Privacy by design." primaryHref="/invite" primaryLabel="Add to Discord" primaryIcon={<DiscordIcon size={16} />} visual={<VerificationMock />} />
               </div>
             </div>
-            {/* Wave out → F4 (#0d1a14) */}
-            <div style={{ lineHeight: 0, display: 'block', marginBottom: -1 }}>
-              <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
-                style={{ display: 'block', width: '100%', height: 80 }}>
-                <path d="M0,0 L0,20 C180,60 360,0 540,40 C720,80 900,0 1080,40 C1260,70 1380,20 1440,40 L1440,0 Z" fill="#14102a" />
-                <path d="M0,20 C180,60 360,0 540,40 C720,80 900,0 1080,40 C1260,70 1380,20 1440,40 L1440,80 L0,80 Z" fill="#0d1a14" />
-              </svg>
-            </div>
+            <svg viewBox="0 0 1440 140" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style={{ display: 'block', width: '100%', height: 140, marginBottom: -1 }}>
+              <path d="M0,0 C360,120 720,10 1080,70 C1280,110 1400,40 1440,60 L1440,140 L0,140 Z" fill="hsl(155,35%,8%)" opacity="0.4"/>
+              <path d="M0,30 C240,130 480,20 720,80 C960,130 1200,40 1440,80 L1440,140 L0,140 Z" fill="hsl(215,40%,8%)" opacity="0.6"/>
+              <path d="M0,65 C300,140 600,50 900,100 C1100,130 1300,60 1440,90 L1440,140 L0,140 Z" fill="hsl(215,40%,8%)"/>
+            </svg>
           </div>
 
-          {/* ── Feature 4 ── bg: #0d1a14, wave out → F5 color ── */}
-          <div className="relative" style={{ background: '#0d1a14' }}>
-            <div className="py-20 sm:py-28 px-4 sm:px-6 relative z-10">
+          {/* ── F5: Dashboard — sapphire ── */}
+          <div style={{ background: 'linear-gradient(180deg, hsl(215,40%,10%) 0%, hsl(215,35%,7%) 100%)', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ position: 'absolute', right: '-5%', top: '50%', transform: 'translateY(-50%)', width: 700, height: 700, borderRadius: '50%', background: 'radial-gradient(circle, rgba(59,130,246,0.18) 0%, transparent 65%)', pointerEvents: 'none', filter: 'blur(40px)' }} />
+            <div style={{ position: 'absolute', inset: 0, opacity: 0.03, backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")', backgroundSize: '200px 200px', pointerEvents: 'none' }} />
+            <div className="relative z-10 px-4 sm:px-6" style={{ paddingTop: 140, paddingBottom: 140 }}>
               <div className="max-w-[1160px] mx-auto">
-                <FeatureBlock
-                  reverse={true}
-                  heading={<>Verify real people.<br />Store nothing.</>}
-                  body="Layer confirms a user is human through an interactive challenge - without storing IPs, device fingerprints, or emails. Nothing to breach. Privacy by design."
-                  primaryHref="/invite"
-                  primaryLabel="Add to Discord"
-                  primaryIcon={<DiscordIcon size={16} />}
-                  visual={<VerificationMock />}
-                />
+                <FeatureBlock reverse={false} heading={<>Full control from<br />your browser.</>} body="Every Layer module has a dedicated settings page at uselayer.de. Toggle rules, configure thresholds, manage ticket categories — live, without a single bot command." primaryHref="/dashboard" primaryLabel="Open Dashboard" primaryIcon={<Shield className="w-4 h-4" />} visual={<DashboardMock switches={switches} toggleSwitch={(k) => toggleSwitch(k as keyof typeof switches)} />} />
               </div>
             </div>
-            {/* Wave out → F5 (#0e1624) */}
-            <div style={{ lineHeight: 0, display: 'block', marginBottom: -1 }}>
-              <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
-                style={{ display: 'block', width: '100%', height: 80 }}>
-                <path d="M0,0 L0,50 C300,10 600,70 900,30 C1150,0 1320,50 1440,30 L1440,0 Z" fill="#0d1a14" />
-                <path d="M0,50 C300,10 600,70 900,30 C1150,0 1320,50 1440,30 L1440,80 L0,80 Z" fill="#0e1624" />
-              </svg>
-            </div>
+            {/* Final wave out → base page bg #07080c */}
+            <svg viewBox="0 0 1440 140" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style={{ display: 'block', width: '100%', height: 140, marginBottom: -1 }}>
+              <path d="M0,0 C240,110 480,10 720,70 C960,130 1200,20 1440,70 L1440,140 L0,140 Z" fill="hsl(215,37%,8%)" opacity="0.4"/>
+              <path d="M0,40 C360,130 720,20 1080,80 C1280,120 1400,50 1440,80 L1440,140 L0,140 Z" fill="#07080c" opacity="0.6"/>
+              <path d="M0,70 C240,140 480,50 720,100 C960,140 1200,60 1440,90 L1440,140 L0,140 Z" fill="#07080c"/>
+            </svg>
           </div>
-
-          {/* ── Feature 5 ── bg: #0e1624, wave out → base bg (#07080c) ── */}
-          <div className="relative" style={{ background: '#0e1624' }}>
-            <div className="py-20 sm:py-28 px-4 sm:px-6 relative z-10">
-              <div className="max-w-[1160px] mx-auto">
-                <FeatureBlock
-                  reverse={false}
-                  heading={<>Full control from<br />your browser.</>}
-                  body="Every Layer module has a dedicated settings page at uselayer.de. Toggle rules, configure thresholds, manage ticket categories - live, without a single bot command."
-                  primaryHref="/dashboard"
-                  primaryLabel="Open Dashboard"
-                  primaryIcon={<Shield className="w-4 h-4" />}
-                  visual={<DashboardMock switches={switches} toggleSwitch={(k) => toggleSwitch(k as keyof typeof switches)} />}
-                />
-              </div>
-            </div>
-            {/* Wave out → base page bg (#07080c) */}
-            <div style={{ lineHeight: 0, display: 'block', marginBottom: -1 }}>
-              <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
-                style={{ display: 'block', width: '100%', height: 80 }}>
-                <path d="M0,0 L0,40 C240,80 480,0 720,50 C960,80 1200,10 1440,40 L1440,0 Z" fill="#0e1624" />
-                <path d="M0,40 C240,80 480,0 720,50 C960,80 1200,10 1440,40 L1440,80 L0,80 Z" fill="#07080c" />
-              </svg>
-            </div>
-          </div>
-
-          {/* Entry wave — base bg (#07080c) → F1 (#0e1f1d) — inserted before F1 visually via CSS order trick: handled by F1 block above having its own bg */}
 
         </section>
 
