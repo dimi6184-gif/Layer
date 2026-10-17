@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useSession, signOut } from 'next-auth/react';
 import {
   Shield,
   ShieldAlert,
@@ -125,6 +126,20 @@ function FeatureBlock({
 
 export default function HomePage() {
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
+
+  // Session for nav avatar
+  const { data: session } = useSession();
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const fn = (e: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
+        setUserMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', fn);
+    return () => document.removeEventListener('mousedown', fn);
+  }, []);
 
   // Page intro animation - one-shot on mount
   const [introGone, setIntroGone] = useState(false);
@@ -409,13 +424,77 @@ export default function HomePage() {
             {/* Right: Premium + Login */}
             <div className="flex items-center gap-3">
 
-              {/* Primary Login Button in Main Brand Color */}
-              <Link
-                href="/login"
-                className="inline-flex items-center justify-center px-4 py-2 rounded-[6px] text-xs sm:text-sm font-semibold text-white bg-[#1FA7BB] hover:bg-[#25bdd3] shadow-md shadow-[#1FA7BB]/20 hover:shadow-[#1FA7BB]/35 transition-all duration-150"
-              >
-                <span>Login with Discord</span>
-              </Link>
+              {/* Auth button — avatar when logged in, login button when not */}
+              {session?.user ? (
+                <div className="relative" ref={userMenuRef}>
+                  <button
+                    type="button"
+                    onClick={() => setUserMenuOpen(v => !v)}
+                    className="inline-flex items-center gap-2 px-2 py-1.5 rounded-[8px] hover:bg-white/[0.06] transition-colors"
+                  >
+                    {session.user.image ? (
+                      <img
+                        src={session.user.image}
+                        alt={session.user.name || ''}
+                        className="w-7 h-7 rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-7 h-7 rounded-full bg-[#1FA7BB]/20 flex items-center justify-center text-xs font-bold text-[#1FA7BB]">
+                        {(session.user.name || 'U')[0].toUpperCase()}
+                      </div>
+                    )}
+                    <span className="hidden sm:block text-sm font-medium text-[#f1f3f9] max-w-[100px] truncate">
+                      {session.user.name}
+                    </span>
+                    <ChevronDown className={`w-3.5 h-3.5 text-[#94a3b8] transition-transform duration-200 ${userMenuOpen ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  {userMenuOpen && (
+                    <div className="absolute right-0 top-full mt-2 w-56 rounded-xl bg-[#0f1117]/98 backdrop-blur-xl border border-white/[0.09] shadow-2xl z-50 overflow-hidden">
+                      {/* User info header */}
+                      <div className="flex items-center gap-3 px-4 py-3 border-b border-white/[0.07]">
+                        {session.user.image ? (
+                          <img src={session.user.image} alt="" className="w-9 h-9 rounded-full object-cover flex-shrink-0" />
+                        ) : (
+                          <div className="w-9 h-9 rounded-full bg-[#1FA7BB]/20 flex items-center justify-center text-sm font-bold text-[#1FA7BB] flex-shrink-0">
+                            {(session.user.name || 'U')[0].toUpperCase()}
+                          </div>
+                        )}
+                        <div className="min-w-0">
+                          <div className="text-sm font-semibold text-white truncate">{session.user.name}</div>
+                          <div className="text-[11px] text-[#64748b] truncate">{session.user.email}</div>
+                        </div>
+                      </div>
+                      {/* Menu items */}
+                      <div className="p-1.5 flex flex-col gap-0.5">
+                        <Link
+                          href="/dashboard"
+                          onClick={() => setUserMenuOpen(false)}
+                          className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-[#cbd5e1] hover:bg-white/[0.06] hover:text-white transition-colors"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                          Dashboard
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={() => { setUserMenuOpen(false); signOut({ callbackUrl: '/' }); }}
+                          className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-[#cbd5e1] hover:bg-white/[0.06] hover:text-white transition-colors w-full text-left"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                          Sign out
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Link
+                  href="/login"
+                  className="inline-flex items-center justify-center px-4 py-2 rounded-[6px] text-xs sm:text-sm font-semibold text-white bg-[#1FA7BB] hover:bg-[#25bdd3] shadow-md shadow-[#1FA7BB]/20 hover:shadow-[#1FA7BB]/35 transition-all duration-150"
+                >
+                  <span>Login with Discord</span>
+                </Link>
+              )}
 
               {/* Mobile Hamburger Toggle */}
               <button
