@@ -703,19 +703,8 @@ export default function HomePage() {
             </svg>
           </div>
 
-        {/* --- Wave divider INTO features --- */}
-        <div className="relative z-10 -mb-1" style={{ lineHeight: 0 }}>
-          <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
-            className="w-full" style={{ display: 'block', height: 80 }}>
-            <path
-              d="M0,40 C180,80 360,0 540,40 C720,80 900,0 1080,40 C1260,80 1380,20 1440,40 L1440,80 L0,80 Z"
-              fill="#0c0f1a"
-            />
-          </svg>
-        </div>
-
         {/* --- FEATURES: ZIG-ZAG SECTION ---------------------------- */}
-        <section id="features" className="relative z-10 py-20 sm:py-28 px-4 sm:px-6" style={{ background: '#0c0f1a' }}>
+        <section id="features" className="relative z-10 py-20 sm:py-28 px-4 sm:px-6">
 
           {/* Section eyebrow */}
           <div className="max-w-[1160px] mx-auto text-center mb-20 sm:mb-28">
@@ -725,13 +714,13 @@ export default function HomePage() {
             </h2>
           </div>
 
-          {/* ── Feature 1 — Teal wave bg (scam detection) ── */}
+          {/* ── Feature 1 — teal wave ── */}
           <div className="relative overflow-hidden py-20 sm:py-28 -mx-4 sm:-mx-6 px-4 sm:px-6 mb-2">
             <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
               <svg viewBox="0 0 1440 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
                 style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
                 <path d="M0,120 C360,220 720,20 1080,140 C1260,200 1380,80 1440,120 L1440,400 L0,400 Z"
-                  fill="rgba(31,167,187,0.06)" />
+                  fill="rgba(31,167,187,0.07)" />
                 <path d="M0,160 C300,60 600,240 900,160 C1150,100 1320,200 1440,160 L1440,400 L0,400 Z"
                   fill="rgba(31,167,187,0.04)" />
               </svg>
@@ -749,13 +738,13 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* ── Feature 2 — Red/danger wave bg (ban evasion) ── */}
+          {/* ── Feature 2 — red wave ── */}
           <div className="relative overflow-hidden py-20 sm:py-28 -mx-4 sm:-mx-6 px-4 sm:px-6 mb-2">
             <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
               <svg viewBox="0 0 1440 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
                 style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
                 <path d="M0,80 C480,200 960,0 1440,100 L1440,400 L0,400 Z"
-                  fill="rgba(239,68,68,0.05)" />
+                  fill="rgba(239,68,68,0.06)" />
                 <path d="M0,140 C240,40 480,220 720,140 C960,60 1200,180 1440,120 L1440,400 L0,400 Z"
                   fill="rgba(239,68,68,0.03)" />
               </svg>
@@ -773,13 +762,13 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* ── Feature 3 — Purple wave bg (AI tickets) ── */}
+          {/* ── Feature 3 — purple wave ── */}
           <div className="relative overflow-hidden py-20 sm:py-28 -mx-4 sm:-mx-6 px-4 sm:px-6 mb-2">
             <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
               <svg viewBox="0 0 1440 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
                 style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
                 <path d="M0,100 C300,0 600,200 900,100 C1150,20 1320,160 1440,80 L1440,400 L0,400 Z"
-                  fill="rgba(167,139,250,0.06)" />
+                  fill="rgba(167,139,250,0.07)" />
                 <path d="M0,180 C400,280 800,80 1200,180 C1340,220 1400,140 1440,160 L1440,400 L0,400 Z"
                   fill="rgba(167,139,250,0.04)" />
               </svg>
@@ -797,13 +786,13 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* ── Feature 4 — Green wave bg (verification/privacy) ── */}
+          {/* ── Feature 4 — green wave ── */}
           <div className="relative overflow-hidden py-20 sm:py-28 -mx-4 sm:-mx-6 px-4 sm:px-6 mb-2">
             <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
               <svg viewBox="0 0 1440 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
                 style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
                 <path d="M0,60 C360,180 720,0 1080,120 C1280,180 1380,60 1440,100 L1440,400 L0,400 Z"
-                  fill="rgba(61,220,151,0.05)" />
+                  fill="rgba(61,220,151,0.06)" />
                 <path d="M0,160 C200,80 400,240 600,160 C800,80 1100,220 1440,140 L1440,400 L0,400 Z"
                   fill="rgba(61,220,151,0.03)" />
               </svg>
@@ -821,13 +810,13 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* ── Feature 5 — Blue wave bg (dashboard) ── */}
+          {/* ── Feature 5 — blue wave ── */}
           <div className="relative overflow-hidden py-20 sm:py-28 -mx-4 sm:-mx-6 px-4 sm:px-6">
             <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
               <svg viewBox="0 0 1440 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
                 style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
                 <path d="M0,140 C480,40 960,240 1440,100 L1440,400 L0,400 Z"
-                  fill="rgba(56,189,248,0.05)" />
+                  fill="rgba(56,189,248,0.06)" />
                 <path d="M0,200 C300,100 600,280 900,180 C1100,120 1300,220 1440,160 L1440,400 L0,400 Z"
                   fill="rgba(56,189,248,0.03)" />
               </svg>
@@ -846,17 +835,6 @@ export default function HomePage() {
           </div>
 
         </section>
-
-        {/* --- Wave divider OUT of features --- */}
-        <div className="relative z-10 -mt-1" style={{ lineHeight: 0, background: '#07080c' }}>
-          <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
-            className="w-full" style={{ display: 'block', height: 80 }}>
-            <path
-              d="M0,40 C200,0 400,80 600,40 C800,0 1000,80 1200,40 C1320,20 1400,60 1440,40 L1440,0 L0,0 Z"
-              fill="#0c0f1a"
-            />
-          </svg>
-        </div>
 
         {/* --- 7. FAQ -------------------------------------------- */}
         <section id="faq" className="relative z-10 py-24 px-6">
