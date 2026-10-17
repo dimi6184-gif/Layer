@@ -747,6 +747,25 @@ export default function HomePage() {
               visual={<BanEvasionMock />}
             />
 
+          </div>
+
+          {/* --- Inner wave 1 — teal accent stripe --- */}
+          <div className="relative my-16" style={{ lineHeight: 0 }}>
+            <svg viewBox="0 0 1440 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
+              style={{ display: 'block', width: '100%', height: 100 }}>
+              <path
+                d="M0,50 C240,100 480,0 720,50 C960,100 1200,0 1440,50 L1440,100 L0,100 Z"
+                fill="rgba(31,167,187,0.07)"
+              />
+              <path
+                d="M0,60 C200,20 400,90 600,60 C800,30 1000,80 1200,60 C1320,48 1400,70 1440,60 L1440,100 L0,100 Z"
+                fill="rgba(31,167,187,0.04)"
+              />
+            </svg>
+          </div>
+
+          <div className="max-w-[1160px] mx-auto space-y-28 sm:space-y-36">
+
             <FeatureBlock
               reverse={false}
               heading={<>Support tickets that<br />resolve themselves.</>}
@@ -766,6 +785,25 @@ export default function HomePage() {
               primaryIcon={<DiscordIcon size={16} />}
               visual={<VerificationMock />}
             />
+
+          </div>
+
+          {/* --- Inner wave 2 — slightly different curve --- */}
+          <div className="relative my-16" style={{ lineHeight: 0 }}>
+            <svg viewBox="0 0 1440 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
+              style={{ display: 'block', width: '100%', height: 100 }}>
+              <path
+                d="M0,30 C300,90 600,10 900,60 C1100,90 1300,20 1440,50 L1440,0 L0,0 Z"
+                fill="rgba(31,167,187,0.06)"
+              />
+              <path
+                d="M0,20 C360,80 720,0 1080,50 C1260,75 1380,30 1440,40 L1440,0 L0,0 Z"
+                fill="rgba(31,167,187,0.03)"
+              />
+            </svg>
+          </div>
+
+          <div className="max-w-[1160px] mx-auto space-y-28 sm:space-y-36">
 
             <FeatureBlock
               reverse={false}
