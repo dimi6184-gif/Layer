@@ -670,7 +670,6 @@ export default function HomePage() {
               <rect x="0" y="128" width="1440" height="12" fill="#07080c" />
             </svg>
           </div>
-        </div>
 
         {/* --- FEATURES: ZIG-ZAG SECTION ---------------------------- */}
         <section id="features" className="relative z-10 bg-[#07080c] py-20 sm:py-28 px-4 sm:px-6">

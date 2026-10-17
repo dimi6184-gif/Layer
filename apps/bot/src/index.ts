@@ -168,6 +168,16 @@ client.once(Events.ClientReady, async (c) => {
   
   // Rotate status every 30 seconds
   setInterval(updateStatus, 30000);
+
+  // ─── Pulsetic heartbeat — ping every 4 minutes so the status page shows online ───
+  const PULSETIC_URL = 'https://api.pulsetic.com/heartbeats/request/56ee9ad9-2eef-4bfc-972f-4df5bb048641';
+  const pingPulsetic = () => {
+    fetch(PULSETIC_URL).catch(() => {}); // fire-and-forget, never crash on network error
+  };
+  pingPulsetic(); // ping immediately on startup
+  setInterval(pingPulsetic, 4 * 60 * 1000); // then every 4 min (Pulsetic expects ≤5 min)
+  console.log(`   Pulsetic Heartbeat: Started (every 4 minutes)`);
+
   
   await setupPlayer(client);
   console.log(`   Music Player: Initialized`);
