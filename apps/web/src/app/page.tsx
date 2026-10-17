@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
@@ -37,7 +37,7 @@ import {
 } from 'lucide-react';
 import { ScamDetectionMock, BanEvasionMock, TicketMock, VerificationMock, DashboardMock } from './DiscordMock';
 
-/* ─── Discord Gamepad SVG Icon ───────────────────────────────── */
+/* --- Discord Gamepad SVG Icon --------------------------------- */
 function DiscordIcon({ size = 18, className = '' }: { size?: number; className?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -46,7 +46,7 @@ function DiscordIcon({ size = 18, className = '' }: { size?: number; className?:
   );
 }
 
-/* ─── FeatureBlock: reusable zig-zag block ────────────────────── */
+/* --- FeatureBlock: reusable zig-zag block ---------------------- */
 interface FeatureBlockProps {
   reverse: boolean;
   heading: React.ReactNode;
@@ -84,7 +84,7 @@ function FeatureBlock({
 
   return (
     <div ref={ref} className="feat-block grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-      {/* Visual column — mobile: always first; desktop: alternates via order */}
+      {/* Visual column - mobile: always first; desktop: alternates via order */}
       <div className={`order-1 ${reverse ? 'lg:order-2' : 'lg:order-1'}`}>
         {visual}
       </div>
@@ -126,7 +126,7 @@ function FeatureBlock({
 export default function HomePage() {
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
 
-  // Page intro animation — one-shot on mount
+  // Page intro animation - one-shot on mount
   const [introGone, setIntroGone] = useState(false);
   useEffect(() => {
     // After 1.4s start fade-out, remove after 1.7s
@@ -191,7 +191,7 @@ export default function HomePage() {
   return (
     <div suppressHydrationWarning className="min-h-screen bg-[#07080c] text-[#f1f3f9] font-sans selection:bg-[#1FA7BB] selection:text-white overflow-x-hidden relative">
 
-        {/* ─── Page intro animation ─────────────────────────────── */}
+        {/* --- Page intro animation ------------------------------- */}
         {!introGone && (
           <div style={{
             position: 'fixed', inset: 0, zIndex: 999,
@@ -231,7 +231,7 @@ export default function HomePage() {
           </div>
         )}
 
-        {/* ─── 1. Header / Sticky Navbar (Picture 1 style) ──────── */}
+        {/* --- 1. Header / Sticky Navbar (Picture 1 style) -------- */}
         <header
           ref={navRef}
           className="sticky top-0 z-50 w-full bg-[#0c0e17]/95 backdrop-blur-md border-b border-white/[0.08] transition-colors"
@@ -252,7 +252,7 @@ export default function HomePage() {
                 <span className="font-extrabold text-xl sm:text-2xl tracking-tight text-white">Layer</span>
               </Link>
 
-              {/* Desktop nav — Features, Resources, Support with slide transition */}
+              {/* Desktop nav - Features, Resources, Support with slide transition */}
               <nav className="hidden md:flex items-center gap-2">
 
                 {/* Each button has its own relative container + the dropdown lives in Features button */}
@@ -290,7 +290,7 @@ export default function HomePage() {
                         width: '200%',
                       }}>
 
-                        {/* ── Features panel ── */}
+                        {/* --- FEATURES: ZIG-ZAG SECTION ---------------------------- */}
                         <div style={{ width: '50%', flexShrink: 0 }}>
                           <div className="p-3 grid grid-cols-2 gap-1">
                             <div className="space-y-0.5">
@@ -337,7 +337,7 @@ export default function HomePage() {
                           </div>
                         </div>
 
-                        {/* ── Resources panel ── */}
+                        {/* -- Resources panel -- */}
                         <div style={{ width: '50%', flexShrink: 0 }}>
                           <div className="p-3 grid grid-cols-2 gap-1">
                             <div className="space-y-0.5">
@@ -389,7 +389,7 @@ export default function HomePage() {
                   )}
                 </div>
 
-                {/* Resources button — triggers same dropdown, switches panel */}
+                {/* Resources button - triggers same dropdown, switches panel */}
                 <div className="relative">
                   <button
                     type="button"
@@ -406,7 +406,7 @@ export default function HomePage() {
                   </button>
                 </div>
 
-                {/* Support — plain link */}
+                {/* Support - plain link */}
                 <a
                   href="https://discord.gg/W2XjhvBbtn"
                   target="_blank"
@@ -510,7 +510,7 @@ export default function HomePage() {
           )}
         </header>
 
-        {/* ─── 2. HERO CONTAINER (Mood Dark + Dusk Gradient + Pine Forest Edge) ─── */}
+        {/* --- 2. HERO CONTAINER (Mood Dark + Dusk Gradient + Pine Forest Edge) --- */}
         <div
           className="relative overflow-hidden"
           style={{
@@ -533,7 +533,7 @@ export default function HomePage() {
               <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-[#1FA7BB]/20 text-[#1FA7BB] border border-[#1FA7BB]/35">
                 Early Access
               </span>
-              <span className="text-xs sm:text-sm text-[#cbd5e1]">We&apos;re launching soon — be among the first servers.</span>
+              <span className="text-xs sm:text-sm text-[#cbd5e1]">We&apos;re launching soon - be among the first servers.</span>
             </div>
           </div>
 
@@ -553,7 +553,7 @@ export default function HomePage() {
                 {/* Sub */}
                 <p className="text-base sm:text-[17px] text-[#94a3b8] leading-relaxed max-w-lg">
                   Layer protects your Discord server with AI scam detection,
-                  ban evasion tracking, and smart ticket routing —
+                  ban evasion tracking, and smart ticket routing -
                   zero data stored. Free to start, up in 60 seconds.
                 </p>
 
@@ -585,7 +585,92 @@ export default function HomePage() {
             </div>
           </section>
 
-          <div className="absolute bottom-0 left-0 right-0 w-full overflow-hidden pointer-events-none z-10 leading-none">
+          {/* --- ILLUSTRATION - behind pine spikes, right edge --- */}
+          <div className="absolute bottom-0 right-0 pointer-events-none select-none hidden lg:block"
+            style={{ width: '55vw', maxWidth: 980, zIndex: 5 }}>
+            <svg viewBox="0 0 640 450" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
+              <defs>
+                <radialGradient id="mG" cx="62%" cy="65%" r="48%">
+                  <stop offset="0%" stopColor="#fff8db" stopOpacity="0.45" />
+                  <stop offset="35%" stopColor="#ffd880" stopOpacity="0.2" />
+                  <stop offset="100%" stopColor="#ffd880" stopOpacity="0" />
+                </radialGradient>
+                <linearGradient id="cG" x1="20%" y1="0%" x2="90%" y2="100%">
+                  <stop offset="0%" stopColor="#252b3d" />
+                  <stop offset="35%" stopColor="#1a1e2b" />
+                  <stop offset="100%" stopColor="#0e1017" />
+                </linearGradient>
+              </defs>
+              {/* Moon */}
+              <circle cx="410" cy="350" r="180" fill="url(#mG)" />
+              <circle cx="410" cy="355" r="75" fill="#fff7d6" opacity="0.9" />
+              {/* Cliff */}
+              <path d="M 370 450 L 388 322 Q 402 316 430 318 L 640 318 L 640 450 Z" fill="url(#cG)" />
+              <path d="M 388 322 Q 410 316 440 318 L 640 318 L 640 326 Q 440 326 405 328 Z" fill="#2e3549" />
+              <path d="M 400 340 L 420 375 L 415 410 L 435 450 M 460 330 L 475 365 M 540 330 L 555 380 L 570 450" stroke="#141822" strokeWidth="3" strokeLinecap="round" />
+              {/* Vines */}
+              <path d="M 394 322 Q 380 360 395 395 Q 405 425 398 450" stroke="#166534" strokeWidth="3.5" fill="none" strokeLinecap="round" />
+              <ellipse cx="384" cy="340" rx="7" ry="4" fill="#22c55e" transform="rotate(-30 384 340)" />
+              <ellipse cx="396" cy="360" rx="8" ry="4.5" fill="#16a34a" transform="rotate(20 396 360)" />
+              <ellipse cx="388" cy="380" rx="7" ry="4" fill="#4ade80" transform="rotate(-40 388 380)" />
+              <ellipse cx="403" cy="405" rx="7.5" ry="4" fill="#22c55e" transform="rotate(15 403 405)" />
+              <path d="M 590 322 Q 605 350 595 385 Q 588 415 600 450" stroke="#166534" strokeWidth="3" fill="none" />
+              <ellipse cx="602" cy="345" rx="7" ry="4" fill="#22c55e" transform="rotate(35 602 345)" />
+              <ellipse cx="590" cy="370" rx="7.5" ry="4" fill="#16a34a" transform="rotate(-20 590 370)" />
+              {/* Mascot 1 - Viking */}
+              <g transform="translate(408,280)">
+                <ellipse cx="0" cy="38" rx="16" ry="4" fill="#000" opacity="0.4"/>
+                <polygon points="0,-24 21,-12 21,12 0,24 -21,12 -21,-12" fill="#1a2233" stroke="#1FA7BB" strokeWidth="1.5"/>
+                <polygon points="0,-16 13,-8 13,8 0,16 -13,8 -13,-8" fill="#0d1117"/>
+                <circle cx="-6" cy="2" r="2.5" fill="#1FA7BB"/><circle cx="6" cy="2" r="2.5" fill="#1FA7BB"/>
+                <circle cx="-5" cy="1" r="1" fill="#e0f7fa"/><circle cx="7" cy="1" r="1" fill="#e0f7fa"/>
+                <path d="M -3 10 Q 0 14 3 10" stroke="#1FA7BB" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+                <path d="M -21 -10 Q -34 -16 -28 -26 Q -20 -18 -14 -10 Z" fill="#d1d5db" stroke="#6b7280" strokeWidth="1"/>
+                <path d="M 21 -10 Q 34 -16 28 -26 Q 20 -18 14 -10 Z" fill="#d1d5db" stroke="#6b7280" strokeWidth="1"/>
+                <ellipse cx="-7" cy="35" rx="5" ry="3" fill="#78350f"/><ellipse cx="7" cy="35" rx="5" ry="3" fill="#78350f"/>
+              </g>
+              {/* Mascot 2 - Straw Hat */}
+              <g transform="translate(468,276)">
+                <ellipse cx="0" cy="42" rx="17" ry="4" fill="#000" opacity="0.4"/>
+                <polygon points="0,-26 22,-13 22,13 0,26 -22,13 -22,-13" fill="#1a2233" stroke="#1FA7BB" strokeWidth="1.5"/>
+                <polygon points="0,-17 14,-8 14,8 0,17 -14,8 -14,-8" fill="#0d1117"/>
+                <circle cx="-6" cy="2" r="2.5" fill="#1FA7BB"/><circle cx="6" cy="2" r="2.5" fill="#1FA7BB"/>
+                <circle cx="-5" cy="1" r="1" fill="#e0f7fa"/><circle cx="7" cy="1" r="1" fill="#e0f7fa"/>
+                <path d="M -4 10 Q 0 15 4 10" stroke="#1FA7BB" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+                <ellipse cx="0" cy="-24" rx="28" ry="6" fill="#fef08a" stroke="#a16207" strokeWidth="1"/>
+                <path d="M -14 -24 Q 0 -38 14 -24 Z" fill="#fde047" stroke="#a16207" strokeWidth="1"/>
+                <rect x="-14" y="-26" width="28" height="3" fill="#dc2626"/>
+                <ellipse cx="-7" cy="38" rx="6" ry="3.5" fill="#854d0e"/><ellipse cx="7" cy="38" rx="6" ry="3.5" fill="#854d0e"/>
+              </g>
+              {/* Mascot 3 - Toga */}
+              <g transform="translate(534,252)">
+                <ellipse cx="0" cy="66" rx="14" ry="3" fill="#000" opacity="0.3"/>
+                <polygon points="0,-24 21,-12 21,12 0,24 -21,12 -21,-12" fill="#1a2233" stroke="#1FA7BB" strokeWidth="1.5"/>
+                <polygon points="0,-16 13,-8 13,8 0,16 -13,8 -13,-8" fill="#0d1117"/>
+                <path d="M -8 2 Q -5 -2 -2 2" stroke="#1FA7BB" strokeWidth="2" strokeLinecap="round" fill="none"/>
+                <circle cx="6" cy="2" r="2.5" fill="#1FA7BB"/><circle cx="7" cy="1" r="1" fill="#e0f7fa"/>
+                <path d="M -4 10 Q 0 16 4 10 Z" fill="#1FA7BB"/>
+                <circle cx="-10" cy="-20" r="2" fill="#eab308"/><circle cx="-5" cy="-23" r="2" fill="#eab308"/>
+                <circle cx="0" cy="-24" r="2.5" fill="#fde047"/><circle cx="5" cy="-23" r="2" fill="#eab308"/><circle cx="10" cy="-20" r="2" fill="#eab308"/>
+                <path d="M -21 16 Q 0 30 21 16 L 16 32 Q 0 35 -16 32 Z" fill="#f8fafc" opacity="0.9"/>
+                <ellipse cx="-8" cy="38" rx="5" ry="3" fill="#eab308"/><ellipse cx="8" cy="36" rx="5" ry="3" fill="#eab308"/>
+              </g>
+              {/* Mascot 4 - King */}
+              <g transform="translate(594,274)">
+                <ellipse cx="0" cy="44" rx="18" ry="4" fill="#000" opacity="0.4"/>
+                <path d="M -22 16 Q -30 42 -18 46 L 22 46 Q 32 42 22 16 Z" fill="#dc2626" stroke="#991b1b" strokeWidth="1"/>
+                <polygon points="0,-26 23,-13 23,13 0,26 -23,13 -23,-13" fill="#1a2233" stroke="#1FA7BB" strokeWidth="2"/>
+                <polygon points="0,-17 15,-8 15,8 0,17 -15,8 -15,-8" fill="#0d1117"/>
+                <circle cx="-7" cy="2" r="2.8" fill="#1FA7BB"/><circle cx="7" cy="2" r="2.8" fill="#1FA7BB"/>
+                <circle cx="-6" cy="1" r="1.1" fill="#e0f7fa"/><circle cx="8" cy="1" r="1.1" fill="#e0f7fa"/>
+                <path d="M -12 12 Q 0 20 12 12 Q 10 24 0 26 Q -10 24 -12 12 Z" fill="#78350f"/>
+                <path d="M -16 -13 L -18 -26 L -8 -19 L 0 -30 L 8 -19 L 18 -26 L 16 -13 Z" fill="#fde047" stroke="#b45309" strokeWidth="1"/>
+                <circle cx="-14" cy="-25" r="2" fill="#ef4444"/><circle cx="0" cy="-29" r="2.5" fill="#ef4444"/><circle cx="14" cy="-25" r="2" fill="#ef4444"/>
+              </g>
+            </svg>
+          </div>
+
+          {/* --- Pine spikes --- */}
             <svg viewBox="0 0 1440 140" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-[75px] sm:h-[105px] md:h-[135px] object-cover" preserveAspectRatio="none">
               {/* Back Layer */}
               <path d="M 0 140 L 0 85 L 18 52 L 28 75 L 42 45 L 56 72 L 72 38 L 86 68 L 105 48 L 120 78 L 140 40 L 158 70 L 180 50 L 202 78 L 225 36 L 244 68 L 268 44 L 290 74 L 315 40 L 336 72 L 360 48 L 382 76 L 405 35 L 428 68 L 452 42 L 476 74 L 500 48 L 522 75 L 546 38 L 568 70 L 592 45 L 615 76 L 638 38 L 660 70 L 685 45 L 710 75 L 734 36 L 758 70 L 782 45 L 805 76 L 828 38 L 850 70 L 875 42 L 898 74 L 922 45 L 945 76 L 968 38 L 990 70 L 1015 45 L 1038 75 L 1062 38 L 1085 70 L 1108 45 L 1132 76 L 1155 38 L 1178 70 L 1202 45 L 1225 76 L 1250 40 L 1272 72 L 1295 45 L 1318 75 L 1342 38 L 1365 70 L 1390 45 L 1414 74 L 1440 50 L 1440 140 Z" fill="#1c162b" opacity="0.85" />
@@ -601,10 +686,10 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* ─── FEATURES: ZIG-ZAG SECTION ──────────────────────────── */}
+        {/* --- FEATURES: ZIG-ZAG SECTION ---------------------------- */}
         <section id="features" className="relative z-10 bg-[#07080c] py-20 sm:py-28 px-4 sm:px-6">
 
-          {/* Gradient fade from #07080c at top — softens the pine forest edge */}
+          {/* Gradient fade from #07080c at top - softens the pine forest edge */}
           <div className="absolute top-0 left-0 right-0 h-32 pointer-events-none"
             style={{ background: 'linear-gradient(to bottom, #07080c 0%, transparent 100%)' }} />
 
@@ -621,7 +706,7 @@ export default function HomePage() {
             <FeatureBlock
               reverse={false}
               heading={<>AI that knows scams.<br />You don&apos;t have to.</>}
-              body="No blocklists to maintain. No dedicated honeypot channel. Layer's AI understands context — it knows what a scam looks like, even inside an image, without you ever updating a single rule."
+              body="No blocklists to maintain. No dedicated honeypot channel. Layer's AI understands context - it knows what a scam looks like, even inside an image, without you ever updating a single rule."
               primaryHref="/invite"
               primaryLabel="Add to Discord"
               primaryIcon={<DiscordIcon size={16} />}
@@ -631,7 +716,7 @@ export default function HomePage() {
             <FeatureBlock
               reverse={true}
               heading={<>Banned users<br />can&apos;t come back.</>}
-              body="When a banned user creates a new account and rejoins, Layer detects them through behavioral and account pattern matching — and bans the new account automatically."
+              body="When a banned user creates a new account and rejoins, Layer detects them through behavioral and account pattern matching - and bans the new account automatically."
               primaryHref="/invite"
               primaryLabel="Add to Discord"
               primaryIcon={<DiscordIcon size={16} />}
@@ -651,7 +736,7 @@ export default function HomePage() {
             <FeatureBlock
               reverse={true}
               heading={<>Verify real people.<br />Store nothing.</>}
-              body="Layer confirms a user is human through an interactive challenge — without storing IPs, device fingerprints, or emails. Nothing to breach. Privacy by design."
+              body="Layer confirms a user is human through an interactive challenge - without storing IPs, device fingerprints, or emails. Nothing to breach. Privacy by design."
               primaryHref="/invite"
               primaryLabel="Add to Discord"
               primaryIcon={<DiscordIcon size={16} />}
@@ -661,7 +746,7 @@ export default function HomePage() {
             <FeatureBlock
               reverse={false}
               heading={<>Full control from<br />your browser.</>}
-              body="Every Layer module has a dedicated settings page at uselayer.de. Toggle rules, configure thresholds, manage ticket categories — live, without a single bot command."
+              body="Every Layer module has a dedicated settings page at uselayer.de. Toggle rules, configure thresholds, manage ticket categories - live, without a single bot command."
               primaryHref="/dashboard"
               primaryLabel="Open Dashboard"
               primaryIcon={<Shield className="w-4 h-4" />}
@@ -674,11 +759,11 @@ export default function HomePage() {
 
 
 
-        {/* ─── 7. FAQ ──────────────────────────────────────────── */}
+        {/* --- 7. FAQ -------------------------------------------- */}
         <section id="faq" className="relative z-10 py-24 px-6">
           <div className="max-w-[1100px] mx-auto grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-16 lg:gap-24 items-start">
 
-            {/* Left — title */}
+            {/* Left - title */}
             <div className="lg:sticky lg:top-28">
               <h2 className="text-4xl sm:text-5xl font-extrabold text-[#f1f3f9] tracking-tight leading-[1.1]">
                 Frequently<br />asked <span className="text-[#1FA7BB]">questions</span>
@@ -692,7 +777,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* Right — accordion */}
+            {/* Right - accordion */}
             <div>
               {faqs.map((faq, idx) => {
                 const isOpen = faqOpen === idx;
@@ -729,7 +814,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ─── 8. Bottom CTA Banner (Protector Exact .cta Style) ─── */}
+        {/* --- 8. Bottom CTA Banner (Protector Exact .cta Style) --- */}
         <section className="relative z-10 py-16 px-6 max-w-6xl mx-auto">
           <div className="rounded-2xl p-8 sm:p-14 bg-gradient-to-b from-[#141722] to-[#0f1118] border border-white/[0.11] text-center space-y-4 shadow-2xl relative overflow-hidden">
             <div className="relative z-10 space-y-4 max-w-xl mx-auto">
@@ -760,10 +845,10 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ─── 9. Footer ──────────────────────────────────────────── */}
+        {/* --- 9. Footer -------------------------------------------- */}
         <footer className="relative z-10 bg-[#07080c]">
 
-          {/* Jagged pine-forest top edge — same motif as the hero section */}
+          {/* Jagged pine-forest top edge - same motif as the hero section */}
           <div className="w-full overflow-hidden leading-none" style={{ height: 48 }}>
             <svg viewBox="0 0 1440 48" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
               className="w-full h-full" style={{ display: 'block' }}>
@@ -823,7 +908,7 @@ export default function HomePage() {
                 </div>
                 <p className="text-[13px] text-[#4d5467] leading-relaxed">
                   Layer is the Discord bot that automatically catches scams, bans evaders,
-                  routes tickets with AI, and keeps your community clean — with zero data stored.
+                  routes tickets with AI, and keeps your community clean - with zero data stored.
                 </p>
                 <p className="text-[12px] text-[#2e3347] mt-3">Not affiliated with Discord, Inc.</p>
               </div>
@@ -836,6 +921,7 @@ export default function HomePage() {
                     ['Dashboard', '/dashboard'],
                     ['Features', '#features'],
                     ['Pricing', '/premium'],
+                    ['Team', '/team'],
                     ['Support', 'https://discord.gg/W2XjhvBbtn'],
                   ].map(([label, href]) => (
                     <Link key={label} href={href}
