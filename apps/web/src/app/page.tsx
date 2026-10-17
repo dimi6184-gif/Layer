@@ -605,7 +605,7 @@ export default function HomePage() {
 
           {/* --- ILLUSTRATION - right edge, sitting above pine spikes --- */}
           <div className="absolute right-0 pointer-events-none select-none hidden lg:block"
-            style={{ width: '72vw', maxWidth: 1200, zIndex: 15, bottom: '60px' }}>
+            style={{ width: '72vw', maxWidth: 1200, zIndex: 15, bottom: '200px' }}>
             <svg viewBox="0 0 640 450" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
               <defs>
                 <radialGradient id="mG" cx="62%" cy="65%" r="48%">
