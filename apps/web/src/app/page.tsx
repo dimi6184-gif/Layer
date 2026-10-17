@@ -706,14 +706,70 @@ export default function HomePage() {
         {/* --- FEATURES: ZIG-ZAG SECTION ---------------------------- */}
         <section id="features" className="relative z-10" style={{ padding: 0 }}>
 
-          {/* Section eyebrow — sits on base bg */}
-          <div className="py-20 sm:py-28 px-4 sm:px-6">
-            <div className="max-w-[1160px] mx-auto text-center">
-              <p className="p-kicker justify-center mb-3">What Layer does</p>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          {/* Section eyebrow — gradient bridge from hero → first feature */}
+          <div style={{ position: 'relative', overflow: 'hidden' }}>
+            {/* ── CHANGE COLORS HERE ─────────────────────────────────────
+                --color-top:    matches the hero/pine section above (#07080c)
+                --color-mid:    neutral dark midpoint
+                --color-bot:    matches F1 first feature section: hsl(185,40%,9%)
+                --glow-teal:    brand teal radial glow
+                --glow-purple:  blends with the purple from jagged edge above
+            ─────────────────────────────────────────────────────────── */}
+
+            {/* Vertical gradient: hero bg → dark mid → F1 start */}
+            <div style={{
+              position: 'absolute', inset: 0, pointerEvents: 'none',
+              background: 'linear-gradient(180deg, #07080c 0%, #0a1218 45%, hsl(185,40%,9%) 100%)',
+            }} />
+
+            {/* Teal radial glow behind heading */}
+            <div style={{
+              position: 'absolute', inset: 0, pointerEvents: 'none',
+              background: 'radial-gradient(600px circle at 50% 55%, rgba(34,184,207,0.14) 0%, transparent 70%)',
+            }} />
+
+            {/* Purple glow at top edge — blends with jagged section above */}
+            <div style={{
+              position: 'absolute', top: 0, left: 0, right: 0, height: '60%', pointerEvents: 'none',
+              background: 'radial-gradient(800px circle at 50% 0%, rgba(139,92,246,0.10) 0%, transparent 70%)',
+            }} />
+
+            {/* Subtle noise grain — same as feature sections */}
+            <div style={{
+              position: 'absolute', inset: 0, opacity: 0.03, pointerEvents: 'none',
+              backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")',
+              backgroundSize: '200px 200px',
+            }} />
+
+            {/* Content */}
+            <div className="max-w-[1160px] mx-auto text-center relative z-10"
+              style={{ paddingTop: 120, paddingBottom: 120, paddingLeft: '1rem', paddingRight: '1rem' }}>
+              <p style={{
+                display: 'inline-block',
+                fontSize: 11, fontWeight: 800,
+                color: '#1FA7BB',
+                letterSpacing: '0.2em', textTransform: 'uppercase',
+                marginBottom: 16,
+              }}>
+                What Layer does
+              </p>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight" style={{
+                textShadow: '0 0 40px rgba(34,184,207,0.25)',
+              }}>
                 Every attack already has an answer.
               </h2>
             </div>
+
+            {/* Wave out → F1 start color: hsl(185,40%,9%) — no gap */}
+            <svg viewBox="0 0 1440 140" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
+              style={{ display: 'block', width: '100%', height: 'clamp(60px,9vw,140px)', marginBottom: -1, position: 'relative', zIndex: 1 }}>
+              <path d="M0,0 C240,110 480,10 720,70 C960,130 1200,20 1440,70 L1440,140 L0,140 Z"
+                fill="hsl(185,40%,9%)" opacity="0.4"/>
+              <path d="M0,30 C300,120 600,10 900,70 C1150,120 1350,40 1440,80 L1440,140 L0,140 Z"
+                fill="hsl(185,40%,9%)" opacity="0.65"/>
+              <path d="M0,65 C240,140 480,50 720,100 C960,140 1200,55 1440,95 L1440,140 L0,140 Z"
+                fill="hsl(185,40%,9%)"/>
+            </svg>
           </div>
 
           {/*
