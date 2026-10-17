@@ -717,12 +717,9 @@ export default function HomePage() {
           {/* ── Feature 1 — teal wave ── */}
           <div className="relative overflow-hidden py-20 sm:py-28 -mx-4 sm:-mx-6 px-4 sm:px-6 mb-2">
             <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-              <svg viewBox="0 0 1440 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
-                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
-                <path d="M0,120 C360,220 720,20 1080,140 C1260,200 1380,80 1440,120 L1440,400 L0,400 Z"
-                  fill="rgba(31,167,187,0.07)" />
-                <path d="M0,160 C300,60 600,240 900,160 C1150,100 1320,200 1440,160 L1440,400 L0,400 Z"
-                  fill="rgba(31,167,187,0.04)" />
+              <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 60 }}>
+                <path d="M0,20 C360,50 720,0 1080,30 C1260,45 1380,10 1440,20 L1440,60 L0,60 Z" fill="rgba(31,167,187,0.12)" />
+                <path d="M0,30 C300,10 600,50 900,30 C1150,15 1320,40 1440,30 L1440,60 L0,60 Z" fill="rgba(31,167,187,0.07)" />
               </svg>
             </div>
             <div className="max-w-[1160px] mx-auto relative z-10">
@@ -741,12 +738,9 @@ export default function HomePage() {
           {/* ── Feature 2 — red wave ── */}
           <div className="relative overflow-hidden py-20 sm:py-28 -mx-4 sm:-mx-6 px-4 sm:px-6 mb-2">
             <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-              <svg viewBox="0 0 1440 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
-                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
-                <path d="M0,80 C480,200 960,0 1440,100 L1440,400 L0,400 Z"
-                  fill="rgba(239,68,68,0.06)" />
-                <path d="M0,140 C240,40 480,220 720,140 C960,60 1200,180 1440,120 L1440,400 L0,400 Z"
-                  fill="rgba(239,68,68,0.03)" />
+              <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 60 }}>
+                <path d="M0,15 C480,45 960,0 1440,20 L1440,60 L0,60 Z" fill="rgba(239,68,68,0.11)" />
+                <path d="M0,28 C240,8 480,48 720,28 C960,8 1200,38 1440,22 L1440,60 L0,60 Z" fill="rgba(239,68,68,0.06)" />
               </svg>
             </div>
             <div className="max-w-[1160px] mx-auto relative z-10">
@@ -765,12 +759,9 @@ export default function HomePage() {
           {/* ── Feature 3 — purple wave ── */}
           <div className="relative overflow-hidden py-20 sm:py-28 -mx-4 sm:-mx-6 px-4 sm:px-6 mb-2">
             <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-              <svg viewBox="0 0 1440 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
-                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
-                <path d="M0,100 C300,0 600,200 900,100 C1150,20 1320,160 1440,80 L1440,400 L0,400 Z"
-                  fill="rgba(167,139,250,0.07)" />
-                <path d="M0,180 C400,280 800,80 1200,180 C1340,220 1400,140 1440,160 L1440,400 L0,400 Z"
-                  fill="rgba(167,139,250,0.04)" />
+              <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 60 }}>
+                <path d="M0,18 C300,0 600,45 900,18 C1150,0 1320,36 1440,15 L1440,60 L0,60 Z" fill="rgba(167,139,250,0.11)" />
+                <path d="M0,35 C400,55 800,15 1200,35 C1340,43 1400,28 1440,32 L1440,60 L0,60 Z" fill="rgba(167,139,250,0.06)" />
               </svg>
             </div>
             <div className="max-w-[1160px] mx-auto relative z-10">
@@ -789,12 +780,9 @@ export default function HomePage() {
           {/* ── Feature 4 — green wave ── */}
           <div className="relative overflow-hidden py-20 sm:py-28 -mx-4 sm:-mx-6 px-4 sm:px-6 mb-2">
             <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-              <svg viewBox="0 0 1440 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
-                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
-                <path d="M0,60 C360,180 720,0 1080,120 C1280,180 1380,60 1440,100 L1440,400 L0,400 Z"
-                  fill="rgba(61,220,151,0.06)" />
-                <path d="M0,160 C200,80 400,240 600,160 C800,80 1100,220 1440,140 L1440,400 L0,400 Z"
-                  fill="rgba(61,220,151,0.03)" />
+              <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 60 }}>
+                <path d="M0,12 C360,40 720,0 1080,25 C1280,38 1380,12 1440,20 L1440,60 L0,60 Z" fill="rgba(61,220,151,0.10)" />
+                <path d="M0,32 C200,16 400,50 600,32 C800,16 1100,42 1440,28 L1440,60 L0,60 Z" fill="rgba(61,220,151,0.05)" />
               </svg>
             </div>
             <div className="max-w-[1160px] mx-auto relative z-10">
@@ -813,12 +801,9 @@ export default function HomePage() {
           {/* ── Feature 5 — blue wave ── */}
           <div className="relative overflow-hidden py-20 sm:py-28 -mx-4 sm:-mx-6 px-4 sm:px-6">
             <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-              <svg viewBox="0 0 1440 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"
-                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
-                <path d="M0,140 C480,40 960,240 1440,100 L1440,400 L0,400 Z"
-                  fill="rgba(56,189,248,0.06)" />
-                <path d="M0,200 C300,100 600,280 900,180 C1100,120 1300,220 1440,160 L1440,400 L0,400 Z"
-                  fill="rgba(56,189,248,0.03)" />
+              <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: 60 }}>
+                <path d="M0,28 C480,8 960,50 1440,20 L1440,60 L0,60 Z" fill="rgba(56,189,248,0.10)" />
+                <path d="M0,42 C300,20 600,58 900,38 C1100,24 1300,44 1440,34 L1440,60 L0,60 Z" fill="rgba(56,189,248,0.05)" />
               </svg>
             </div>
             <div className="max-w-[1160px] mx-auto relative z-10">
